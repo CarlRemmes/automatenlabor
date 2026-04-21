@@ -604,7 +604,7 @@
           </div>
           <div class="row">
             <button class="secondary" id="logoutAdminBtn">Lehrkraft abmelden</button>
-            <button class="secondary" id="closeAdminBtn">Schliessen</button>
+            <button class="secondary" id="closeAdminBtn">Schließen</button>
           </div>
         </div>
 
@@ -691,7 +691,12 @@
   <script>
     const SUPABASE_URL = "https://ksuqarrjolkhpwojrjav.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const studentClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { storageKey: "automatenlabor-student-auth" }
+    });
+    const adminClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { storageKey: "automatenlabor-admin-auth" }
+    });
 
     const SESSION_KEY = "automatenlabor_session_v6";
     const MISSION_CODE = "main";
@@ -759,8 +764,50 @@
       },
       {
         id: "q6",
-        type: "text",
+        type: "single",
         tag: "Mission 6",
+        text: "Welche Zustandsfolge ist möglich, wenn zuerst 50 Cent und danach 1 Euro eingeworfen werden?",
+        help: "Beobachte die Reihenfolge der Beträge.",
+        options: [
+          "0 Euro → 1 Euro → 2 Euro",
+          "0 Euro → 50 Cent → 1,50 Euro",
+          "0 Euro → 2 Euro → 50 Cent",
+          "0 Euro → 50 Cent → 2 Euro"
+        ],
+        correctIndex: 1
+      },
+      {
+        id: "q7",
+        type: "single",
+        tag: "Mission 7",
+        text: "Wann gibt der Automat eine Ausgabe aus?",
+        help: "Achte darauf, wann genug Geld für ein Produkt vorhanden ist.",
+        options: [
+          "Sobald irgendeine Münze eingeworfen wurde",
+          "Wenn ein Produkt ausgewählt wird und der passende Zustand erreicht ist",
+          "Nur bei der Rückgabe-Taste",
+          "Immer nach zwei Eingaben"
+        ],
+        correctIndex: 1
+      },
+      {
+        id: "q8",
+        type: "single",
+        tag: "Mission 8",
+        text: "Welche Information steht in einem Zustandsdiagramm normalerweise an einem Pfeil?",
+        help: "Denke an das, was zwischen zwei Zuständen passiert.",
+        options: [
+          "Die Farbe des Zustands",
+          "Die Eingabe oder Aktion, die den Übergang auslöst",
+          "Der Name der Lehrkraft",
+          "Die Reihenfolge der Aufgaben"
+        ],
+        correctIndex: 1
+      },
+      {
+        id: "q9",
+        type: "text",
+        tag: "Mission 9",
         text: "Beschreibe in 1 bis 2 Sätzen, woran man in einem Zustandsdiagramm Zustand, Eingabe, Folgezustand und Ausgabe erkennt.",
         help: "Nutze einfache Worte. Es geht um Verstehen, nicht um Fachsprache.",
         placeholder: "Beispiel: Der Zustand ist ... Die Eingabe erkennt man an ..."
@@ -838,7 +885,8 @@
     let heartbeatHandle = null;
     let currentQuestionIndex = 0;
     let answers = {};
-    let authUser = null;
+    let studentAuthUser = null;
+    let adminAuthUser = null;
     let teacherProfile = null;
     let snapshotUrls = {};
     let lobbySignups = [];
@@ -872,7 +920,11 @@
     }
 
     function userId() {
-      return authUser?.id || null;
+      return studentAuthUser?.id || null;
+    }
+
+    function getAdminDataClient() {
+      return isTeacher() ? adminClient : studentClient;
     }
 
     function escapeHtml(value) {
@@ -1112,11 +1164,11 @@
             <div class="stack">
               <div>
                 <label for="msg-${entry.student_key}">Nachricht an ${escapeHtml(entry.first_name)}</label>
-                <textarea id="msg-${entry.student_key}" placeholder="z. B. Schau noch einmal auf die Ruckgabe-Taste.">${escapeHtml(entry.teacher_message || "")}</textarea>
+                <textarea id="msg-${entry.student_key}" placeholder="z. B. Schau noch einmal auf die Rückgabe-Taste.">${escapeHtml(entry.teacher_message || "")}</textarea>
               </div>
               <div class="row">
                 <button class="primary" data-action="send-message" data-student="${entry.student_key}">Nachricht senden</button>
-                <button class="secondary" data-action="skip-task" data-student="${entry.student_key}">Aufgabe uberspringen</button>
+                <button class="secondary" data-action="skip-task" data-student="${entry.student_key}">Aufgabe überspringen</button>
                 <button class="secondary" data-action="request-snapshot" data-student="${entry.student_key}">Screenshot anfordern</button>
               </div>
               ${preview}
@@ -1127,7 +1179,7 @@
     }
 
     async function fetchMission() {
-      const { data, error } = await supabaseClient
+      const { data, error } = await getAdminDataClient()
         .from("missions")
         .select("status, broadcast_message, teacher_hint, updated_at")
         .eq("code", MISSION_CODE)
@@ -1145,11 +1197,24 @@
     }
 
     async function fetchStudentSessions() {
-      const { data, error } = await supabaseClient
+      if (!isTeacher() && !session.studentKey) {
+        studentSessions = [];
+        renderStudentView();
+        return;
+      }
+
+      let query = (isTeacher() ? adminClient : studentClient)
         .from("student_sessions")
         .select("student_key, first_name, class_name, current_question_index, teacher_message, forced_question_index, last_seen_at, note_preview, has_submitted, snapshot_requested_at, snapshot_path, snapshot_updated_at, joined_at")
-        .eq("mission_code", MISSION_CODE)
-        .order("last_seen_at", { ascending: false });
+        .eq("mission_code", MISSION_CODE);
+
+      if (isTeacher()) {
+        query = query.order("last_seen_at", { ascending: false });
+      } else {
+        query = query.eq("student_key", session.studentKey);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       studentSessions = data || [];
@@ -1162,7 +1227,7 @@
     }
 
     async function fetchLobbySignups() {
-      const { data, error } = await supabaseClient
+      const { data, error } = await studentClient
         .from("lobby_signups")
         .select("first_name, class_name, joined_at")
         .eq("mission_code", MISSION_CODE)
@@ -1175,11 +1240,22 @@
     }
 
     async function fetchSubmissions() {
-      const { data, error } = await supabaseClient
+      let query = (isTeacher() ? adminClient : studentClient)
         .from("submissions")
         .select("student_key, first_name, class_name, score, max_score, percentage, note, created_at")
-        .eq("mission_code", MISSION_CODE)
-        .order("created_at", { ascending: false });
+        .eq("mission_code", MISSION_CODE);
+
+      if (isTeacher()) {
+        query = query.order("created_at", { ascending: false });
+      } else if (session.studentKey) {
+        query = query.eq("student_key", session.studentKey);
+      } else {
+        submissions = [];
+        renderAdmin();
+        return;
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       submissions = data || [];
@@ -1190,7 +1266,7 @@
       const nextUrls = {};
       const snapshotEntries = studentSessions.filter((entry) => entry.snapshot_path);
       for (const entry of snapshotEntries) {
-        const { data, error } = await supabaseClient.storage
+        const { data, error } = await adminClient.storage
           .from(SNAPSHOT_BUCKET)
           .createSignedUrl(entry.snapshot_path, 60 * 60);
         if (!error && data?.signedUrl) {
@@ -1201,28 +1277,38 @@
     }
 
     async function ensureAuthSession() {
-      const { data, error } = await supabaseClient.auth.getSession();
+      const { data, error } = await studentClient.auth.getSession();
       if (error) throw error;
 
       if (!data.session) {
-        const { error: anonError } = await supabaseClient.auth.signInAnonymously();
+        const { error: anonError } = await studentClient.auth.signInAnonymously();
         if (anonError) throw anonError;
       }
 
-      await refreshAuthState();
+      await refreshStudentAuthState();
+      await refreshAdminAuthState();
     }
 
-    async function refreshAuthState() {
-      const { data, error } = await supabaseClient.auth.getUser();
+    async function refreshStudentAuthState() {
+      const { data, error } = await studentClient.auth.getUser();
       if (error) throw error;
-      authUser = data.user || null;
+      studentAuthUser = data.user || null;
+      elements.adminConnectionLine.textContent = studentAuthUser
+        ? `${studentAuthUser.is_anonymous ? "Anonyme Schüler-Session aktiv" : "Schüler-Session aktiv"}`
+        : "Nicht angemeldet";
+    }
+
+    async function refreshAdminAuthState() {
+      const { data, error } = await adminClient.auth.getUser();
+      if (error) throw error;
+      adminAuthUser = data.user || null;
       teacherProfile = null;
 
-      if (authUser && !authUser.is_anonymous) {
-        const { data: profile, error: profileError } = await supabaseClient
+      if (adminAuthUser && !adminAuthUser.is_anonymous) {
+        const { data: profile, error: profileError } = await adminClient
           .from("profiles")
           .select("role, display_name")
-          .eq("id", authUser.id)
+          .eq("id", adminAuthUser.id)
           .maybeSingle();
 
         if (profileError) {
@@ -1232,9 +1318,11 @@
         teacherProfile = profile;
       }
 
-      elements.adminConnectionLine.textContent = authUser
-        ? `${authUser.is_anonymous ? "Anonyme Schüler-Session" : "Lehrkraft angemeldet"}`
-        : "Nicht angemeldet";
+      if (adminAuthUser && !adminAuthUser.is_anonymous) {
+        elements.adminConnectionLine.textContent = isTeacher()
+          ? "Lehrkraft angemeldet"
+          : "Benutzer angemeldet, aber ohne Lehrkraftrolle";
+      }
     }
 
     async function joinMission() {
@@ -1268,7 +1356,7 @@
     async function syncLobbySignup() {
       if (!session.student) return;
 
-      const { error } = await supabaseClient
+      const { error } = await studentClient
         .from("lobby_signups")
         .upsert({
           mission_code: MISSION_CODE,
@@ -1283,7 +1371,7 @@
 
     async function removeLobbySignup() {
       if (!session.studentKey) return;
-      const { error } = await supabaseClient
+      const { error } = await studentClient
         .from("lobby_signups")
         .delete()
         .eq("student_key", session.studentKey);
@@ -1308,7 +1396,7 @@
         ...extra
       };
 
-      const { error } = await supabaseClient
+      const { error } = await studentClient
         .from("student_sessions")
         .upsert(payload, { onConflict: "student_key" });
 
@@ -1365,7 +1453,7 @@
 
       elements.studentMessage.textContent = "Speichere deine Antworten ...";
       let error = null;
-      const { data: existingSubmission, error: lookupError } = await supabaseClient
+      const { data: existingSubmission, error: lookupError } = await studentClient
         .from("submissions")
         .select("id")
         .eq("mission_code", MISSION_CODE)
@@ -1379,13 +1467,13 @@
       }
 
       if (existingSubmission?.id) {
-        const result = await supabaseClient
+        const result = await studentClient
           .from("submissions")
           .update(payload)
           .eq("id", existingSubmission.id);
         error = result.error;
       } else {
-        const result = await supabaseClient
+        const result = await studentClient
           .from("submissions")
           .insert(payload);
         error = result.error;
@@ -1414,7 +1502,7 @@
         updated_at: new Date().toISOString()
       };
 
-      const { error } = await supabaseClient
+      const { error } = await adminClient
         .from("missions")
         .upsert(payload, { onConflict: "code" });
 
@@ -1431,7 +1519,7 @@
       if (!isTeacher()) return;
       const message = elements.broadcastInput.value.trim();
       elements.adminActionMessage.textContent = "Nachricht wird gesendet ...";
-      const { error } = await supabaseClient
+      const { error } = await adminClient
         .from("missions")
         .upsert({
           code: MISSION_CODE,
@@ -1446,7 +1534,7 @@
 
     async function updateStudentField(studentKey, changes) {
       if (!isTeacher() && studentKey !== session.studentKey) return;
-      const { error } = await supabaseClient
+      const { error } = await adminClient
         .from("student_sessions")
         .update(changes)
         .eq("student_key", studentKey);
@@ -1472,7 +1560,7 @@
         const snapshotPath = `${userId()}/${MISSION_CODE}/${session.studentKey}.jpg`;
         const snapshotBlob = dataUrlToBlob(snapshotData);
 
-        const { error: uploadError } = await supabaseClient.storage
+        const { error: uploadError } = await studentClient.storage
           .from(SNAPSHOT_BUCKET)
           .upload(snapshotPath, snapshotBlob, {
             contentType: "image/jpeg",
@@ -1610,7 +1698,7 @@
     }
 
     function setupRealtime() {
-      supabaseClient
+      studentClient
         .channel("automatenlabor-live")
         .on("postgres_changes", { event: "*", schema: "public", table: "missions" }, () => {
           fetchMission().catch(console.error);
@@ -1628,10 +1716,15 @@
           elements.adminConnectionLine.textContent = `Live-Status: ${status}`;
         });
 
-      supabaseClient.auth.onAuthStateChange(() => {
-        refreshAuthState()
-          .then(() => fetchStudentSessions().catch(() => {}))
-          .then(() => fetchSubmissions().catch(() => {}))
+      studentClient.auth.onAuthStateChange(() => {
+        refreshStudentAuthState().catch(console.error);
+      });
+
+      adminClient.auth.onAuthStateChange(() => {
+        refreshAdminAuthState()
+          .then(() => fetchMission().catch(() => {}))
+          .then(() => isTeacher() ? fetchStudentSessions().catch(() => {}) : null)
+          .then(() => isTeacher() ? fetchSubmissions().catch(() => {}) : null)
           .then(() => renderAdmin())
           .catch(console.error);
       });
@@ -1656,7 +1749,7 @@
     }
 
     function runSelfTests() {
-      const sampleAnswers = { q1: 0, q2: 1, q3: 1, q4: 1, q5: 0, q6: "Ein Zustand ist ein Kreis." };
+      const sampleAnswers = { q1: 0, q2: 1, q3: 1, q4: 1, q5: 0, q6: 1, q7: 1, q8: 1, q9: "Ein Zustand ist ein Kreis." };
       answers = { ...answers, ...sampleAnswers };
       const result = scoreAnswers();
       console.assert(result.points === 5, "scoreAnswers sollte 5 Punkte liefern");
@@ -1706,15 +1799,14 @@
         return;
       }
 
-      supabaseClient.auth.signInWithPassword({ email, password })
+      adminClient.auth.signInWithPassword({ email, password })
         .then(async ({ error }) => {
           if (error) throw error;
-          await refreshAuthState();
+          await refreshAdminAuthState();
           if (!isTeacher()) {
             elements.adminLoginMessage.textContent = "Dieser Benutzer hat keine Lehrkraftrolle.";
-            await supabaseClient.auth.signOut();
-            await supabaseClient.auth.signInAnonymously();
-            await refreshAuthState();
+            await adminClient.auth.signOut();
+            await refreshAdminAuthState();
             return;
           }
           openAdminPanel();
@@ -1729,11 +1821,12 @@
       elements.adminPanel.classList.add("hidden");
     });
     elements.logoutAdminBtn.addEventListener("click", () => {
-      supabaseClient.auth.signOut()
-        .then(() => supabaseClient.auth.signInAnonymously())
-        .then(() => refreshAuthState())
+      adminClient.auth.signOut()
+        .then(() => refreshAdminAuthState())
         .then(() => {
           elements.adminPanel.classList.add("hidden");
+          teacherProfile = null;
+          renderAdmin();
         })
         .catch(console.error);
     });

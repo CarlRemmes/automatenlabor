@@ -1,1 +1,826 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informatik-Check 6</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --card-2: #1f2937;
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --accent: #38bdf8;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
 
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0b1220, #111827 35%, #0f172a 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1080px;
+      background: rgba(17,24,39,0.96);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero {
+      padding: 28px 28px 12px;
+      text-align: center;
+      background: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 45%);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.35rem;
+    }
+
+    .sub {
+      margin: 0 auto;
+      max-width: 760px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 1rem;
+    }
+
+    .main {
+      padding: 20px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"], input[type="password"], select {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56,189,248,0.2);
+    }
+
+    .question {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+
+    .question h3 {
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+    }
+
+    .answers {
+      display: grid;
+      gap: 10px;
+    }
+
+    .answer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--card-2);
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .answer:hover {
+      border-color: rgba(56,189,248,0.5);
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary { background: var(--accent); color: #082f49; }
+    .ghost { background: rgba(255,255,255,0.07); color: var(--text); }
+    .ok { background: var(--ok); color: white; }
+    .warn { background: var(--warn); color: #1f2937; }
+    .danger { background: var(--danger); color: white; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(56,189,248,0.12);
+      color: #bae6fd;
+      border: 1px solid rgba(56,189,248,0.18);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+    }
+
+    .muted { color: var(--muted); }
+    .hidden { display: none !important; }
+
+    .center-box {
+      text-align: center;
+      padding: 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .state-badge {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .state-waiting { color: #fde68a; }
+    .state-live { color: #86efac; }
+    .state-stopped { color: #fca5a5; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    th, td {
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+
+    th { color: #bae6fd; }
+
+    .kpis {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      margin-bottom: 14px;
+    }
+
+    .kpi {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .kpi strong {
+      display: block;
+      font-size: 1.8rem;
+      margin-top: 6px;
+    }
+
+    .footer-note {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    @media (max-width: 640px) {
+      .hero, .main { padding: 16px; }
+      .card { padding: 16px; }
+      .row button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="app">
+      <section class="hero">
+        <h1>Informatik-Check Klasse 6</h1>
+        <p class="sub">Startseite für den Unterricht: Schülerinnen und Schüler melden sich mit Vornamen an und warten, bis die Lehrkraft den Check freigibt. Über die Admin-Seite kannst du live starten, stoppen und Ergebnisse einsehen.</p>
+      </section>
+
+      <main class="main">
+        <section class="card" id="landingCard">
+          <div class="pill">Startseite</div>
+          <div class="grid">
+            <div>
+              <label for="firstName">Vorname</label>
+              <input id="firstName" type="text" maxlength="30" placeholder="z. B. Mia" />
+            </div>
+            <div>
+              <label for="className">Klasse / Gruppe</label>
+              <select id="className">
+                <option value="6a">6a</option>
+                <option value="6b">6b</option>
+                <option value="6c">6c</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" style="margin-top:16px;">
+            <button class="primary" id="joinBtn">Zum Warteraum</button>
+            <span id="landingMessage" class="muted"></span>
+          </div>
+        </section>
+
+        <section class="card hidden" id="waitingCard">
+          <div class="pill">Warteraum</div>
+          <div class="center-box">
+            <div id="studentStateBadge" class="state-badge state-waiting">Wartet auf Freigabe</div>
+            <h2 id="waitingTitle">Hallo!</h2>
+            <p id="waitingText" class="sub">Bitte warte, bis die Lehrkraft den Wissenscheck startet.</p>
+            <div class="row" style="justify-content:center; margin-top:18px;">
+              <button class="ghost" id="backToStartBtn">Zurück zur Startseite</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="quizCard" class="card hidden">
+          <div class="pill">Schüleransicht</div>
+          <p class="muted" id="studentIntro"></p>
+          <div id="questionsBox" style="margin-top: 18px;"></div>
+          <div class="row">
+            <button class="primary" id="submitBtn">Antworten speichern</button>
+            <button class="ghost" id="resetStudentBtn">Eingaben zurücksetzen</button>
+            <span id="studentMessage" class="muted"></span>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="pill">Admin-Login</div>
+          <div class="grid">
+            <div>
+              <label for="teacherCode">Admin-Passwort</label>
+              <input id="teacherCode" type="password" placeholder="Passwort eingeben" />
+            </div>
+            <div style="display:flex;align-items:end;">
+              <button class="ghost" id="toggleAdminBtn">Admin-Seite öffnen</button>
+            </div>
+          </div>
+          <p class="footer-note">Im Prototyp lautet das Passwort <strong>schule6</strong>. Vor echtem Einsatz bitte ändern. In dieser Version werden Status und Ergebnisse im Browser gespeichert. Für einen Raspberry Pi als echten Zentralserver würdest du dieselbe Oberfläche mit zentraler Datenbank verwenden.</p>
+        </section>
+
+        <section id="adminView" class="card hidden">
+          <div class="pill">Admin-Seite</div>
+
+          <div class="kpis">
+            <div class="kpi"><span class="muted">Status</span><strong id="kpiState">WARTEN</strong></div>
+            <div class="kpi"><span class="muted">Abgaben</span><strong id="kpiSubmissions">0</strong></div>
+            <div class="kpi"><span class="muted">Durchschnitt</span><strong id="kpiAverage">0%</strong></div>
+            <div class="kpi"><span class="muted">Beste Quote</span><strong id="kpiBest">0%</strong></div>
+          </div>
+
+          <div class="row" style="margin-bottom: 14px;">
+            <button class="ok" id="startQuizBtn">Freigeben / Starten</button>
+            <button class="danger" id="stopQuizBtn">Stoppen</button>
+            <button class="ghost" id="setWaitingBtn">Auf Warten setzen</button>
+          </div>
+
+          <div class="row" style="margin-bottom: 14px;">
+            <button class="ok" id="exportCsvBtn">CSV exportieren</button>
+            <button class="warn" id="exportJsonBtn">JSON exportieren</button>
+            <button class="danger" id="clearAllBtn">Alle Daten löschen</button>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Vorname</th>
+                  <th>Klasse</th>
+                  <th>Punkte</th>
+                  <th>Quote</th>
+                  <th>Zeit</th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'informatik_check_klasse6_results_v2';
+    const SESSION_KEY = 'informatik_check_klasse6_session_v2';
+    const TEACHER_CODE = 'schule6';
+
+    const STATE_WAITING = 'waiting';
+    const STATE_LIVE = 'live';
+    const STATE_STOPPED = 'stopped';
+
+    const questions = [
+      {
+        id: 'q1',
+        text: 'Wofür steht die Abkürzung HTML?',
+        options: [
+          'HyperText Markup Language',
+          'High Transfer Machine Language',
+          'Home Tool Markup Logic'
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 'q2',
+        text: 'Welches Gerät verarbeitet Eingaben und führt Programme aus?',
+        options: ['Drucker', 'Computer', 'Lautsprecher'],
+        correctIndex: 1
+      },
+      {
+        id: 'q3',
+        text: 'Was ist ein Algorithmus?',
+        options: [
+          'Eine Schritt-für-Schritt-Anleitung zur Lösung eines Problems',
+          'Ein besonders schneller Computer',
+          'Ein Passwort für das Internet'
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 'q4',
+        text: 'Welche Aussage zu sicheren Passwörtern ist richtig?',
+        options: [
+          'Ein kurzes Passwort mit dem Vornamen ist am sichersten',
+          'Ein langes Passwort mit verschiedenen Zeichen ist besser',
+          'Dasselbe Passwort sollte überall genutzt werden'
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 'q5',
+        text: 'Was bedeutet „Speichern“ bei einer Datei?',
+        options: [
+          'Die Datei wird dauerhaft abgelegt',
+          'Die Datei wird gelöscht',
+          'Der Computer wird ausgeschaltet'
+        ],
+        correctIndex: 0
+      }
+    ];
+
+    const landingCard = document.getElementById('landingCard');
+    const waitingCard = document.getElementById('waitingCard');
+    const quizCard = document.getElementById('quizCard');
+    const adminView = document.getElementById('adminView');
+
+    const joinBtn = document.getElementById('joinBtn');
+    const backToStartBtn = document.getElementById('backToStartBtn');
+    const firstNameInput = document.getElementById('firstName');
+    const classNameInput = document.getElementById('className');
+    const landingMessage = document.getElementById('landingMessage');
+    const studentStateBadge = document.getElementById('studentStateBadge');
+    const waitingTitle = document.getElementById('waitingTitle');
+    const waitingText = document.getElementById('waitingText');
+    const studentIntro = document.getElementById('studentIntro');
+    const questionsBox = document.getElementById('questionsBox');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetStudentBtn = document.getElementById('resetStudentBtn');
+    const studentMessage = document.getElementById('studentMessage');
+
+    const teacherCodeInput = document.getElementById('teacherCode');
+    const toggleAdminBtn = document.getElementById('toggleAdminBtn');
+    const startQuizBtn = document.getElementById('startQuizBtn');
+    const stopQuizBtn = document.getElementById('stopQuizBtn');
+    const setWaitingBtn = document.getElementById('setWaitingBtn');
+
+    const resultsBody = document.getElementById('resultsBody');
+    const kpiState = document.getElementById('kpiState');
+    const kpiSubmissions = document.getElementById('kpiSubmissions');
+    const kpiAverage = document.getElementById('kpiAverage');
+    const kpiBest = document.getElementById('kpiBest');
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
+    const exportJsonBtn = document.getElementById('exportJsonBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+
+    function renderQuestions() {
+      questionsBox.innerHTML = '';
+      questions.forEach((question, index) => {
+        const block = document.createElement('div');
+        block.className = 'question';
+        block.innerHTML = `
+          <h3>${index + 1}. ${question.text}</h3>
+          <div class="answers">
+            ${question.options.map((option, optionIndex) => `
+              <label class="answer">
+                <input type="radio" name="${question.id}" value="${optionIndex}" />
+                <span>${option}</span>
+              </label>
+            `).join('')}
+          </div>
+        `;
+        questionsBox.appendChild(block);
+      });
+    }
+
+    function getStoredResults() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveStoredResults(results) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
+    }
+
+    function getSession() {
+      try {
+        return JSON.parse(localStorage.getItem(SESSION_KEY)) || {
+          student: null,
+          quizState: STATE_WAITING,
+          hasSubmitted: false
+        };
+      } catch (error) {
+        return {
+          student: null,
+          quizState: STATE_WAITING,
+          hasSubmitted: false
+        };
+      }
+    }
+
+    function saveSession(session) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    }
+
+    function updateQuizState(newState) {
+      const session = getSession();
+      session.quizState = newState;
+      saveSession(session);
+      renderStudentView();
+      renderAdminTable();
+    }
+
+    function formatDate(isoString) {
+      const date = new Date(isoString);
+      return date.toLocaleString('de-DE');
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function collectAnswers() {
+      const answers = {};
+      for (const question of questions) {
+        const checked = document.querySelector(`input[name="${question.id}"]:checked`);
+        answers[question.id] = checked ? Number(checked.value) : null;
+      }
+      return answers;
+    }
+
+    function scoreAnswers(answers) {
+      let points = 0;
+      questions.forEach((question) => {
+        if (answers[question.id] === question.correctIndex) {
+          points += 1;
+        }
+      });
+      return points;
+    }
+
+    function validateStudentInput(firstName, answers) {
+      if (!firstName || firstName.trim().length < 2) {
+        return 'Bitte gib einen Vornamen mit mindestens 2 Zeichen ein.';
+      }
+      const unanswered = Object.values(answers).some((value) => value === null);
+      if (unanswered) {
+        return 'Bitte beantworte alle Fragen.';
+      }
+      return '';
+    }
+
+    function joinWaitingRoom() {
+      const firstName = firstNameInput.value.trim();
+      const className = classNameInput.value;
+
+      if (!firstName || firstName.length < 2) {
+        landingMessage.textContent = 'Bitte zuerst einen Vornamen eingeben.';
+        return;
+      }
+
+      const session = getSession();
+      session.student = { firstName, className };
+      session.hasSubmitted = false;
+      saveSession(session);
+      landingMessage.textContent = '';
+      studentIntro.textContent = `Angemeldet als ${firstName} (${className})`;
+      renderStudentView();
+    }
+
+    function backToStart() {
+      const session = getSession();
+      session.student = null;
+      session.hasSubmitted = false;
+      saveSession(session);
+      studentMessage.textContent = '';
+      landingMessage.textContent = '';
+      resetStudentForm(false);
+      renderStudentView();
+    }
+
+    function resetStudentForm(clearMessage = true) {
+      document.querySelectorAll('input[type="radio"]').forEach((input) => {
+        input.checked = false;
+      });
+      if (clearMessage) {
+        studentMessage.textContent = '';
+      }
+    }
+
+    function submitAnswers() {
+      const session = getSession();
+      if (!session.student) {
+        studentMessage.textContent = 'Bitte zuerst auf der Startseite anmelden.';
+        return;
+      }
+      if (session.quizState !== STATE_LIVE) {
+        studentMessage.textContent = 'Der Check ist aktuell nicht freigegeben.';
+        return;
+      }
+      if (session.hasSubmitted) {
+        studentMessage.textContent = 'Du hast bereits abgegeben.';
+        return;
+      }
+
+      const answers = collectAnswers();
+      const validationError = validateStudentInput(session.student.firstName, answers);
+      if (validationError) {
+        studentMessage.textContent = validationError;
+        return;
+      }
+
+      const points = scoreAnswers(answers);
+      const entry = {
+        id: window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : String(Date.now()),
+        firstName: session.student.firstName,
+        className: session.student.className,
+        answers,
+        points,
+        maxPoints: questions.length,
+        percentage: Math.round((points / questions.length) * 100),
+        submittedAt: new Date().toISOString()
+      };
+
+      const results = getStoredResults();
+      results.push(entry);
+      saveStoredResults(results);
+
+      session.hasSubmitted = true;
+      saveSession(session);
+      studentMessage.textContent = `Gespeichert. Du hast ${points} von ${questions.length} Punkten erreicht.`;
+      renderAdminTable();
+      renderStudentView();
+    }
+
+    function renderStudentView() {
+      const session = getSession();
+      const state = session.quizState || STATE_WAITING;
+      const hasStudent = !!session.student;
+
+      landingCard.classList.toggle('hidden', hasStudent);
+      waitingCard.classList.add('hidden');
+      quizCard.classList.add('hidden');
+
+      if (!hasStudent) {
+        return;
+      }
+
+      studentIntro.textContent = `Angemeldet als ${session.student.firstName} (${session.student.className})`;
+
+      if (session.hasSubmitted) {
+        waitingCard.classList.remove('hidden');
+        studentStateBadge.className = 'state-badge state-live';
+        studentStateBadge.textContent = 'Abgegeben';
+        waitingTitle.textContent = `Danke, ${session.student.firstName}!`;
+        waitingText.textContent = 'Deine Antworten wurden gespeichert. Bitte warte auf weitere Anweisungen.';
+        return;
+      }
+
+      if (state === STATE_WAITING) {
+        waitingCard.classList.remove('hidden');
+        studentStateBadge.className = 'state-badge state-waiting';
+        studentStateBadge.textContent = 'Wartet auf Freigabe';
+        waitingTitle.textContent = `Hallo ${session.student.firstName}!`;
+        waitingText.textContent = 'Bitte warte, bis die Lehrkraft den Wissenscheck startet.';
+      } else if (state === STATE_LIVE) {
+        quizCard.classList.remove('hidden');
+      } else {
+        waitingCard.classList.remove('hidden');
+        studentStateBadge.className = 'state-badge state-stopped';
+        studentStateBadge.textContent = 'Gestoppt';
+        waitingTitle.textContent = `Hallo ${session.student.firstName}!`;
+        waitingText.textContent = 'Der Wissenscheck wurde gestoppt. Bitte warte auf weitere Anweisungen.';
+      }
+    }
+
+    function renderAdminTable() {
+      const results = getStoredResults();
+      const session = getSession();
+      const stateMap = {
+        waiting: 'WARTEN',
+        live: 'LIVE',
+        stopped: 'GESTOPPT'
+      };
+
+      kpiState.textContent = stateMap[session.quizState] || 'WARTEN';
+      resultsBody.innerHTML = '';
+
+      if (results.length === 0) {
+        resultsBody.innerHTML = '<tr><td colspan="5">Noch keine Abgaben vorhanden.</td></tr>';
+        kpiSubmissions.textContent = '0';
+        kpiAverage.textContent = '0%';
+        kpiBest.textContent = '0%';
+        return;
+      }
+
+      let sum = 0;
+      let best = 0;
+
+      results
+        .slice()
+        .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt))
+        .forEach((entry) => {
+          sum += entry.percentage;
+          best = Math.max(best, entry.percentage);
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${escapeHtml(entry.firstName)}</td>
+            <td>${escapeHtml(entry.className)}</td>
+            <td>${entry.points}/${entry.maxPoints}</td>
+            <td>${entry.percentage}%</td>
+            <td>${formatDate(entry.submittedAt)}</td>
+          `;
+          resultsBody.appendChild(row);
+        });
+
+      kpiSubmissions.textContent = String(results.length);
+      kpiAverage.textContent = `${Math.round(sum / results.length)}%`;
+      kpiBest.textContent = `${best}%`;
+    }
+
+    function openAdmin() {
+      if (teacherCodeInput.value !== TEACHER_CODE) {
+        alert('Das Admin-Passwort ist nicht korrekt.');
+        return;
+      }
+      adminView.classList.toggle('hidden');
+      renderAdminTable();
+    }
+
+    function downloadFile(filename, content, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function toCsv(rows) {
+      return rows
+        .map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(';'))
+        .join('\n');
+    }
+
+    function exportCsv() {
+      const results = getStoredResults();
+      const header = ['Vorname', 'Klasse', 'Punkte', 'MaxPunkte', 'Quote', 'Zeit'];
+      const rows = results.map((r) => [
+        r.firstName,
+        r.className,
+        r.points,
+        r.maxPoints,
+        r.percentage,
+        r.submittedAt
+      ]);
+      const csv = toCsv([header, ...rows]);
+      downloadFile('informatik-check-auswertung.csv', csv, 'text/csv;charset=utf-8;');
+    }
+
+    function exportJson() {
+      const results = getStoredResults();
+      downloadFile('informatik-check-auswertung.json', JSON.stringify(results, null, 2), 'application/json');
+    }
+
+    function clearAllData() {
+      const confirmed = confirm('Wirklich alle gespeicherten Ergebnisse löschen?');
+      if (!confirmed) {
+        return;
+      }
+      localStorage.removeItem(STORAGE_KEY);
+      const session = getSession();
+      session.hasSubmitted = false;
+      saveSession(session);
+      renderAdminTable();
+      renderStudentView();
+    }
+
+    function runSelfTests() {
+      console.assert(scoreAnswers({ q1: 0, q2: 1, q3: 0, q4: 1, q5: 0 }) === 5, 'scoreAnswers sollte 5 liefern');
+      console.assert(scoreAnswers({ q1: 1, q2: 1, q3: 2, q4: 0, q5: 0 }) === 2, 'scoreAnswers sollte 2 liefern');
+      console.assert(validateStudentInput('Mi', { q1: 0, q2: 1, q3: 0, q4: 1, q5: 0 }) === '', 'validateStudentInput sollte gültige Eingaben akzeptieren');
+      console.assert(validateStudentInput('', { q1: 0, q2: 1, q3: 0, q4: 1, q5: 0 }).length > 0, 'validateStudentInput sollte leeren Namen ablehnen');
+      console.assert(toCsv([['A', 'B'], ['1', '2']]) === '"A";"B"\n"1";"2"', 'toCsv sollte korrekten Zeilenumbruch erzeugen');
+      console.assert(escapeHtml('<script>') === '&lt;script&gt;', 'escapeHtml sollte HTML maskieren');
+    }
+
+    joinBtn.addEventListener('click', joinWaitingRoom);
+    backToStartBtn.addEventListener('click', backToStart);
+    submitBtn.addEventListener('click', submitAnswers);
+    resetStudentBtn.addEventListener('click', () => resetStudentForm());
+
+    toggleAdminBtn.addEventListener('click', openAdmin);
+    startQuizBtn.addEventListener('click', () => updateQuizState(STATE_LIVE));
+    stopQuizBtn.addEventListener('click', () => updateQuizState(STATE_STOPPED));
+    setWaitingBtn.addEventListener('click', () => updateQuizState(STATE_WAITING));
+    exportCsvBtn.addEventListener('click', exportCsv);
+    exportJsonBtn.addEventListener('click', exportJson);
+    clearAllBtn.addEventListener('click', clearAllData);
+
+    window.addEventListener('storage', () => {
+      renderStudentView();
+      renderAdminTable();
+    });
+
+    renderQuestions();
+    renderStudentView();
+    renderAdminTable();
+    runSelfTests();
+  </script>
+</body>
+</html>

@@ -3,28 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Informatik-Check 6</title>
+  <title>Automatenlabor – Mission Snackautomat</title>
   <style>
     :root {
-      --bg: #0f172a;
+      --bg: #0b1220;
       --card: #111827;
       --card-2: #1f2937;
       --text: #f8fafc;
       --muted: #cbd5e1;
-      --accent: #38bdf8;
+      --accent: #67e8f9;
+      --accent-2: #22d3ee;
       --ok: #22c55e;
       --warn: #f59e0b;
       --danger: #ef4444;
       --border: rgba(255,255,255,0.08);
-      --shadow: 0 20px 50px rgba(0,0,0,0.25);
+      --shadow: 0 20px 50px rgba(0,0,0,0.28);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #0b1220, #111827 35%, #0f172a 100%);
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(34,211,238,0.14), transparent 30%),
+        linear-gradient(180deg, #09111d, #101827 35%, #0b1220 100%);
       color: var(--text);
       min-height: 100vh;
     }
@@ -39,8 +42,8 @@
 
     .app {
       width: 100%;
-      max-width: 1080px;
-      background: rgba(17,24,39,0.96);
+      max-width: 1120px;
+      background: rgba(17,24,39,0.95);
       border: 1px solid var(--border);
       border-radius: 28px;
       box-shadow: var(--shadow);
@@ -49,27 +52,32 @@
     }
 
     .hero {
-      padding: 28px 28px 12px;
+      padding: 34px 28px 16px;
       text-align: center;
-      background: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 45%);
+      background: radial-gradient(circle at top, rgba(103,232,249,0.18), transparent 45%);
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4vw, 2.9rem);
+      letter-spacing: -0.03em;
     }
 
     h2 {
-      margin-top: 0;
-      margin-bottom: 12px;
+      margin: 0 0 12px;
       font-size: 1.35rem;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
     }
 
     .sub {
       margin: 0 auto;
-      max-width: 760px;
+      max-width: 780px;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.6;
       font-size: 1rem;
     }
 
@@ -92,6 +100,12 @@
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
 
+    .grid-2 {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
     label {
       display: block;
       font-weight: 700;
@@ -111,10 +125,10 @@
 
     input:focus, select:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(56,189,248,0.2);
+      box-shadow: 0 0 0 3px rgba(103,232,249,0.18);
     }
 
-    .question {
+    .mission {
       padding: 18px;
       border-radius: 18px;
       background: rgba(255,255,255,0.03);
@@ -122,29 +136,47 @@
       margin-bottom: 14px;
     }
 
-    .question h3 {
-      margin: 0 0 12px;
-      font-size: 1.05rem;
+    .mission-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .mission-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(103,232,249,0.12);
+      color: #cffafe;
+      border: 1px solid rgba(103,232,249,0.16);
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 0.84rem;
+      font-weight: 700;
     }
 
     .answers {
       display: grid;
       gap: 10px;
+      margin-top: 12px;
     }
 
     .answer {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 10px;
       padding: 12px 14px;
       border-radius: 14px;
       background: var(--card-2);
       border: 1px solid transparent;
       cursor: pointer;
+      line-height: 1.45;
     }
 
     .answer:hover {
-      border-color: rgba(56,189,248,0.5);
+      border-color: rgba(103,232,249,0.45);
     }
 
     .row {
@@ -163,7 +195,7 @@
       cursor: pointer;
     }
 
-    .primary { background: var(--accent); color: #082f49; }
+    .primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #082f49; }
     .ghost { background: rgba(255,255,255,0.07); color: var(--text); }
     .ok { background: var(--ok); color: white; }
     .warn { background: var(--warn); color: #1f2937; }
@@ -173,9 +205,9 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(56,189,248,0.12);
-      color: #bae6fd;
-      border: 1px solid rgba(56,189,248,0.18);
+      background: rgba(103,232,249,0.12);
+      color: #cffafe;
+      border: 1px solid rgba(103,232,249,0.16);
       border-radius: 999px;
       padding: 8px 12px;
       font-size: 0.9rem;
@@ -187,7 +219,7 @@
 
     .center-box {
       text-align: center;
-      padding: 24px;
+      padding: 28px;
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
       border-radius: 20px;
@@ -206,6 +238,44 @@
     .state-live { color: #86efac; }
     .state-stopped { color: #fca5a5; }
 
+    .info-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      line-height: 1.55;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+      color: var(--text);
+      font-size: 1rem;
+      resize: vertical;
+      outline: none;
+      font-family: inherit;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -219,9 +289,10 @@
       text-align: left;
       border-bottom: 1px solid var(--border);
       font-size: 0.95rem;
+      vertical-align: top;
     }
 
-    th { color: #bae6fd; }
+    th { color: #cffafe; }
 
     .kpis {
       display: grid;
@@ -246,13 +317,14 @@
     .footer-note {
       font-size: 0.9rem;
       color: var(--muted);
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
     @media (max-width: 640px) {
       .hero, .main { padding: 16px; }
       .card { padding: 16px; }
       .row button { width: 100%; }
+      .mission-head { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -260,13 +332,13 @@
   <div class="wrap">
     <div class="app">
       <section class="hero">
-        <h1>Informatik-Check Klasse 6</h1>
-        <p class="sub">Startseite für den Unterricht: Schülerinnen und Schüler melden sich mit Vornamen an und warten, bis die Lehrkraft den Check freigibt. Über die Admin-Seite kannst du live starten, stoppen und Ergebnisse einsehen.</p>
+        <h1>Automatenlabor</h1>
+        <p class="sub">Mission Snackautomat: Untersuche ein System mit Zuständen, Eingaben, Übergängen und Funktionen. Beobachte genau, wie der Automat reagiert, und sichere deine Erkenntnisse im Laborprotokoll.</p>
       </section>
 
       <main class="main">
         <section class="card" id="landingCard">
-          <div class="pill">Startseite</div>
+          <div class="pill">Zugang zur Mission</div>
           <div class="grid">
             <div>
               <label for="firstName">Vorname</label>
@@ -281,62 +353,88 @@
               </select>
             </div>
           </div>
+          <div class="grid-2" style="margin-top:16px;">
+            <div class="info-box">
+              <strong>Systemdaten</strong>
+              <div class="chips">
+                <span class="chip">Gummibärchen · 1 €</span>
+                <span class="chip">Schokoriegel · 1,50 €</span>
+                <span class="chip">Chips · 2 €</span>
+                <span class="chip">Münzen: 50 ct, 1 €, 2 €</span>
+                <span class="chip">Taste: Rückgabe</span>
+              </div>
+            </div>
+            <div class="info-box">
+              <strong>Auftrag</strong>
+              <div class="muted" style="margin-top:8px;">Finde heraus, wie der Snackautomat aufgebaut ist. Achte auf Startzustand, Folgezustände, erlaubte Eingaben und die Wirkung der Rückgabe-Taste.</div>
+            </div>
+          </div>
           <div class="row" style="margin-top:16px;">
-            <button class="primary" id="joinBtn">Zum Warteraum</button>
+            <button class="primary" id="joinBtn">Mission starten</button>
             <span id="landingMessage" class="muted"></span>
           </div>
         </section>
 
         <section class="card hidden" id="waitingCard">
-          <div class="pill">Warteraum</div>
+          <div class="pill">Bereitstellungsraum</div>
           <div class="center-box">
             <div id="studentStateBadge" class="state-badge state-waiting">Wartet auf Freigabe</div>
-            <h2 id="waitingTitle">Hallo!</h2>
-            <p id="waitingText" class="sub">Bitte warte, bis die Lehrkraft den Wissenscheck startet.</p>
+            <h2 id="waitingTitle">Mission vorbereitet</h2>
+            <p id="waitingText" class="sub">Bitte warte, bis die Laborleitung die Mission freigibt.</p>
             <div class="row" style="justify-content:center; margin-top:18px;">
-              <button class="ghost" id="backToStartBtn">Zurück zur Startseite</button>
+              <button class="ghost" id="backToStartBtn">Zurück</button>
             </div>
           </div>
         </section>
 
         <section id="quizCard" class="card hidden">
-          <div class="pill">Schüleransicht</div>
+          <div class="pill">Mission Snackautomat</div>
           <p class="muted" id="studentIntro"></p>
+
+          <div class="mission">
+            <div class="mission-head">
+              <h2>Laborauftrag</h2>
+              <span class="mission-tag">Beobachten · Ordnen · Erklären</span>
+            </div>
+            <p class="muted">Bearbeite die Missionen in Ruhe. Es geht darum, den Automaten zu verstehen: Welche Zustände gibt es, welche Eingaben sind sinnvoll und was passiert bei der Rückgabe?</p>
+          </div>
+
           <div id="questionsBox" style="margin-top: 18px;"></div>
+
           <div class="row">
-            <button class="primary" id="submitBtn">Antworten speichern</button>
-            <button class="ghost" id="resetStudentBtn">Eingaben zurücksetzen</button>
+            <button class="primary" id="submitBtn">Laborprotokoll abgeben</button>
+            <button class="ghost" id="resetStudentBtn">Antworten löschen</button>
             <span id="studentMessage" class="muted"></span>
           </div>
         </section>
 
         <section class="card">
-          <div class="pill">Admin-Login</div>
+          <div class="pill">Admin-Zugang</div>
           <div class="grid">
             <div>
-              <label for="teacherCode">Admin-Passwort</label>
+              <label for="teacherCode">Passwort</label>
               <input id="teacherCode" type="password" placeholder="Passwort eingeben" />
             </div>
             <div style="display:flex;align-items:end;">
-              <button class="ghost" id="toggleAdminBtn">Admin-Seite öffnen</button>
+              <button class="ghost" id="toggleAdminBtn">Laborleitung öffnen</button>
             </div>
           </div>
-          <p class="footer-note">Im Prototyp lautet das Passwort <strong>schule6</strong>. Vor echtem Einsatz bitte ändern. In dieser Version werden Status und Ergebnisse im Browser gespeichert. Für einen Raspberry Pi als echten Zentralserver würdest du dieselbe Oberfläche mit zentraler Datenbank verwenden.</p>
+          <p class="footer-note">Im Prototyp lautet das Passwort <strong>schule6</strong>. Die Mission wirkt für die Lernenden spielerisch. Im Hintergrund werden die Antworten dennoch gespeichert, damit du den Wissensstand auswerten kannst.</p>
         </section>
 
         <section id="adminView" class="card hidden">
-          <div class="pill">Admin-Seite</div>
+          <div class="pill">Laborleitung</div>
 
           <div class="kpis">
             <div class="kpi"><span class="muted">Status</span><strong id="kpiState">WARTEN</strong></div>
             <div class="kpi"><span class="muted">Abgaben</span><strong id="kpiSubmissions">0</strong></div>
-            <div class="kpi"><span class="muted">Durchschnitt</span><strong id="kpiAverage">0%</strong></div>
+            <div class="kpi"><span class="muted">Trefferquote</span><strong id="kpiAverage">0%</strong></div>
             <div class="kpi"><span class="muted">Beste Quote</span><strong id="kpiBest">0%</strong></div>
           </div>
 
           <div class="row" style="margin-bottom: 14px;">
-            <button class="ok" id="startQuizBtn">Freigeben / Starten</button>
-            <button class="danger" id="stopQuizBtn">Stoppen</button>
+            <button class="ok" id="startQuizBtn">Mission freigeben</button>
+            <button class="danger" id="stopQuizBtn">Mission stoppen</button>
             <button class="ghost" id="setWaitingBtn">Auf Warten setzen</button>
           </div>
 
@@ -352,8 +450,9 @@
                 <tr>
                   <th>Vorname</th>
                   <th>Klasse</th>
-                  <th>Punkte</th>
+                  <th>Treffer</th>
                   <th>Quote</th>
+                  <th>Notiz</th>
                   <th>Zeit</th>
                 </tr>
               </thead>
@@ -366,8 +465,8 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'informatik_check_klasse6_results_v2';
-    const SESSION_KEY = 'informatik_check_klasse6_session_v2';
+    const STORAGE_KEY = 'automatenlabor_results_v3';
+    const SESSION_KEY = 'automatenlabor_session_v3';
     const TEACHER_CODE = 'schule6';
 
     const STATE_WAITING = 'waiting';
@@ -377,49 +476,70 @@
     const questions = [
       {
         id: 'q1',
-        text: 'Wofür steht die Abkürzung HTML?',
-        options: [
-          'HyperText Markup Language',
-          'High Transfer Machine Language',
-          'Home Tool Markup Logic'
-        ],
+        type: 'single',
+        tag: 'Mission 1',
+        text: 'Welcher Zustand ist der Startzustand des Snackautomaten?',
+        options: ['0 €', '0,50 €', '1 €', '2 €'],
         correctIndex: 0
       },
       {
         id: 'q2',
-        text: 'Welches Gerät verarbeitet Eingaben und führt Programme aus?',
-        options: ['Drucker', 'Computer', 'Lautsprecher'],
+        type: 'single',
+        tag: 'Mission 2',
+        text: 'Welche Eingaben akzeptiert der Automat?',
+        options: [
+          '10 ct, 20 ct und 50 ct',
+          '50 ct, 1 € und 2 €',
+          'Nur 1 € und 2 €',
+          'Beliebige Münzen'
+        ],
         correctIndex: 1
       },
       {
         id: 'q3',
-        text: 'Was ist ein Algorithmus?',
+        type: 'single',
+        tag: 'Mission 3',
+        text: 'Was passiert, wenn sich der Automat im Zustand 0 € befindet und die Taste für Gummibärchen gedrückt wird?',
         options: [
-          'Eine Schritt-für-Schritt-Anleitung zur Lösung eines Problems',
-          'Ein besonders schneller Computer',
-          'Ein Passwort für das Internet'
+          'Die Gummibärchen werden ausgegeben',
+          'Der Zustand bleibt bei 0 €',
+          'Der Zustand springt direkt zu 1 €',
+          'Es wird Rückgeld ausgegeben'
         ],
-        correctIndex: 0
+        correctIndex: 1
       },
       {
         id: 'q4',
-        text: 'Welche Aussage zu sicheren Passwörtern ist richtig?',
+        type: 'single',
+        tag: 'Mission 4',
+        text: 'Welche Beschreibung passt am besten zur Rückgabe-Taste?',
         options: [
-          'Ein kurzes Passwort mit dem Vornamen ist am sichersten',
-          'Ein langes Passwort mit verschiedenen Zeichen ist besser',
-          'Dasselbe Passwort sollte überall genutzt werden'
+          'Sie erhöht den Geldbetrag im Automaten',
+          'Sie setzt den Automaten abhängig vom Zustand zurück und gibt eingeworfenes Geld zurück',
+          'Sie gibt immer Chips aus',
+          'Sie wechselt das Produkt'
         ],
         correctIndex: 1
       },
       {
         id: 'q5',
-        text: 'Was bedeutet „Speichern“ bei einer Datei?',
+        type: 'single',
+        tag: 'Mission 5',
+        text: 'Warum kann der Automat kein Wechselgeld ausgeben?',
         options: [
-          'Die Datei wird dauerhaft abgelegt',
-          'Die Datei wird gelöscht',
-          'Der Computer wird ausgeschaltet'
+          'Weil er nur Zustände für eingeworfene Beträge nutzt und keine Rückgabe von Restgeld vorgesehen ist',
+          'Weil 2-€-Münzen verboten sind',
+          'Weil Scratch keine Zahlen speichern kann',
+          'Weil Produkte immer kostenlos sind'
         ],
         correctIndex: 0
+      },
+      {
+        id: 'q6',
+        type: 'text',
+        tag: 'Mission 6',
+        text: 'Beschreibe in 1–2 Sätzen, wie man an einem Zustandsdiagramm erkennt, was Zustand, Eingabe, Folgezustand und Ausgabe sind.',
+        placeholder: 'Beispiel: Ein Zustand ist ... Die Eingabe ist ...'
       }
     ];
 
@@ -461,18 +581,33 @@
       questionsBox.innerHTML = '';
       questions.forEach((question, index) => {
         const block = document.createElement('div');
-        block.className = 'question';
-        block.innerHTML = `
-          <h3>${index + 1}. ${question.text}</h3>
-          <div class="answers">
-            ${question.options.map((option, optionIndex) => `
-              <label class="answer">
-                <input type="radio" name="${question.id}" value="${optionIndex}" />
-                <span>${option}</span>
-              </label>
-            `).join('')}
-          </div>
-        `;
+        block.className = 'mission';
+
+        if (question.type === 'single') {
+          block.innerHTML = `
+            <div class="mission-head">
+              <h3>${index + 1}. ${question.text}</h3>
+              <span class="mission-tag">${question.tag}</span>
+            </div>
+            <div class="answers">
+              ${question.options.map((option, optionIndex) => `
+                <label class="answer">
+                  <input type="radio" name="${question.id}" value="${optionIndex}" />
+                  <span>${option}</span>
+                </label>
+              `).join('')}
+            </div>
+          `;
+        } else {
+          block.innerHTML = `
+            <div class="mission-head">
+              <h3>${index + 1}. ${question.text}</h3>
+              <span class="mission-tag">${question.tag}</span>
+            </div>
+            <textarea id="${question.id}" placeholder="${question.placeholder}"></textarea>
+          `;
+        }
+
         questionsBox.appendChild(block);
       });
     }
@@ -518,8 +653,7 @@
     }
 
     function formatDate(isoString) {
-      const date = new Date(isoString);
-      return date.toLocaleString('de-DE');
+      return new Date(isoString).toLocaleString('de-DE');
     }
 
     function escapeHtml(value) {
@@ -534,42 +668,56 @@
     function collectAnswers() {
       const answers = {};
       for (const question of questions) {
-        const checked = document.querySelector(`input[name="${question.id}"]:checked`);
-        answers[question.id] = checked ? Number(checked.value) : null;
+        if (question.type === 'single') {
+          const checked = document.querySelector(`input[name="${question.id}"]:checked`);
+          answers[question.id] = checked ? Number(checked.value) : null;
+        } else {
+          const field = document.getElementById(question.id);
+          answers[question.id] = field ? field.value.trim() : '';
+        }
       }
       return answers;
     }
 
     function scoreAnswers(answers) {
       let points = 0;
+      let maxPoints = 0;
       questions.forEach((question) => {
-        if (answers[question.id] === question.correctIndex) {
-          points += 1;
+        if (question.type === 'single') {
+          maxPoints += 1;
+          if (answers[question.id] === question.correctIndex) {
+            points += 1;
+          }
         }
       });
-      return points;
+      return { points, maxPoints };
     }
 
     function validateStudentInput(firstName, answers) {
       if (!firstName || firstName.trim().length < 2) {
         return 'Bitte gib einen Vornamen mit mindestens 2 Zeichen ein.';
       }
-      const unanswered = Object.values(answers).some((value) => value === null);
-      if (unanswered) {
-        return 'Bitte beantworte alle Fragen.';
+      const missingSingle = questions
+        .filter((question) => question.type === 'single')
+        .some((question) => answers[question.id] === null);
+      if (missingSingle) {
+        return 'Bitte bearbeite alle Missionen mit Auswahl.';
       }
       return '';
+    }
+
+    function summarizeTextAnswer(text) {
+      if (!text) return '';
+      return text.length > 80 ? `${text.slice(0, 80)}…` : text;
     }
 
     function joinWaitingRoom() {
       const firstName = firstNameInput.value.trim();
       const className = classNameInput.value;
-
       if (!firstName || firstName.length < 2) {
         landingMessage.textContent = 'Bitte zuerst einen Vornamen eingeben.';
         return;
       }
-
       const session = getSession();
       session.student = { firstName, className };
       session.hasSubmitted = false;
@@ -594,6 +742,10 @@
       document.querySelectorAll('input[type="radio"]').forEach((input) => {
         input.checked = false;
       });
+      questions.filter((q) => q.type === 'text').forEach((q) => {
+        const field = document.getElementById(q.id);
+        if (field) field.value = '';
+      });
       if (clearMessage) {
         studentMessage.textContent = '';
       }
@@ -606,11 +758,11 @@
         return;
       }
       if (session.quizState !== STATE_LIVE) {
-        studentMessage.textContent = 'Der Check ist aktuell nicht freigegeben.';
+        studentMessage.textContent = 'Die Mission ist aktuell nicht freigegeben.';
         return;
       }
       if (session.hasSubmitted) {
-        studentMessage.textContent = 'Du hast bereits abgegeben.';
+        studentMessage.textContent = 'Dein Laborprotokoll wurde bereits gespeichert.';
         return;
       }
 
@@ -621,15 +773,16 @@
         return;
       }
 
-      const points = scoreAnswers(answers);
+      const { points, maxPoints } = scoreAnswers(answers);
       const entry = {
         id: window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : String(Date.now()),
         firstName: session.student.firstName,
         className: session.student.className,
         answers,
         points,
-        maxPoints: questions.length,
-        percentage: Math.round((points / questions.length) * 100),
+        maxPoints,
+        percentage: maxPoints ? Math.round((points / maxPoints) * 100) : 0,
+        note: summarizeTextAnswer(answers.q6),
         submittedAt: new Date().toISOString()
       };
 
@@ -639,7 +792,7 @@
 
       session.hasSubmitted = true;
       saveSession(session);
-      studentMessage.textContent = `Gespeichert. Du hast ${points} von ${questions.length} Punkten erreicht.`;
+      studentMessage.textContent = 'Laborprotokoll gespeichert. Danke für deine Analyse.';
       renderAdminTable();
       renderStudentView();
     }
@@ -653,52 +806,45 @@
       waitingCard.classList.add('hidden');
       quizCard.classList.add('hidden');
 
-      if (!hasStudent) {
-        return;
-      }
+      if (!hasStudent) return;
 
-      studentIntro.textContent = `Angemeldet als ${session.student.firstName} (${session.student.className})`;
+      studentIntro.textContent = `Mission aktiviert für ${session.student.firstName} (${session.student.className})`;
 
       if (session.hasSubmitted) {
         waitingCard.classList.remove('hidden');
         studentStateBadge.className = 'state-badge state-live';
-        studentStateBadge.textContent = 'Abgegeben';
-        waitingTitle.textContent = `Danke, ${session.student.firstName}!`;
-        waitingText.textContent = 'Deine Antworten wurden gespeichert. Bitte warte auf weitere Anweisungen.';
+        studentStateBadge.textContent = 'Mission abgeschlossen';
+        waitingTitle.textContent = `Stark, ${session.student.firstName}!`;
+        waitingText.textContent = 'Dein Laborprotokoll wurde gespeichert. Bitte warte auf die nächste Anweisung.';
         return;
       }
 
       if (state === STATE_WAITING) {
         waitingCard.classList.remove('hidden');
         studentStateBadge.className = 'state-badge state-waiting';
-        studentStateBadge.textContent = 'Wartet auf Freigabe';
+        studentStateBadge.textContent = 'Bereit';
         waitingTitle.textContent = `Hallo ${session.student.firstName}!`;
-        waitingText.textContent = 'Bitte warte, bis die Lehrkraft den Wissenscheck startet.';
+        waitingText.textContent = 'Die Mission wird gleich freigegeben.';
       } else if (state === STATE_LIVE) {
         quizCard.classList.remove('hidden');
       } else {
         waitingCard.classList.remove('hidden');
         studentStateBadge.className = 'state-badge state-stopped';
-        studentStateBadge.textContent = 'Gestoppt';
+        studentStateBadge.textContent = 'Pausiert';
         waitingTitle.textContent = `Hallo ${session.student.firstName}!`;
-        waitingText.textContent = 'Der Wissenscheck wurde gestoppt. Bitte warte auf weitere Anweisungen.';
+        waitingText.textContent = 'Die Mission wurde pausiert. Bitte warte auf weitere Anweisungen.';
       }
     }
 
     function renderAdminTable() {
       const results = getStoredResults();
       const session = getSession();
-      const stateMap = {
-        waiting: 'WARTEN',
-        live: 'LIVE',
-        stopped: 'GESTOPPT'
-      };
-
+      const stateMap = { waiting: 'WARTEN', live: 'LIVE', stopped: 'PAUSIERT' };
       kpiState.textContent = stateMap[session.quizState] || 'WARTEN';
       resultsBody.innerHTML = '';
 
       if (results.length === 0) {
-        resultsBody.innerHTML = '<tr><td colspan="5">Noch keine Abgaben vorhanden.</td></tr>';
+        resultsBody.innerHTML = '<tr><td colspan="6">Noch keine Laborprotokolle vorhanden.</td></tr>';
         kpiSubmissions.textContent = '0';
         kpiAverage.textContent = '0%';
         kpiBest.textContent = '0%';
@@ -707,7 +853,6 @@
 
       let sum = 0;
       let best = 0;
-
       results
         .slice()
         .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt))
@@ -720,6 +865,7 @@
             <td>${escapeHtml(entry.className)}</td>
             <td>${entry.points}/${entry.maxPoints}</td>
             <td>${entry.percentage}%</td>
+            <td>${escapeHtml(entry.note || '')}</td>
             <td>${formatDate(entry.submittedAt)}</td>
           `;
           resultsBody.appendChild(row);
@@ -754,34 +900,34 @@
     function toCsv(rows) {
       return rows
         .map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(';'))
-        .join('\n');
+        .join('
+');
     }
 
     function exportCsv() {
       const results = getStoredResults();
-      const header = ['Vorname', 'Klasse', 'Punkte', 'MaxPunkte', 'Quote', 'Zeit'];
+      const header = ['Vorname', 'Klasse', 'Treffer', 'MaxTreffer', 'Quote', 'Notiz', 'Zeit'];
       const rows = results.map((r) => [
         r.firstName,
         r.className,
         r.points,
         r.maxPoints,
         r.percentage,
+        r.note || '',
         r.submittedAt
       ]);
       const csv = toCsv([header, ...rows]);
-      downloadFile('informatik-check-auswertung.csv', csv, 'text/csv;charset=utf-8;');
+      downloadFile('automatenlabor-auswertung.csv', csv, 'text/csv;charset=utf-8;');
     }
 
     function exportJson() {
       const results = getStoredResults();
-      downloadFile('informatik-check-auswertung.json', JSON.stringify(results, null, 2), 'application/json');
+      downloadFile('automatenlabor-auswertung.json', JSON.stringify(results, null, 2), 'application/json');
     }
 
     function clearAllData() {
-      const confirmed = confirm('Wirklich alle gespeicherten Ergebnisse löschen?');
-      if (!confirmed) {
-        return;
-      }
+      const confirmed = confirm('Wirklich alle gespeicherten Daten löschen?');
+      if (!confirmed) return;
       localStorage.removeItem(STORAGE_KEY);
       const session = getSession();
       session.hasSubmitted = false;
@@ -791,11 +937,14 @@
     }
 
     function runSelfTests() {
-      console.assert(scoreAnswers({ q1: 0, q2: 1, q3: 0, q4: 1, q5: 0 }) === 5, 'scoreAnswers sollte 5 liefern');
-      console.assert(scoreAnswers({ q1: 1, q2: 1, q3: 2, q4: 0, q5: 0 }) === 2, 'scoreAnswers sollte 2 liefern');
-      console.assert(validateStudentInput('Mi', { q1: 0, q2: 1, q3: 0, q4: 1, q5: 0 }) === '', 'validateStudentInput sollte gültige Eingaben akzeptieren');
-      console.assert(validateStudentInput('', { q1: 0, q2: 1, q3: 0, q4: 1, q5: 0 }).length > 0, 'validateStudentInput sollte leeren Namen ablehnen');
-      console.assert(toCsv([['A', 'B'], ['1', '2']]) === '"A";"B"\n"1";"2"', 'toCsv sollte korrekten Zeilenumbruch erzeugen');
+      const perfect = { q1: 0, q2: 1, q3: 1, q4: 1, q5: 0, q6: 'Zustand ist der Kreis.' };
+      const result = scoreAnswers(perfect);
+      console.assert(result.points === 5, 'scoreAnswers sollte 5 Treffer liefern');
+      console.assert(result.maxPoints === 5, 'scoreAnswers sollte 5 MaxTreffer liefern');
+      console.assert(validateStudentInput('Mi', perfect) === '', 'validateStudentInput sollte gültige Eingaben akzeptieren');
+      console.assert(validateStudentInput('', perfect).length > 0, 'validateStudentInput sollte leeren Namen ablehnen');
+      console.assert(toCsv([['A', 'B'], ['1', '2']]) === '"A";"B"
+"1";"2"', 'toCsv sollte korrekten Zeilenumbruch erzeugen');
       console.assert(escapeHtml('<script>') === '&lt;script&gt;', 'escapeHtml sollte HTML maskieren');
     }
 

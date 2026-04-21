@@ -626,6 +626,7 @@
               <button class="warning" id="pauseMissionBtn">Pausieren</button>
               <button class="secondary" id="waitingMissionBtn">Warten</button>
             </div>
+            <div class="status-line" id="adminActionMessage"></div>
             <div>
               <label for="broadcastInput">Nachricht an alle</label>
               <textarea id="broadcastInput" placeholder="z. B. Denkt an die Rückgabe-Taste."></textarea>
@@ -811,6 +812,7 @@
       broadcastInput: document.getElementById("broadcastInput"),
       sendBroadcastBtn: document.getElementById("sendBroadcastBtn"),
       refreshAdminBtn: document.getElementById("refreshAdminBtn"),
+      adminActionMessage: document.getElementById("adminActionMessage"),
       exportCsvBtn: document.getElementById("exportCsvBtn"),
       exportJsonBtn: document.getElementById("exportJsonBtn"),
       kpiMission: document.getElementById("kpiMission"),
@@ -1405,30 +1407,41 @@
 
     async function updateMissionStatus(newState) {
       if (!isTeacher()) return;
+      elements.adminActionMessage.textContent = "Mission wird aktualisiert ...";
+      const payload = {
+        code: MISSION_CODE,
+        status: newState,
+        updated_at: new Date().toISOString()
+      };
+
       const { error } = await supabaseClient
         .from("missions")
-        .update({
-          status: newState,
-          updated_at: new Date().toISOString()
-        })
-        .eq("code", MISSION_CODE);
+        .upsert(payload, { onConflict: "code" });
 
-      if (error) throw error;
+      if (error) {
+        elements.adminActionMessage.textContent = "Freigabe fehlgeschlagen. Bitte prüfe die Konsole.";
+        throw error;
+      }
+
+      elements.adminActionMessage.textContent = `Mission ist jetzt auf „${getMissionStateLabel(newState)}“ gesetzt.`;
+      await fetchMission();
     }
 
     async function sendBroadcast() {
       if (!isTeacher()) return;
       const message = elements.broadcastInput.value.trim();
+      elements.adminActionMessage.textContent = "Nachricht wird gesendet ...";
       const { error } = await supabaseClient
         .from("missions")
-        .update({
+        .upsert({
+          code: MISSION_CODE,
           broadcast_message: message,
           updated_at: new Date().toISOString()
-        })
-        .eq("code", MISSION_CODE);
+        }, { onConflict: "code" });
 
       if (error) throw error;
       elements.broadcastInput.value = message;
+      elements.adminActionMessage.textContent = "Nachricht an alle wurde gespeichert.";
     }
 
     async function updateStudentField(studentKey, changes) {

@@ -928,11 +928,10 @@
     }
 
     function toCsv(rows) {
-      return rows
-        .map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(';'))
-        .join('
-');
-    }
+  return rows
+    .map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(';'))
+    .join('\n');
+}
 
     function exportCsv() {
       const header = ['Vorname', 'Klasse', 'Treffer', 'MaxTreffer', 'Quote', 'Notiz', 'Zeit'];

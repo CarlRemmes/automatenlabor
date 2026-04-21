@@ -6,18 +6,18 @@
   <title>Automatenlabor</title>
   <style>
     :root {
-      --bg: #f3f6fb;
+      --bg: #f1f5fb;
       --panel: rgba(255, 255, 255, 0.84);
       --panel-strong: rgba(255, 255, 255, 0.96);
       --text: #10233d;
-      --muted: #5e6d82;
+      --muted: #607188;
       --line: rgba(16, 35, 61, 0.1);
       --accent: #007aff;
       --accent-soft: rgba(0, 122, 255, 0.12);
-      --ok: #1f9d55;
-      --warn: #f59e0b;
+      --green: #1f9d55;
+      --amber: #f59e0b;
       --danger: #e11d48;
-      --shadow: 0 22px 70px rgba(16, 35, 61, 0.12);
+      --shadow: 0 22px 80px rgba(16, 35, 61, 0.12);
       --radius-xl: 30px;
       --radius-lg: 22px;
       --radius-md: 16px;
@@ -31,9 +31,9 @@
       font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(0, 122, 255, 0.12), transparent 22%),
-        radial-gradient(circle at bottom right, rgba(31, 157, 85, 0.1), transparent 20%),
-        linear-gradient(180deg, #f8fbff, #eef3f8 55%, #e8edf5);
+        radial-gradient(circle at top left, rgba(0, 122, 255, 0.14), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(31, 157, 85, 0.1), transparent 22%),
+        linear-gradient(180deg, #f8fbff, #eef3f9 56%, #e8edf5);
     }
 
     button, input, textarea {
@@ -41,12 +41,12 @@
     }
 
     .shell {
-      width: min(1180px, calc(100% - 24px));
-      margin: 14px auto;
-      padding: 14px;
-      border-radius: 36px;
+      width: min(1220px, calc(100% - 24px));
+      margin: 12px auto;
+      padding: 12px;
+      border-radius: 34px;
       background: rgba(255, 255, 255, 0.42);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.62);
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
     }
@@ -55,20 +55,20 @@
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: var(--radius-xl);
-      box-shadow: 0 10px 28px rgba(16, 35, 61, 0.06);
+      box-shadow: 0 12px 28px rgba(16, 35, 61, 0.06);
       backdrop-filter: blur(20px);
     }
 
     .hero {
       display: grid;
       gap: 18px;
-      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
     }
 
     .hero-copy,
-    .hero-visual,
+    .hero-gallery,
     .workspace {
-      padding: 26px;
+      padding: 28px;
     }
 
     .eyebrow {
@@ -86,8 +86,8 @@
 
     h1 {
       margin: 0 0 12px;
-      font-size: clamp(2.5rem, 5vw, 4.2rem);
-      line-height: 0.95;
+      font-size: clamp(2.7rem, 5vw, 4.5rem);
+      line-height: 0.93;
       letter-spacing: -0.05em;
       cursor: default;
       user-select: none;
@@ -100,10 +100,10 @@
 
     .sub {
       margin: 0;
-      max-width: 46rem;
       color: var(--muted);
-      line-height: 1.58;
+      line-height: 1.6;
       font-size: 1.04rem;
+      max-width: 48rem;
     }
 
     .chip-row {
@@ -118,35 +118,34 @@
       border-radius: 999px;
       background: rgba(16, 35, 61, 0.05);
       font-weight: 600;
-      color: var(--text);
     }
 
-    .machine-grid {
+    .gallery-grid {
       display: grid;
       gap: 14px;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-top: 12px;
+      margin-top: 14px;
     }
 
-    .machine-card {
+    .gallery-card {
       padding: 16px;
       border-radius: 22px;
       background: var(--panel-strong);
       border: 1px solid var(--line);
-      min-height: 150px;
+      min-height: 168px;
     }
 
-    .machine-graphic {
+    .gallery-visual {
       display: grid;
       place-items: center;
-      height: 86px;
+      height: 92px;
       border-radius: 18px;
       background: linear-gradient(180deg, rgba(0, 122, 255, 0.08), rgba(16, 35, 61, 0.03));
       margin-bottom: 12px;
       overflow: hidden;
     }
 
-    .machine-svg {
+    .art {
       width: 100%;
       height: 100%;
     }
@@ -157,12 +156,29 @@
       gap: 18px;
     }
 
-    .topbar {
+    .toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 16px;
       flex-wrap: wrap;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(16, 35, 61, 0.05);
+      font-weight: 600;
     }
 
     .progress-box,
@@ -193,13 +209,13 @@
     .question-head {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
+      gap: 14px;
       align-items: flex-start;
       margin-bottom: 14px;
     }
 
     .question-tag {
-      padding: 7px 12px;
+      padding: 8px 12px;
       border-radius: 999px;
       background: var(--accent-soft);
       color: var(--accent);
@@ -207,9 +223,9 @@
       white-space: nowrap;
     }
 
-    .question-text {
+    .question-title {
       margin: 0 0 8px;
-      font-size: clamp(1.35rem, 2vw, 1.7rem);
+      font-size: clamp(1.35rem, 2vw, 1.75rem);
       line-height: 1.16;
     }
 
@@ -217,6 +233,32 @@
       margin: 0;
       color: var(--muted);
       line-height: 1.55;
+    }
+
+    .question-visual {
+      margin-top: 18px;
+    }
+
+    .example-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .example-card {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(16, 35, 61, 0.04);
+      border: 1px solid rgba(16, 35, 61, 0.06);
+    }
+
+    .example-visual {
+      height: 82px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(0, 122, 255, 0.09), rgba(16, 35, 61, 0.03));
+      margin-bottom: 10px;
+      display: grid;
+      place-items: center;
     }
 
     .answers {
@@ -235,7 +277,7 @@
       border: 1px solid rgba(16, 35, 61, 0.06);
     }
 
-    textarea, input[type="text"] {
+    textarea, input[type="text"], input[type="password"] {
       width: 100%;
       border: 1px solid rgba(16, 35, 61, 0.1);
       background: rgba(255, 255, 255, 0.88);
@@ -271,7 +313,7 @@
     button:disabled { opacity: 0.55; cursor: not-allowed; }
 
     .primary {
-      background: linear-gradient(180deg, #2690ff, #007aff);
+      background: linear-gradient(180deg, #2490ff, #007aff);
       color: white;
       box-shadow: 0 14px 28px rgba(0, 122, 255, 0.22);
     }
@@ -283,43 +325,24 @@
 
     .warning {
       background: rgba(245, 158, 11, 0.18);
-      color: #9a6200;
-    }
-
-    .success {
-      background: rgba(31, 157, 85, 0.16);
-      color: #176c3d;
+      color: #8f5a00;
     }
 
     .muted { color: var(--muted); }
     .hidden { display: none !important; }
+    .status-line { min-height: 1.4em; color: var(--muted); }
 
-    .mini-gallery {
+    .skip-summary {
       display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
       margin-top: 14px;
     }
 
-    .mini-card {
-      padding: 14px;
-      border-radius: 18px;
-      background: rgba(16, 35, 61, 0.04);
-      border: 1px solid rgba(16, 35, 61, 0.06);
-    }
-
-    .mini-graphic {
-      height: 74px;
+    .skip-item {
+      padding: 10px 12px;
       border-radius: 14px;
-      background: linear-gradient(180deg, rgba(0, 122, 255, 0.09), rgba(16, 35, 61, 0.03));
-      margin-bottom: 10px;
-      display: grid;
-      place-items: center;
-    }
-
-    .status-line {
-      min-height: 1.4em;
-      color: var(--muted);
+      background: rgba(16, 35, 61, 0.05);
+      font-size: 0.95rem;
     }
 
     .overlay {
@@ -335,28 +358,15 @@
     }
 
     .overlay-card {
-      width: min(420px, 100%);
+      width: min(440px, 100%);
       padding: 24px;
       border-radius: 28px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.72);
       box-shadow: var(--shadow);
     }
 
-    .skip-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .skip-item {
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(16, 35, 61, 0.05);
-      font-size: 0.95rem;
-    }
-
-    @media (max-width: 920px) {
+    @media (max-width: 940px) {
       .hero {
         grid-template-columns: 1fr;
       }
@@ -364,19 +374,19 @@
 
     @media (max-width: 680px) {
       .shell {
-        width: min(100% - 10px, 1180px);
+        width: min(100% - 10px, 1220px);
         margin: 6px auto;
         padding: 8px;
         border-radius: 26px;
       }
 
       .hero-copy,
-      .hero-visual,
+      .hero-gallery,
       .workspace {
         padding: 18px;
       }
 
-      .machine-grid {
+      .gallery-grid {
         grid-template-columns: 1fr;
       }
 
@@ -389,6 +399,7 @@
       }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="shell">
@@ -397,79 +408,84 @@
         <div class="eyebrow">Automatenlabor</div>
         <h1 id="heroTitle">Automaten<br />verstehen</h1>
         <p class="sub">
-          Beantworte Fragen zu Automaten, Zuständen, Eingaben und Ausgaben.
-          Schau dir Beispiele an und entscheide: Ist das ein Automat oder nicht?
+          Beantworte Fragen zu Zuständen, Eingaben, Übergängen und Ausgaben.
+          Entscheide bei mehreren Alltagsbeispielen, ob es sich um einen Automaten handelt.
         </p>
         <div class="chip-row">
-          <span class="chip">Mehr Bilder</span>
+          <span class="chip">Große Grafiken</span>
           <span class="chip">Klare Fragen</span>
-          <span class="chip">Einfache Auswertung</span>
+          <span class="chip">Fortschritt wird gespeichert</span>
           <span class="chip">Download am Ende</span>
         </div>
       </section>
 
-      <section class="hero-visual glass">
+      <section class="hero-gallery glass">
         <div class="eyebrow">Beispiele</div>
         <h2>Automaten im Alltag</h2>
-        <div class="machine-grid">
-          <article class="machine-card">
-            <div class="machine-graphic">
-              <svg class="machine-svg" viewBox="0 0 220 100" aria-hidden="true">
-                <rect x="64" y="8" width="92" height="84" rx="16" fill="#dfe9f8"></rect>
-                <rect x="82" y="20" width="56" height="22" rx="8" fill="#8bc3ff"></rect>
-                <circle cx="92" cy="60" r="7" fill="#007aff"></circle>
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <div class="gallery-visual">
+              <svg class="art" viewBox="0 0 220 100" aria-hidden="true">
+                <rect x="66" y="8" width="88" height="84" rx="16" fill="#dde9fb"></rect>
+                <rect x="84" y="20" width="52" height="22" rx="8" fill="#92c4ff"></rect>
+                <circle cx="94" cy="60" r="7" fill="#007aff"></circle>
                 <circle cx="112" cy="60" r="7" fill="#007aff"></circle>
-                <circle cx="132" cy="60" r="7" fill="#007aff"></circle>
-                <rect x="100" y="72" width="20" height="10" rx="3" fill="#5e6d82"></rect>
+                <circle cx="130" cy="60" r="7" fill="#007aff"></circle>
+                <rect x="101" y="73" width="18" height="10" rx="3" fill="#607188"></rect>
               </svg>
             </div>
             <strong>Snackautomat</strong>
-            <p class="muted">Eingabe, Zustand, Auswahl, Ausgabe</p>
+            <div class="muted">Eingabe, Zustand, Ausgabe</div>
           </article>
-          <article class="machine-card">
-            <div class="machine-graphic">
-              <svg class="machine-svg" viewBox="0 0 220 100" aria-hidden="true">
-                <circle cx="58" cy="50" r="26" fill="#cae6ff"></circle>
-                <circle cx="110" cy="50" r="26" fill="#cae6ff"></circle>
-                <circle cx="162" cy="50" r="26" fill="#cae6ff"></circle>
+          <article class="gallery-card">
+            <div class="gallery-visual">
+              <svg class="art" viewBox="0 0 220 100" aria-hidden="true">
+                <circle cx="58" cy="50" r="24" fill="#d7ecff"></circle>
+                <circle cx="110" cy="50" r="24" fill="#d7ecff"></circle>
+                <circle cx="162" cy="50" r="24" fill="#d7ecff"></circle>
                 <path d="M82 50h22" stroke="#007aff" stroke-width="6" stroke-linecap="round"></path>
                 <path d="M134 50h22" stroke="#007aff" stroke-width="6" stroke-linecap="round"></path>
               </svg>
             </div>
             <strong>Zustandsdiagramm</strong>
-            <p class="muted">Zustände und Übergänge</p>
+            <div class="muted">Zustände und Übergänge</div>
           </article>
-          <article class="machine-card">
-            <div class="machine-graphic">
-              <svg class="machine-svg" viewBox="0 0 220 100" aria-hidden="true">
-                <rect x="48" y="16" width="124" height="68" rx="16" fill="#dff5e8"></rect>
-                <rect x="62" y="30" width="60" height="12" rx="6" fill="#1f9d55"></rect>
-                <rect x="62" y="50" width="92" height="12" rx="6" fill="#87d8a8"></rect>
+          <article class="gallery-card">
+            <div class="gallery-visual">
+              <svg class="art" viewBox="0 0 220 100" aria-hidden="true">
+                <rect x="70" y="10" width="80" height="78" rx="18" fill="#def5e8"></rect>
+                <circle cx="110" cy="50" r="22" fill="#9ad8b6"></circle>
+                <circle cx="110" cy="50" r="12" fill="#f7fbff"></circle>
+                <rect x="84" y="22" width="24" height="8" rx="4" fill="#1f9d55"></rect>
               </svg>
             </div>
             <strong>Waschmaschine</strong>
-            <p class="muted">Programm wählen, starten, stoppen</p>
+            <div class="muted">Programm, Start, Ende</div>
           </article>
-          <article class="machine-card">
-            <div class="machine-graphic">
-              <svg class="machine-svg" viewBox="0 0 220 100" aria-hidden="true">
-                <rect x="74" y="14" width="72" height="72" rx="20" fill="#ffe8bf"></rect>
-                <path d="M92 48h36" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"></path>
-                <path d="M110 30v36" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"></path>
+          <article class="gallery-card">
+            <div class="gallery-visual">
+              <svg class="art" viewBox="0 0 220 100" aria-hidden="true">
+                <rect x="86" y="8" width="48" height="84" rx="16" fill="#fce8bf"></rect>
+                <circle cx="110" cy="28" r="8" fill="#ef4444"></circle>
+                <circle cx="110" cy="50" r="8" fill="#f59e0b"></circle>
+                <circle cx="110" cy="72" r="8" fill="#22c55e"></circle>
               </svg>
             </div>
             <strong>Ampel</strong>
-            <p class="muted">Wechselt geordnet zwischen Zuständen</p>
+            <div class="muted">Geordneter Wechsel von Zuständen</div>
           </article>
         </div>
       </section>
     </section>
 
     <main class="workspace glass">
-      <div class="topbar">
+      <div class="toolbar">
         <div>
           <div class="eyebrow">Arbeitsbereich</div>
-          <div class="muted">Verstecktes Hilfemenü: fünfmal auf den Titel tippen</div>
+          <div class="meta">
+            <span class="badge" id="saveBadge">Speicherstand wird vorbereitet</span>
+            <span class="badge" id="helperBadge">Hilfemenü gesperrt</span>
+          </div>
         </div>
         <div class="row">
           <button class="secondary" id="backBtn">Zurück</button>
@@ -478,7 +494,7 @@
       </div>
 
       <section class="progress-box">
-        <strong id="progressLabel">Frage 1 von 12</strong>
+        <strong id="progressLabel">Frage 1 von 14</strong>
         <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
         <div class="status-line" id="statusLine"></div>
       </section>
@@ -486,13 +502,12 @@
       <section class="question-card" id="questionCard">
         <div class="question-head">
           <div>
-            <h2 class="question-text" id="questionText"></h2>
+            <h2 class="question-title" id="questionText"></h2>
             <p class="question-help" id="questionHelp"></p>
           </div>
           <div class="question-tag" id="questionTag"></div>
         </div>
-
-        <div id="questionVisual"></div>
+        <div class="question-visual" id="questionVisual"></div>
         <div id="questionAnswer"></div>
       </section>
 
@@ -506,9 +521,9 @@
           <label for="studentName"><strong>Name</strong></label>
           <input id="studentName" type="text" placeholder="Vorname und Nachname" />
         </div>
-        <div class="skip-list" id="skipSummary"></div>
+        <div class="skip-summary" id="skipSummary"></div>
         <div class="row" style="margin-top: 18px;">
-          <button class="primary" id="downloadBtn">Auswertung downloaden</button>
+          <button class="primary" id="downloadBtn">Auswertung herunterladen</button>
           <button class="secondary" id="restartBtn">Neu starten</button>
         </div>
         <div class="status-line" id="downloadMessage"></div>
@@ -516,24 +531,42 @@
     </main>
   </div>
 
-  <div class="overlay hidden" id="skipOverlay">
+  <div class="overlay hidden" id="helperOverlay">
     <div class="overlay-card">
       <div class="eyebrow">Hilfemenü</div>
-      <h3>Aufgabe überspringen</h3>
+      <h3>PIN eingeben</h3>
       <p class="sub" style="max-width: none;">
-        Wenn du einer einzelnen Schülerin oder einem einzelnen Schüler helfen möchtest, kannst du die aktuelle Aufgabe überspringen.
-        Das wird in der Auswertung vermerkt.
+        Mit der PIN kann die aktuelle Aufgabe übersprungen werden. Das wird in der Auswertung vermerkt.
       </p>
-      <div class="row" style="margin-top: 18px;">
-        <button class="warning" id="skipQuestionBtn">Aktuelle Aufgabe überspringen</button>
-        <button class="secondary" id="closeOverlayBtn">Schließen</button>
+      <div style="margin-top: 16px;">
+        <label for="helperPin"><strong>PIN</strong></label>
+        <input id="helperPin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" />
       </div>
-      <div class="status-line" id="skipMessage"></div>
+      <div class="row" style="margin-top: 18px;">
+        <button class="primary" id="unlockHelperBtn">Freischalten</button>
+        <button class="secondary" id="closeHelperOverlayBtn">Schließen</button>
+      </div>
+      <div class="status-line" id="helperMessage"></div>
+      <div class="row hidden" id="helperActions" style="margin-top: 16px;">
+        <button class="warning" id="skipQuestionBtn">Aktuelle Aufgabe überspringen</button>
+      </div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "automatenlabor_local_exam_v1";
+    const SUPABASE_URL = "https://ksuqarrjolkhpwojrjav.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj";
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { storageKey: "automatenlabor-worksheet-auth" }
+    });
+
+    const STORAGE_KEY = "automatenlabor_worksheet_v2";
+    const state = loadState();
+    let saveTimer = null;
+    let titleTapCount = 0;
+    let titleTapTimer = null;
+    let currentAttempt = null;
+    let authUser = null;
 
     const questions = [
       {
@@ -608,38 +641,52 @@
       {
         id: "q7",
         tag: "Frage 7",
-        type: "yesno",
-        text: "Ist eine Ampel ein Automat?",
-        help: "Begründe für dich mit Zuständen und Wechseln.",
-        visual: "traffic"
+        type: "single",
+        text: "Wann gibt ein Automat eine Ausgabe aus?",
+        help: "Achte darauf, wann eine passende Eingabe oder ein passender Zustand erreicht ist.",
+        options: [
+          "Immer nach jeder Eingabe",
+          "Wenn die passende Bedingung erfüllt ist",
+          "Nur beim Einschalten",
+          "Nur bei einem Fehler"
+        ],
+        correct: 1
       },
       {
         id: "q8",
         tag: "Frage 8",
         type: "yesno",
-        text: "Ist ein normaler Stein auf dem Schulhof ein Automat?",
-        help: "Überlege, ob er feste Zustände und Eingaben hat.",
-        visual: "rock"
+        text: "Ist eine Ampel ein Automat?",
+        help: "Überlege, ob sie feste Zustände und geregelte Wechsel hat.",
+        visual: "traffic"
       },
       {
         id: "q9",
         tag: "Frage 9",
         type: "yesno",
-        text: "Ist eine Waschmaschine ein Automat?",
-        help: "Denke an Programme, Start, Stopp und Zustandswechsel.",
-        visual: "washer"
+        text: "Ist ein Stein auf dem Schulhof ein Automat?",
+        help: "Frage dich, ob es Eingaben, Zustände und Ausgaben gibt.",
+        visual: "rock"
       },
       {
         id: "q10",
         tag: "Frage 10",
         type: "yesno",
-        text: "Ist ein Fahrkartenautomat ein Automat?",
-        help: "Achte auf Eingaben, Zustände und Ausgaben.",
-        visual: "ticket"
+        text: "Ist eine Waschmaschine ein Automat?",
+        help: "Denke an Programme, Start, Stopp und feste Abläufe.",
+        visual: "washer"
       },
       {
         id: "q11",
         tag: "Frage 11",
+        type: "yesno",
+        text: "Ist ein Fahrkartenautomat ein Automat?",
+        help: "Achte auf Auswahl, Eingaben und Ausgabe.",
+        visual: "ticket"
+      },
+      {
+        id: "q12",
+        tag: "Frage 12",
         type: "single",
         text: "Welche Information steht in einem Zustandsdiagramm meistens an einem Pfeil?",
         help: "Denke an das, was zwischen zwei Zuständen passiert.",
@@ -652,18 +699,33 @@
         correct: 1
       },
       {
-        id: "q12",
-        tag: "Frage 12",
+        id: "q13",
+        tag: "Frage 13",
+        type: "single",
+        text: "Was ist ein Folgezustand?",
+        help: "Überlege, welcher Zustand nach einer Eingabe erreicht wird.",
+        options: [
+          "Der Zustand vor dem Start",
+          "Der Zustand nach einer Eingabe oder Aktion",
+          "Ein Zustand ohne Namen",
+          "Die Ausgabe des Automaten"
+        ],
+        correct: 1
+      },
+      {
+        id: "q14",
+        tag: "Frage 14",
         type: "text",
         text: "Erkläre in ein bis zwei Sätzen, woran man in einem Zustandsdiagramm Zustand, Eingabe, Folgezustand und Ausgabe erkennt.",
-        help: "Schreibe in eigenen Worten.",
+        help: "Schreibe in deinen eigenen Worten.",
         placeholder: "Ein Zustand ist ... Die Eingabe erkennt man an ..."
       }
     ];
 
-    const state = loadState();
     const els = {
       heroTitle: document.getElementById("heroTitle"),
+      saveBadge: document.getElementById("saveBadge"),
+      helperBadge: document.getElementById("helperBadge"),
       backBtn: document.getElementById("backBtn"),
       nextBtn: document.getElementById("nextBtn"),
       progressLabel: document.getElementById("progressLabel"),
@@ -680,21 +742,24 @@
       downloadBtn: document.getElementById("downloadBtn"),
       restartBtn: document.getElementById("restartBtn"),
       downloadMessage: document.getElementById("downloadMessage"),
-      skipOverlay: document.getElementById("skipOverlay"),
-      closeOverlayBtn: document.getElementById("closeOverlayBtn"),
-      skipQuestionBtn: document.getElementById("skipQuestionBtn"),
-      skipMessage: document.getElementById("skipMessage"),
-      skipSummary: document.getElementById("skipSummary")
+      skipSummary: document.getElementById("skipSummary"),
+      helperOverlay: document.getElementById("helperOverlay"),
+      helperPin: document.getElementById("helperPin"),
+      helperMessage: document.getElementById("helperMessage"),
+      helperActions: document.getElementById("helperActions"),
+      unlockHelperBtn: document.getElementById("unlockHelperBtn"),
+      closeHelperOverlayBtn: document.getElementById("closeHelperOverlayBtn"),
+      skipQuestionBtn: document.getElementById("skipQuestionBtn")
     };
-
-    let titleTapCount = 0;
-    let titleTapTimer = null;
 
     function createDefaultState() {
       return {
         currentIndex: 0,
         answers: {},
-        skipped: []
+        skipped: [],
+        helperUnlocked: false,
+        studentName: "",
+        downloadedAt: null
       };
     }
 
@@ -706,7 +771,7 @@
       }
     }
 
-    function saveState() {
+    function saveLocalState() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
@@ -719,70 +784,78 @@
         .replaceAll("'", "&#039;");
     }
 
-    function isAnswered(question) {
-      const answer = state.answers[question.id];
-      if (question.type === "text") return Boolean(String(answer || "").trim());
-      return typeof answer !== "undefined" && answer !== null && answer !== "";
-    }
-
     function getSkippedEntry(question) {
       return state.skipped.find((entry) => entry.id === question.id) || null;
     }
 
-    function renderVisual(kind) {
-      if (!kind) return "";
+    function scoreResult() {
+      let points = 0;
+      let maxPoints = 0;
+      questions.forEach((question) => {
+        if (question.type === "single") {
+          maxPoints += 1;
+          if (state.answers[question.id] === question.correct) points += 1;
+        }
+      });
+      return { points, maxPoints };
+    }
 
+    function updateBadges() {
+      els.helperBadge.textContent = state.helperUnlocked ? "Hilfemenü freigeschaltet" : "Hilfemenü gesperrt";
+    }
+
+    function exampleVisual(kind) {
       const visuals = {
         traffic: `
-          <div class="mini-gallery">
-            <div class="mini-card">
-              <div class="mini-graphic">
-                <svg viewBox="0 0 160 80" width="100%" height="100%">
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
                   <rect x="58" y="8" width="44" height="64" rx="14" fill="#dbe8f8"></rect>
                   <circle cx="80" cy="24" r="8" fill="#ef4444"></circle>
                   <circle cx="80" cy="40" r="8" fill="#f59e0b"></circle>
-                  <circle cx="80" cy="56" r="8" fill="#1f9d55"></circle>
+                  <circle cx="80" cy="56" r="8" fill="#22c55e"></circle>
                 </svg>
               </div>
               <strong>Ampel</strong>
-              <div class="muted">Rot, Gelb, Grün</div>
+              <div class="muted">Wechselt geordnet zwischen Zuständen.</div>
             </div>
           </div>
         `,
         rock: `
-          <div class="mini-gallery">
-            <div class="mini-card">
-              <div class="mini-graphic">
-                <svg viewBox="0 0 160 80" width="100%" height="100%">
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
                   <path d="M42 56c0-12 10-20 21-20 5-12 17-18 28-13 8-7 19-7 28 0 12 0 21 9 21 21 0 10-8 18-19 18H59c-10 0-17-7-17-16z" fill="#94a3b8"></path>
                 </svg>
               </div>
               <strong>Stein</strong>
-              <div class="muted">Ohne Eingabe und Ausgabe</div>
+              <div class="muted">Keine geregelte Eingabe und keine Ausgabe.</div>
             </div>
           </div>
         `,
         washer: `
-          <div class="mini-gallery">
-            <div class="mini-card">
-              <div class="mini-graphic">
-                <svg viewBox="0 0 160 80" width="100%" height="100%">
-                  <rect x="40" y="8" width="80" height="64" rx="16" fill="#dff5e8"></rect>
-                  <circle cx="80" cy="42" r="18" fill="#9bd8b6"></circle>
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <rect x="40" y="8" width="80" height="64" rx="16" fill="#def5e8"></rect>
+                  <circle cx="80" cy="42" r="18" fill="#9ad8b6"></circle>
                   <circle cx="80" cy="42" r="10" fill="#f8fbff"></circle>
                   <rect x="52" y="18" width="28" height="8" rx="4" fill="#1f9d55"></rect>
                 </svg>
               </div>
               <strong>Waschmaschine</strong>
-              <div class="muted">Programm, Start, Ende</div>
+              <div class="muted">Programm, Start, Ablauf, Ende.</div>
             </div>
           </div>
         `,
         ticket: `
-          <div class="mini-gallery">
-            <div class="mini-card">
-              <div class="mini-graphic">
-                <svg viewBox="0 0 160 80" width="100%" height="100%">
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
                   <rect x="42" y="8" width="76" height="64" rx="16" fill="#dfe9f8"></rect>
                   <rect x="56" y="18" width="48" height="14" rx="6" fill="#8bc3ff"></rect>
                   <circle cx="62" cy="50" r="5" fill="#007aff"></circle>
@@ -791,30 +864,29 @@
                 </svg>
               </div>
               <strong>Fahrkartenautomat</strong>
-              <div class="muted">Auswahl und Ausgabe</div>
+              <div class="muted">Auswahl, Zahlung und Ticket-Ausgabe.</div>
             </div>
           </div>
         `
       };
-
       return visuals[kind] || "";
     }
 
     function renderQuestion() {
       const question = questions[state.currentIndex];
-      const progress = ((state.currentIndex + 1) / questions.length) * 100;
       const skipped = getSkippedEntry(question);
+      const progress = ((state.currentIndex + 1) / questions.length) * 100;
 
       els.progressLabel.textContent = `Frage ${state.currentIndex + 1} von ${questions.length}`;
       els.progressBar.style.width = `${progress}%`;
       els.statusLine.textContent = skipped
         ? "Diese Aufgabe wurde über das Hilfemenü übersprungen."
-        : "Arbeite in Ruhe. Du kannst zwischen den Fragen wechseln.";
+        : "Dein Fortschritt wird automatisch gespeichert.";
 
       els.questionText.textContent = question.text;
       els.questionHelp.textContent = question.help;
       els.questionTag.textContent = question.tag;
-      els.questionVisual.innerHTML = renderVisual(question.visual);
+      els.questionVisual.innerHTML = exampleVisual(question.visual);
       els.backBtn.disabled = state.currentIndex === 0;
       els.nextBtn.textContent = state.currentIndex === questions.length - 1 ? "Zum Abschluss" : "Weiter";
 
@@ -832,7 +904,7 @@
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
           input.addEventListener("change", (event) => {
             state.answers[question.id] = Number(event.target.value);
-            saveState();
+            queueSave();
           });
         });
       } else if (question.type === "yesno") {
@@ -851,7 +923,7 @@
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
           input.addEventListener("change", (event) => {
             state.answers[question.id] = event.target.value;
-            saveState();
+            queueSave();
           });
         });
       } else {
@@ -863,7 +935,7 @@
         const field = document.getElementById("textAnswer");
         field.addEventListener("input", () => {
           state.answers[question.id] = field.value;
-          saveState();
+          queueSave();
         });
       }
     }
@@ -873,18 +945,19 @@
       els.finishCard.classList.remove("hidden");
       els.backBtn.classList.add("hidden");
       els.nextBtn.classList.add("hidden");
+      els.studentName.value = state.studentName || "";
 
       if (!state.skipped.length) {
         els.skipSummary.innerHTML = `<div class="skip-item">Es wurde keine Aufgabe übersprungen.</div>`;
-        return;
+      } else {
+        els.skipSummary.innerHTML = state.skipped.map((entry) => `
+          <div class="skip-item">${escapeHtml(entry.tag)} wurde übersprungen.</div>
+        `).join("");
       }
-
-      els.skipSummary.innerHTML = state.skipped.map((entry) => `
-        <div class="skip-item">${escapeHtml(entry.tag)} wurde übersprungen.</div>
-      `).join("");
     }
 
     function render() {
+      updateBadges();
       if (state.currentIndex >= questions.length) {
         renderFinish();
         return;
@@ -900,7 +973,7 @@
     function goNext() {
       if (state.currentIndex < questions.length) {
         state.currentIndex += 1;
-        saveState();
+        queueSave();
         render();
       }
     }
@@ -908,7 +981,7 @@
     function goBack() {
       if (state.currentIndex > 0) {
         state.currentIndex -= 1;
-        saveState();
+        queueSave();
         render();
       }
     }
@@ -919,28 +992,17 @@
         state.skipped.push({
           id: question.id,
           tag: question.tag,
-          text: question.text
+          text: question.text,
+          timestamp: new Date().toISOString()
         });
       }
-      saveState();
-      els.skipMessage.textContent = `${question.tag} wurde als übersprungen markiert.`;
+      els.helperMessage.textContent = `${question.tag} wurde als übersprungen markiert.`;
+      queueSave();
       setTimeout(() => {
-        els.skipOverlay.classList.add("hidden");
-        els.skipMessage.textContent = "";
+        els.helperOverlay.classList.add("hidden");
+        els.helperMessage.textContent = "";
       }, 500);
       goNext();
-    }
-
-    function scoreResult() {
-      let points = 0;
-      let maxPoints = 0;
-      questions.forEach((question) => {
-        if (question.type === "single") {
-          maxPoints += 1;
-          if (state.answers[question.id] === question.correct) points += 1;
-        }
-      });
-      return { points, maxPoints };
     }
 
     function buildReportText(name) {
@@ -988,12 +1050,16 @@
       return lines.join("\n");
     }
 
-    function downloadReport() {
+    async function downloadReport() {
       const name = els.studentName.value.trim();
       if (!name) {
         els.downloadMessage.textContent = "Bitte gib zuerst deinen Namen ein.";
         return;
       }
+
+      state.studentName = name;
+      state.downloadedAt = new Date().toISOString();
+      await saveAttempt();
 
       const content = buildReportText(name);
       const safeName = name.toLowerCase().replaceAll(/[^a-z0-9äöüß]+/gi, "-").replace(/^-+|-+$/g, "");
@@ -1013,9 +1079,10 @@
     function restart() {
       localStorage.removeItem(STORAGE_KEY);
       Object.assign(state, createDefaultState());
-      els.studentName.value = "";
+      currentAttempt = null;
       els.downloadMessage.textContent = "";
       render();
+      initializeApp().catch(console.error);
     }
 
     function handleTitleTap() {
@@ -1024,22 +1091,145 @@
       titleTapTimer = setTimeout(() => { titleTapCount = 0; }, 1400);
       if (titleTapCount >= 5) {
         titleTapCount = 0;
-        els.skipOverlay.classList.remove("hidden");
+        els.helperOverlay.classList.remove("hidden");
+        els.helperActions.classList.toggle("hidden", !state.helperUnlocked);
+        els.helperPin.value = "";
+        els.helperMessage.textContent = "";
+      }
+    }
+
+    async function ensureAuthSession() {
+      const { data, error } = await client.auth.getSession();
+      if (error) throw error;
+      if (!data.session) {
+        const { error: anonError } = await client.auth.signInAnonymously();
+        if (anonError) throw anonError;
+      }
+      const { data: userData, error: userError } = await client.auth.getUser();
+      if (userError) throw userError;
+      authUser = userData.user;
+    }
+
+    async function loadAttempt() {
+      const { data, error } = await client
+        .from("worksheet_attempts")
+        .select("*")
+        .eq("user_id", authUser.id)
+        .maybeSingle();
+
+      if (error) throw error;
+      currentAttempt = data || null;
+
+      if (!currentAttempt) return;
+
+      state.currentIndex = currentAttempt.current_index || 0;
+      state.answers = currentAttempt.answers || {};
+      state.skipped = currentAttempt.skipped || [];
+      state.helperUnlocked = Boolean(currentAttempt.helper_enabled);
+      state.studentName = currentAttempt.student_name || "";
+      state.downloadedAt = currentAttempt.downloaded_at || null;
+      saveLocalState();
+    }
+
+    async function saveAttempt() {
+      if (!authUser) return;
+
+      saveLocalState();
+      els.saveBadge.textContent = "Speichert ...";
+
+      const payload = {
+        user_id: authUser.id,
+        student_key: authUser.id,
+        current_index: state.currentIndex,
+        answers: state.answers,
+        skipped: state.skipped,
+        helper_enabled: state.helperUnlocked,
+        student_name: state.studentName || "",
+        finished_at: state.currentIndex >= questions.length ? new Date().toISOString() : null,
+        downloaded_at: state.downloadedAt,
+        updated_at: new Date().toISOString()
+      };
+
+      const { error } = await client
+        .from("worksheet_attempts")
+        .upsert(payload, { onConflict: "user_id" });
+
+      if (error) {
+        console.error(error);
+        els.saveBadge.textContent = "Speichern fehlgeschlagen";
+        return;
+      }
+
+      els.saveBadge.textContent = "Fortschritt gespeichert";
+    }
+
+    function queueSave() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        saveAttempt().catch(console.error);
+      }, 250);
+      saveLocalState();
+    }
+
+    async function unlockHelperMenu() {
+      const pin = els.helperPin.value.trim();
+      if (!pin) {
+        els.helperMessage.textContent = "Bitte gib zuerst die PIN ein.";
+        return;
+      }
+
+      els.helperMessage.textContent = "PIN wird geprüft ...";
+      const { data, error } = await client.rpc("verify_helper_pin", {
+        input_pin: pin
+      });
+
+      if (error) {
+        console.error(error);
+        els.helperMessage.textContent = "Die PIN konnte nicht geprüft werden.";
+        return;
+      }
+
+      if (!data) {
+        els.helperMessage.textContent = "Die PIN ist nicht korrekt.";
+        return;
+      }
+
+      state.helperUnlocked = true;
+      await saveAttempt();
+      updateBadges();
+      els.helperActions.classList.remove("hidden");
+      els.helperMessage.textContent = "Hilfemenü freigeschaltet.";
+    }
+
+    async function initializeApp() {
+      try {
+        await ensureAuthSession();
+        await loadAttempt();
+        render();
+      } catch (error) {
+        console.error(error);
+        els.saveBadge.textContent = "Verbindung fehlgeschlagen";
       }
     }
 
     els.nextBtn.addEventListener("click", goNext);
     els.backBtn.addEventListener("click", goBack);
-    els.downloadBtn.addEventListener("click", downloadReport);
+    els.downloadBtn.addEventListener("click", () => downloadReport().catch(console.error));
     els.restartBtn.addEventListener("click", restart);
     els.heroTitle.addEventListener("click", handleTitleTap);
-    els.closeOverlayBtn.addEventListener("click", () => {
-      els.skipOverlay.classList.add("hidden");
-      els.skipMessage.textContent = "";
+    els.unlockHelperBtn.addEventListener("click", () => unlockHelperMenu().catch(console.error));
+    els.closeHelperOverlayBtn.addEventListener("click", () => {
+      els.helperOverlay.classList.add("hidden");
+      els.helperMessage.textContent = "";
     });
     els.skipQuestionBtn.addEventListener("click", skipCurrentQuestion);
+    els.studentName.addEventListener("input", () => {
+      state.studentName = els.studentName.value;
+      queueSave();
+    });
 
     render();
+    initializeApp();
   </script>
 </body>
 </html>

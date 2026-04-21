@@ -765,14 +765,16 @@
 
     function loadState() {
       try {
-        return { ...createDefaultState(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        return { ...createDefaultState(), ...stored, helperUnlocked: false };
       } catch (error) {
         return createDefaultState();
       }
     }
 
     function saveLocalState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const persistableState = { ...state, helperUnlocked: false };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(persistableState));
     }
 
     function escapeHtml(value) {
@@ -1002,6 +1004,9 @@
         });
       }
       els.helperMessage.textContent = `${question.tag} wurde als übersprungen markiert.`;
+      state.helperUnlocked = false;
+      els.helperActions.classList.add("hidden");
+      updateBadges();
       queueSave();
       setTimeout(() => {
         els.helperOverlay.classList.add("hidden");
@@ -1130,7 +1135,7 @@
       state.currentIndex = currentAttempt.current_index || 0;
       state.answers = currentAttempt.answers || {};
       state.skipped = currentAttempt.skipped || [];
-      state.helperUnlocked = Boolean(currentAttempt.helper_enabled);
+      state.helperUnlocked = false;
       state.studentName = currentAttempt.student_name || "";
       state.downloadedAt = currentAttempt.downloaded_at || null;
       saveLocalState();
@@ -1149,7 +1154,7 @@
         current_index: state.currentIndex,
         answers: state.answers,
         skipped: state.skipped,
-        helper_enabled: state.helperUnlocked,
+        helper_enabled: false,
         student_name: state.studentName || "",
         finished_at: state.currentIndex >= questions.length ? new Date().toISOString() : null,
         downloaded_at: state.downloadedAt,
@@ -1201,7 +1206,6 @@
       }
 
       state.helperUnlocked = true;
-      await saveAttempt();
       updateBadges();
       els.helperActions.classList.remove("hidden");
       els.helperMessage.textContent = "Hilfemenü freigeschaltet.";
@@ -1228,6 +1232,9 @@
     els.heroTitle.addEventListener("click", handleTitleTap);
     els.unlockHelperBtn.addEventListener("click", () => unlockHelperMenu().catch(console.error));
     els.closeHelperOverlayBtn.addEventListener("click", () => {
+      state.helperUnlocked = false;
+      els.helperActions.classList.add("hidden");
+      updateBadges();
       els.helperOverlay.classList.add("hidden");
       els.helperMessage.textContent = "";
     });

@@ -32,9 +32,9 @@
       font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(10, 132, 255, 0.18), transparent 24%),
-        radial-gradient(circle at bottom right, rgba(48, 209, 88, 0.16), transparent 24%),
-        linear-gradient(180deg, #f7f9fd 0%, #edf2f8 48%, #e8edf5 100%);
+        radial-gradient(circle at top left, rgba(10, 132, 255, 0.12), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(48, 209, 88, 0.1), transparent 24%),
+        linear-gradient(180deg, #f8fafd 0%, #eef3f8 48%, #e9eef5 100%);
     }
 
     button, input, select, textarea {
@@ -46,7 +46,7 @@
       margin: 18px auto;
       padding: 16px;
       border-radius: 38px;
-      background: rgba(255, 255, 255, 0.34);
+      background: rgba(255, 255, 255, 0.42);
       border: 1px solid rgba(255, 255, 255, 0.45);
       box-shadow: var(--shadow);
       backdrop-filter: var(--blur);
@@ -64,7 +64,7 @@
       border: 1px solid var(--panel-border);
       backdrop-filter: var(--blur);
       border-radius: var(--radius-xl);
-      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
     }
 
     .hero-copy {
@@ -164,7 +164,7 @@
     textarea {
       width: 100%;
       border: 1px solid rgba(15, 23, 42, 0.1);
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.82);
       padding: 14px 16px;
       border-radius: 18px;
       color: var(--text);
@@ -259,6 +259,35 @@
       gap: 16px;
     }
 
+    .waiting-room {
+      display: grid;
+      gap: 16px;
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: var(--panel-strong);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .waiting-room h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+
+    .roster {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .roster-item {
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.04);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      font-size: 0.95rem;
+    }
+
     .progress {
       height: 12px;
       background: rgba(15, 23, 42, 0.08);
@@ -317,8 +346,8 @@
       align-items: flex-start;
       padding: 15px 16px;
       border-radius: 20px;
-      background: rgba(15, 23, 42, 0.05);
-      border: 1px solid rgba(15, 23, 42, 0.08);
+      background: rgba(15, 23, 42, 0.04);
+      border: 1px solid rgba(15, 23, 42, 0.06);
     }
 
     .option input { margin-top: 3px; }
@@ -465,23 +494,23 @@
         <div class="eyebrow">Automatenlabor</div>
         <h1 id="heroTitle">Mission Snackautomat</h1>
         <p class="sub">
-          Melde dich an, beobachte den Automaten und löse die Laboraufgaben Schritt fur Schritt.
-          Deine Lehrkraft kann dir wahrenddessen Tipps schicken, Aufgaben freigeben und live begleiten.
+          Melde dich an, beobachte den Automaten und löse die Laboraufgaben Schritt für Schritt.
+          Deine Lehrkraft kann dir währenddessen Tipps schicken, Aufgaben freigeben und dich live begleiten.
         </p>
         <div class="hero-stats">
           <span class="chip">Name + Klasse eingeben</span>
           <span class="chip">Aufgaben nacheinander</span>
-          <span class="chip">Live Tipps der Lehrkraft</span>
+          <span class="chip">Live-Tipps der Lehrkraft</span>
           <span class="chip">Apple-inspirierte Optik</span>
         </div>
         <p class="footer-note">
-          Versteckter Admin-Zugang: Tippe funfmal schnell auf den Titel oder drucke <strong>Shift + Alt + A</strong>.
+          Versteckter Admin-Zugang: Tippe fünfmal schnell auf den Titel oder drücke <strong>Shift + Alt + A</strong>.
         </p>
       </div>
 
       <section class="join-card glass" id="landingCard">
         <h2 class="section-title">Mission starten</h2>
-        <p class="muted">Vor dem Start kurz anmelden. Danach lauft die Mission automatisch weiter.</p>
+        <p class="muted">Vor dem Start kurz anmelden. Danach läuft die Mission automatisch weiter.</p>
 
         <div class="field-grid">
           <div>
@@ -505,6 +534,10 @@
 
         <div class="status-line" id="landingMessage"></div>
         <div class="status-line" id="connectionStatus">Verbinde mit dem Klassenraum ...</div>
+        <div class="card" style="margin-top: 18px;">
+          <h3 class="section-title">Schon angemeldet</h3>
+          <div class="roster" id="landingRoster"></div>
+        </div>
       </section>
     </section>
 
@@ -522,6 +555,17 @@
 
         <div class="banner hidden" id="broadcastBanner"></div>
         <div class="banner warn hidden" id="teacherBanner"></div>
+
+        <section class="waiting-room hidden" id="waitingRoomCard">
+          <div>
+            <h3>Warteraum</h3>
+            <p class="muted" id="waitingRoomText">Die Mission startet gleich gemeinsam.</p>
+          </div>
+          <div>
+            <strong>Schon angemeldet</strong>
+            <div class="roster" id="studentRoster" style="margin-top: 10px;"></div>
+          </div>
+        </section>
 
         <div class="task-card">
           <div class="row" style="justify-content: space-between; margin-bottom: 10px;">
@@ -544,7 +588,7 @@
         </section>
 
         <div class="row">
-          <button class="secondary" id="prevBtn">Zuruck</button>
+          <button class="secondary" id="prevBtn">Zurück</button>
           <button class="primary" id="nextBtn">Weiter</button>
           <button class="primary hidden" id="submitBtn">Abgeben</button>
           <span class="inline-message" id="studentMessage"></span>
@@ -555,7 +599,7 @@
         <div class="row" style="justify-content: space-between; align-items: flex-start;">
           <div>
             <div class="eyebrow">Laborleitung</div>
-            <h2 class="section-title" style="margin-bottom: 4px;">Live-Dashboard fur Lehrkraft</h2>
+            <h2 class="section-title" style="margin-bottom: 4px;">Live-Dashboard für die Lehrkraft</h2>
             <p class="muted" style="margin: 0;">Steuere die Mission, sende Hinweise und begleite angemeldete SuS in Echtzeit.</p>
           </div>
           <div class="row">
@@ -584,7 +628,7 @@
             </div>
             <div>
               <label for="broadcastInput">Nachricht an alle</label>
-              <textarea id="broadcastInput" placeholder="z. B. Denkt an die Ruckgabe-Taste."></textarea>
+              <textarea id="broadcastInput" placeholder="z. B. Denkt an die Rückgabe-Taste."></textarea>
             </div>
             <button class="primary" id="sendBroadcastBtn">An alle senden</button>
           </section>
@@ -623,7 +667,7 @@
     <div class="admin-sheet">
       <div class="eyebrow">Versteckter Bereich</div>
       <h2 class="section-title">Admin-Zugang</h2>
-      <p class="muted">Mit deinem Supabase-Lehrkraftkonto anmelden, um den Lehrkraftbereich zu offnen.</p>
+      <p class="muted">Melde dich mit deinem Supabase-Lehrkraftkonto an, um den Lehrkraftbereich zu öffnen.</p>
       <div class="stack">
         <div>
           <label for="teacherEmail">E-Mail</label>
@@ -635,11 +679,11 @@
         </div>
       </div>
       <div class="row" style="margin-top: 18px;">
-        <button class="primary" id="openAdminBtn">Offnen</button>
+        <button class="primary" id="openAdminBtn">Öffnen</button>
         <button class="secondary" id="cancelAdminBtn">Abbrechen</button>
       </div>
       <div class="status-line" id="adminLoginMessage"></div>
-      <p class="footer-note">Der Zugriff laeuft jetzt ueber Supabase Auth. Fuer Lehrkraftrechte braucht dein Benutzer zusaetzlich einen Eintrag mit Rolle <strong>teacher</strong> in der Tabelle <strong>profiles</strong>.</p>
+      <p class="footer-note">Der Zugriff läuft jetzt über Supabase Auth. Für Lehrkraftrechte braucht dein Benutzer zusätzlich einen Eintrag mit der Rolle <strong>teacher</strong> in der Tabelle <strong>profiles</strong>.</p>
     </div>
   </div>
 
@@ -671,28 +715,28 @@
         type: "single",
         tag: "Mission 2",
         text: "Welche Eingaben akzeptiert der Automat?",
-        help: "Achte auf die zugelassenen Munzen.",
-        options: ["10 ct, 20 ct und 50 ct", "50 ct, 1 Euro und 2 Euro", "Nur 1 Euro und 2 Euro", "Beliebige Munzen"],
+        help: "Achte auf die zugelassenen Münzen.",
+        options: ["10 ct, 20 ct und 50 ct", "50 ct, 1 Euro und 2 Euro", "Nur 1 Euro und 2 Euro", "Beliebige Münzen"],
         correctIndex: 1
       },
       {
         id: "q3",
         type: "single",
         tag: "Mission 3",
-        text: "Was passiert im Zustand 0 Euro, wenn die Taste fur Gummibarchen gedruckt wird?",
-        help: "Prufe, ob genug Geld im Automaten liegt.",
-        options: ["Die Gummibarchen werden ausgegeben", "Der Zustand bleibt bei 0 Euro", "Der Zustand springt auf 1 Euro", "Es wird Ruckgeld ausgegeben"],
+        text: "Was passiert im Zustand 0 Euro, wenn die Taste für Gummibärchen gedrückt wird?",
+        help: "Prüfe, ob genug Geld im Automaten liegt.",
+        options: ["Die Gummibärchen werden ausgegeben", "Der Zustand bleibt bei 0 Euro", "Der Zustand springt auf 1 Euro", "Es wird Rückgeld ausgegeben"],
         correctIndex: 1
       },
       {
         id: "q4",
         type: "single",
         tag: "Mission 4",
-        text: "Welche Beschreibung passt am besten zur Ruckgabe-Taste?",
-        help: "Denk daran, was mit Geld und Zustand passiert.",
+        text: "Welche Beschreibung passt am besten zur Rückgabe-Taste?",
+        help: "Denke daran, was mit Geld und Zustand passiert.",
         options: [
-          "Sie erhoht den Geldbetrag im Automaten",
-          "Sie setzt den Automaten je nach Zustand zuruck und gibt Geld zuruck",
+          "Sie erhöht den Geldbetrag im Automaten",
+          "Sie setzt den Automaten je nach Zustand zurück und gibt Geld zurück",
           "Sie gibt immer Chips aus",
           "Sie wechselt das Produkt"
         ],
@@ -705,9 +749,9 @@
         text: "Warum kann der Automat kein Wechselgeld ausgeben?",
         help: "Die Antwort steckt im Aufbau des Modells.",
         options: [
-          "Weil nur Zustande fur eingeworfene Betrage genutzt werden und keine Restgeld-Regel vorgesehen ist",
-          "Weil 2-Euro-Munzen verboten sind",
-          "Weil Webseiten keine Zahlen speichern konnen",
+          "Weil nur Zustände für eingeworfene Beträge genutzt werden und keine Restgeld-Regel vorgesehen ist",
+          "Weil 2-Euro-Münzen verboten sind",
+          "Weil Webseiten keine Zahlen speichern können",
           "Weil alle Produkte kostenlos sind"
         ],
         correctIndex: 0
@@ -716,7 +760,7 @@
         id: "q6",
         type: "text",
         tag: "Mission 6",
-        text: "Beschreibe in 1 bis 2 Satzen, woran man in einem Zustandsdiagramm Zustand, Eingabe, Folgezustand und Ausgabe erkennt.",
+        text: "Beschreibe in 1 bis 2 Sätzen, woran man in einem Zustandsdiagramm Zustand, Eingabe, Folgezustand und Ausgabe erkennt.",
         help: "Nutze einfache Worte. Es geht um Verstehen, nicht um Fachsprache.",
         placeholder: "Beispiel: Der Zustand ist ... Die Eingabe erkennt man an ..."
       }
@@ -726,6 +770,8 @@
       heroTitle: document.getElementById("heroTitle"),
       landingCard: document.getElementById("landingCard"),
       studentStage: document.getElementById("studentStage"),
+      waitingRoomCard: document.getElementById("waitingRoomCard"),
+      waitingRoomText: document.getElementById("waitingRoomText"),
       joinBtn: document.getElementById("joinBtn"),
       resetBtn: document.getElementById("resetBtn"),
       leaveBtn: document.getElementById("leaveBtn"),
@@ -733,6 +779,8 @@
       classNameInput: document.getElementById("className"),
       landingMessage: document.getElementById("landingMessage"),
       connectionStatus: document.getElementById("connectionStatus"),
+      landingRoster: document.getElementById("landingRoster"),
+      studentRoster: document.getElementById("studentRoster"),
       studentLabel: document.getElementById("studentLabel"),
       studentStatusLine: document.getElementById("studentStatusLine"),
       broadcastBanner: document.getElementById("broadcastBanner"),
@@ -791,11 +839,13 @@
     let authUser = null;
     let teacherProfile = null;
     let snapshotUrls = {};
+    let lobbySignups = [];
 
     function createDefaultSession() {
       return {
         studentKey: crypto.randomUUID(),
         student: null,
+        joinedAt: null,
         currentQuestionIndex: 0,
         answers: {},
         hasSubmitted: false,
@@ -854,7 +904,7 @@
     }
 
     function getMissionStateLabel(state) {
-      if (state === STATE_LIVE) return "Mission lauft";
+      if (state === STATE_LIVE) return "Mission läuft";
       if (state === STATE_PAUSED) return "Mission pausiert";
       return "Mission wartet";
     }
@@ -862,6 +912,27 @@
     function getStudentRecord() {
       if (!session.student) return null;
       return studentSessions.find((entry) => entry.student_key === session.studentKey) || null;
+    }
+
+    function canCurrentStudentStart(record) {
+      if (!record?.joined_at || mission.status !== STATE_LIVE) return false;
+      if (!mission.updated_at) return false;
+      return new Date(record.joined_at).getTime() <= new Date(mission.updated_at).getTime();
+    }
+
+    function renderRoster(target, emptyText = "Noch niemand angemeldet.") {
+      if (!target) return;
+      if (!lobbySignups.length) {
+        target.innerHTML = `<div class="roster-item muted">${emptyText}</div>`;
+        return;
+      }
+
+      target.innerHTML = lobbySignups.map((entry) => `
+        <div class="roster-item">
+          <strong>${escapeHtml(entry.first_name)}</strong><br />
+          <span class="muted">${escapeHtml(entry.class_name)}</span>
+        </div>
+      `).join("");
     }
 
     function ensureAnswerShape() {
@@ -932,6 +1003,7 @@
 
       const record = getStudentRecord();
       const studentName = `${session.student.firstName} (${session.student.className})`;
+      const canStart = canCurrentStudentStart(record);
       elements.studentLabel.textContent = studentName;
       elements.studentStatusLine.textContent = session.hasSubmitted
         ? "Deine Antworten wurden bereits abgegeben."
@@ -944,6 +1016,30 @@
       const teacherText = record?.teacher_message || "";
       elements.teacherBanner.textContent = teacherText;
       elements.teacherBanner.classList.toggle("hidden", !teacherText);
+
+      renderRoster(elements.studentRoster);
+
+      const isWaitingForStart = !session.hasSubmitted && (
+        mission.status === STATE_WAITING ||
+        mission.status === STATE_PAUSED ||
+        !canStart
+      );
+
+      elements.waitingRoomCard.classList.toggle("hidden", !isWaitingForStart);
+      document.getElementById("taskCard").classList.toggle("hidden", isWaitingForStart);
+      elements.prevBtn.classList.toggle("hidden", isWaitingForStart);
+      elements.nextBtn.classList.toggle("hidden", isWaitingForStart || currentQuestionIndex === questions.length - 1);
+      elements.submitBtn.classList.toggle("hidden", isWaitingForStart || currentQuestionIndex !== questions.length - 1);
+
+      if (isWaitingForStart) {
+        if (mission.status === STATE_PAUSED) {
+          elements.waitingRoomText.textContent = "Die Mission ist gerade pausiert. Bitte warte auf die nächste Freigabe.";
+        } else if (mission.status === STATE_LIVE && !canStart) {
+          elements.waitingRoomText.textContent = "Du bist angemeldet. Die nächste gemeinsame Freigabe startet gleich für alle Wartenden.";
+        } else {
+          elements.waitingRoomText.textContent = "Du bist angemeldet. Bitte warte, bis die Lehrkraft die Mission für alle startet.";
+        }
+      }
 
       if (!session.hasSubmitted && mission.status !== STATE_LIVE && !teacherText) {
         elements.teacherBanner.textContent = mission.status === STATE_PAUSED
@@ -958,7 +1054,9 @@
         saveSession();
       }
 
-      renderTask();
+      if (!isWaitingForStart) {
+        renderTask();
+      }
     }
 
     function renderAdmin() {
@@ -1047,7 +1145,7 @@
     async function fetchStudentSessions() {
       const { data, error } = await supabaseClient
         .from("student_sessions")
-        .select("student_key, first_name, class_name, current_question_index, teacher_message, forced_question_index, last_seen_at, note_preview, has_submitted, snapshot_requested_at, snapshot_path, snapshot_updated_at")
+        .select("student_key, first_name, class_name, current_question_index, teacher_message, forced_question_index, last_seen_at, note_preview, has_submitted, snapshot_requested_at, snapshot_path, snapshot_updated_at, joined_at")
         .eq("mission_code", MISSION_CODE)
         .order("last_seen_at", { ascending: false });
 
@@ -1059,6 +1157,19 @@
       renderStudentView();
       renderAdmin();
       await maybeHandleSnapshotRequest();
+    }
+
+    async function fetchLobbySignups() {
+      const { data, error } = await supabaseClient
+        .from("lobby_signups")
+        .select("first_name, class_name, joined_at")
+        .eq("mission_code", MISSION_CODE)
+        .order("joined_at", { ascending: true });
+
+      if (error) throw error;
+      lobbySignups = data || [];
+      renderRoster(elements.landingRoster);
+      renderRoster(elements.studentRoster);
     }
 
     async function fetchSubmissions() {
@@ -1120,13 +1231,13 @@
       }
 
       elements.adminConnectionLine.textContent = authUser
-        ? `${authUser.is_anonymous ? "Anonyme Schueler-Session" : "Lehrkraft angemeldet"}`
+        ? `${authUser.is_anonymous ? "Anonyme Schüler-Session" : "Lehrkraft angemeldet"}`
         : "Nicht angemeldet";
     }
 
     async function joinMission() {
       if (!userId()) {
-        elements.landingMessage.textContent = "Die Schueler-Session wird noch vorbereitet. Bitte kurz warten.";
+        elements.landingMessage.textContent = "Die Schüler-Session wird noch vorbereitet. Bitte kurz warten.";
         return;
       }
 
@@ -1139,6 +1250,7 @@
 
       session.student = { firstName, className };
       session.hasSubmitted = false;
+      session.joinedAt = new Date().toISOString();
       session.currentQuestionIndex = 0;
       currentQuestionIndex = 0;
       answers = {};
@@ -1146,8 +1258,34 @@
       saveSession();
 
       await syncStudentSession();
+      await syncLobbySignup();
       elements.landingMessage.textContent = "";
       renderStudentView();
+    }
+
+    async function syncLobbySignup() {
+      if (!session.student) return;
+
+      const { error } = await supabaseClient
+        .from("lobby_signups")
+        .upsert({
+          mission_code: MISSION_CODE,
+          student_key: session.studentKey,
+          first_name: session.student.firstName,
+          class_name: session.student.className,
+          joined_at: session.joinedAt || new Date().toISOString()
+        }, { onConflict: "student_key" });
+
+      if (error) throw error;
+    }
+
+    async function removeLobbySignup() {
+      if (!session.studentKey) return;
+      const { error } = await supabaseClient
+        .from("lobby_signups")
+        .delete()
+        .eq("student_key", session.studentKey);
+      if (error) throw error;
     }
 
     async function syncStudentSession(extra = {}) {
@@ -1161,6 +1299,7 @@
         first_name: session.student.firstName,
         class_name: session.student.className,
         current_question_index: currentQuestionIndex,
+        joined_at: session.joinedAt || new Date().toISOString(),
         note_preview: notePreview,
         has_submitted: Boolean(session.hasSubmitted),
         last_seen_at: new Date().toISOString(),
@@ -1223,12 +1362,35 @@
       };
 
       elements.studentMessage.textContent = "Speichere deine Antworten ...";
-      const { error } = await supabaseClient
+      let error = null;
+      const { data: existingSubmission, error: lookupError } = await supabaseClient
         .from("submissions")
-        .upsert(payload, { onConflict: "mission_code,student_key" });
+        .select("id")
+        .eq("mission_code", MISSION_CODE)
+        .eq("student_key", session.studentKey)
+        .maybeSingle();
+
+      if (lookupError) {
+        elements.studentMessage.textContent = "Die Abgabe konnte nicht vorbereitet werden.";
+        console.error(lookupError);
+        return;
+      }
+
+      if (existingSubmission?.id) {
+        const result = await supabaseClient
+          .from("submissions")
+          .update(payload)
+          .eq("id", existingSubmission.id);
+        error = result.error;
+      } else {
+        const result = await supabaseClient
+          .from("submissions")
+          .insert(payload);
+        error = result.error;
+      }
 
       if (error) {
-        elements.studentMessage.textContent = "Speichern fehlgeschlagen. Bitte probiere es noch einmal.";
+        elements.studentMessage.textContent = "Speichern fehlgeschlagen. Bitte probiere es noch einmal oder melde dich bei der Lehrkraft.";
         console.error(error);
         return;
       }
@@ -1359,6 +1521,7 @@
       renderStudentView();
       elements.firstNameInput.value = "";
       elements.studentMessage.textContent = "";
+      renderRoster(elements.landingRoster);
     }
 
     function openAdminLogin() {
@@ -1412,7 +1575,7 @@
       if (action === "skip-task") {
         const nextIndex = Math.min((student.current_question_index ?? 0) + 1, questions.length - 1);
         updateStudentField(studentKey, {
-          teacher_message: textarea ? textarea.value.trim() : "Die Lehrkraft hat die Aufgabe ubersprungen.",
+          teacher_message: textarea ? textarea.value.trim() : "Die Lehrkraft hat die Aufgabe übersprungen.",
           forced_question_index: nextIndex
         }).catch(console.error);
       }
@@ -1442,6 +1605,9 @@
         .on("postgres_changes", { event: "*", schema: "public", table: "student_sessions" }, () => {
           fetchStudentSessions().catch(console.error);
         })
+        .on("postgres_changes", { event: "*", schema: "public", table: "lobby_signups" }, () => {
+          fetchLobbySignups().catch(console.error);
+        })
         .on("postgres_changes", { event: "*", schema: "public", table: "submissions" }, () => {
           fetchSubmissions().catch(console.error);
         })
@@ -1466,12 +1632,13 @@
         await ensureAuthSession();
         await fetchMission();
         await fetchStudentSessions();
+        await fetchLobbySignups();
         await fetchSubmissions();
         renderStudentView();
         elements.connectionStatus.textContent = "Verbindung mit Supabase erfolgreich.";
       } catch (error) {
         console.error(error);
-        elements.connectionStatus.textContent = "Verbindung fehlgeschlagen. Bitte Supabase-Tabellen und Rechte prufen.";
+        elements.connectionStatus.textContent = "Verbindung fehlgeschlagen. Bitte prüfe Tabellen, Rechte und die Supabase-Konfiguration.";
       }
     }
 
@@ -1491,6 +1658,7 @@
     elements.leaveBtn.addEventListener("click", async () => {
       if (session.student) {
         await updateStudentField(session.studentKey, { teacher_message: "", has_submitted: false }).catch(() => {});
+        await removeLobbySignup().catch(() => {});
       }
       resetLocalSession();
     });

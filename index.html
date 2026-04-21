@@ -527,13 +527,10 @@
     <div class="overlay-card">
       <input id="helperPin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" />
       <div class="row" style="margin-top: 14px;">
-        <button class="primary" id="unlockHelperBtn">Freischalten</button>
+        <button class="primary" id="unlockHelperBtn">Überspringen</button>
         <button class="secondary" id="closeHelperOverlayBtn">Schließen</button>
       </div>
       <div class="status-line" id="helperMessage"></div>
-      <div class="row hidden" id="helperActions" style="margin-top: 16px;">
-        <button class="warning" id="skipQuestionBtn">Aktuelle Aufgabe überspringen</button>
-      </div>
     </div>
   </div>
 
@@ -728,10 +725,8 @@
       helperOverlay: document.getElementById("helperOverlay"),
       helperPin: document.getElementById("helperPin"),
       helperMessage: document.getElementById("helperMessage"),
-      helperActions: document.getElementById("helperActions"),
       unlockHelperBtn: document.getElementById("unlockHelperBtn"),
-      closeHelperOverlayBtn: document.getElementById("closeHelperOverlayBtn"),
-      skipQuestionBtn: document.getElementById("skipQuestionBtn")
+      closeHelperOverlayBtn: document.getElementById("closeHelperOverlayBtn")
     };
 
     function createDefaultState() {
@@ -965,11 +960,6 @@
     }
 
     function skipCurrentQuestion() {
-      if (!state.helperUnlocked) {
-        els.helperMessage.textContent = "Bitte schalte das Hilfemenü zuerst mit der PIN frei.";
-        return;
-      }
-
       const question = questions[state.currentIndex];
       if (!getSkippedEntry(question)) {
         state.skipped.push({
@@ -981,7 +971,6 @@
       }
       els.helperMessage.textContent = `${question.tag} wurde als übersprungen markiert.`;
       state.helperUnlocked = false;
-      els.helperActions.classList.add("hidden");
       updateBadges();
       queueSave();
       setTimeout(() => {
@@ -1078,7 +1067,6 @@
       if (titleTapCount >= 5) {
         titleTapCount = 0;
         els.helperOverlay.classList.remove("hidden");
-        els.helperActions.classList.toggle("hidden", !state.helperUnlocked);
         els.helperPin.value = "";
         els.helperMessage.textContent = "";
       }
@@ -1181,10 +1169,7 @@
         return;
       }
 
-      state.helperUnlocked = true;
-      updateBadges();
-      els.helperActions.classList.remove("hidden");
-      els.helperMessage.textContent = "Hilfemenü freigeschaltet.";
+      skipCurrentQuestion();
     }
 
     async function initializeApp() {
@@ -1209,12 +1194,10 @@
     els.unlockHelperBtn.addEventListener("click", () => unlockHelperMenu().catch(console.error));
     els.closeHelperOverlayBtn.addEventListener("click", () => {
       state.helperUnlocked = false;
-      els.helperActions.classList.add("hidden");
       updateBadges();
       els.helperOverlay.classList.add("hidden");
       els.helperMessage.textContent = "";
     });
-    els.skipQuestionBtn.addEventListener("click", skipCurrentQuestion);
     els.studentName.addEventListener("input", () => {
       state.studentName = els.studentName.value;
       queueSave();

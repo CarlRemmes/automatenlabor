@@ -411,12 +411,6 @@
           Beantworte Fragen zu Zuständen, Eingaben, Übergängen und Ausgaben.
           Entscheide bei mehreren Alltagsbeispielen, ob es sich um einen Automaten handelt.
         </p>
-        <div class="chip-row">
-          <span class="chip">Große Grafiken</span>
-          <span class="chip">Klare Fragen</span>
-          <span class="chip">Automatisches Speichern aktiv</span>
-          <span class="chip">Download am Ende</span>
-        </div>
       </section>
 
       <section class="hero-gallery glass">
@@ -483,8 +477,7 @@
         <div>
           <div class="eyebrow">Arbeitsbereich</div>
           <div class="meta">
-            <span class="badge" id="saveBadge">Speicherstand wird vorbereitet</span>
-            <span class="badge" id="helperBadge">Hilfemenü gesperrt</span>
+            <span class="badge hidden" id="saveBadge">Speicherstand wird vorbereitet</span>
           </div>
         </div>
         <div class="row">
@@ -496,7 +489,6 @@
       <section class="progress-box">
         <strong id="progressLabel">Frage 1 von 14</strong>
         <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
-        <div class="status-line" id="statusLine"></div>
       </section>
 
       <section class="question-card" id="questionCard">
@@ -533,11 +525,8 @@
 
   <div class="overlay hidden" id="helperOverlay">
     <div class="overlay-card">
-      <div class="eyebrow">Hilfemenü</div>
-      <h3>PIN eingeben</h3>
-      <p class="sub" style="max-width: none;">
-        Mit der PIN kann die aktuelle Aufgabe übersprungen werden. Das wird in der Auswertung vermerkt.
-      </p>
+      <div class="eyebrow">PIN</div>
+      <h3>Freischalten</h3>
       <div style="margin-top: 16px;">
         <label for="helperPin"><strong>PIN</strong></label>
         <input id="helperPin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" />
@@ -725,12 +714,10 @@
     const els = {
       heroTitle: document.getElementById("heroTitle"),
       saveBadge: document.getElementById("saveBadge"),
-      helperBadge: document.getElementById("helperBadge"),
       backBtn: document.getElementById("backBtn"),
       nextBtn: document.getElementById("nextBtn"),
       progressLabel: document.getElementById("progressLabel"),
       progressBar: document.getElementById("progressBar"),
-      statusLine: document.getElementById("statusLine"),
       questionCard: document.getElementById("questionCard"),
       questionText: document.getElementById("questionText"),
       questionHelp: document.getElementById("questionHelp"),
@@ -802,9 +789,7 @@
       return { points, maxPoints };
     }
 
-    function updateBadges() {
-      els.helperBadge.textContent = state.helperUnlocked ? "Hilfemenü freigeschaltet" : "Hilfemenü gesperrt";
-    }
+    function updateBadges() {}
 
     function exampleVisual(kind) {
       const visuals = {
@@ -876,14 +861,10 @@
 
     function renderQuestion() {
       const question = questions[state.currentIndex];
-      const skipped = getSkippedEntry(question);
       const progress = ((state.currentIndex + 1) / questions.length) * 100;
 
       els.progressLabel.textContent = `Frage ${state.currentIndex + 1} von ${questions.length}`;
       els.progressBar.style.width = `${progress}%`;
-      els.statusLine.textContent = skipped
-        ? "Diese Aufgabe wurde über das Hilfemenü übersprungen."
-        : "Deine Antworten werden automatisch gespeichert.";
 
       els.questionText.textContent = question.text;
       els.questionHelp.textContent = question.help;

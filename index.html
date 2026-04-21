@@ -3,1011 +3,1578 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Automatenlabor – Mission Snackautomat</title>
+  <title>Automatenlabor</title>
   <style>
     :root {
-      --bg: #0b1220;
-      --card: #111827;
-      --card-2: #1f2937;
-      --text: #f8fafc;
-      --muted: #cbd5e1;
-      --accent: #67e8f9;
-      --accent-2: #22d3ee;
-      --ok: #22c55e;
-      --warn: #f59e0b;
-      --danger: #ef4444;
-      --border: rgba(255,255,255,0.08);
-      --shadow: 0 20px 50px rgba(0,0,0,0.28);
+      --bg: #eef2f7;
+      --panel: rgba(255, 255, 255, 0.78);
+      --panel-strong: rgba(255, 255, 255, 0.92);
+      --panel-border: rgba(15, 23, 42, 0.08);
+      --text: #0f172a;
+      --muted: #516079;
+      --accent: #0a84ff;
+      --accent-soft: rgba(10, 132, 255, 0.12);
+      --green: #30d158;
+      --amber: #ff9f0a;
+      --red: #ff453a;
+      --shadow: 0 24px 80px rgba(15, 23, 42, 0.14);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --blur: blur(24px);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: Inter, Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(34,211,238,0.14), transparent 30%),
-        linear-gradient(180deg, #09111d, #101827 35%, #0b1220 100%);
+      min-height: 100vh;
+      font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
       color: var(--text);
-      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(10, 132, 255, 0.18), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(48, 209, 88, 0.16), transparent 24%),
+        linear-gradient(180deg, #f7f9fd 0%, #edf2f8 48%, #e8edf5 100%);
     }
 
-    .wrap {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+    button, input, select, textarea {
+      font: inherit;
     }
 
-    .app {
-      width: 100%;
-      max-width: 1120px;
-      background: rgba(17,24,39,0.95);
-      border: 1px solid var(--border);
-      border-radius: 28px;
+    .shell {
+      width: min(1240px, calc(100% - 28px));
+      margin: 18px auto;
+      padding: 16px;
+      border-radius: 38px;
+      background: rgba(255, 255, 255, 0.34);
+      border: 1px solid rgba(255, 255, 255, 0.45);
       box-shadow: var(--shadow);
-      overflow: hidden;
-      backdrop-filter: blur(10px);
+      backdrop-filter: var(--blur);
     }
 
     .hero {
-      padding: 34px 28px 16px;
-      text-align: center;
-      background: radial-gradient(circle at top, rgba(103,232,249,0.18), transparent 45%);
+      display: grid;
+      gap: 18px;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.9fr);
+      align-items: stretch;
+    }
+
+    .glass {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: var(--blur);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    .hero-copy {
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-copy::after {
+      content: "";
+      position: absolute;
+      inset: auto -30px -40px auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(10, 132, 255, 0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: var(--accent);
+      background: rgba(10, 132, 255, 0.1);
+      font-weight: 700;
+      font-size: 0.92rem;
     }
 
     h1 {
-      margin: 0 0 10px;
-      font-size: clamp(2rem, 4vw, 2.9rem);
-      letter-spacing: -0.03em;
-    }
-
-    h2 {
-      margin: 0 0 12px;
-      font-size: 1.35rem;
-    }
-
-    h3 {
-      margin: 0 0 10px;
-      font-size: 1.05rem;
+      margin: 0 0 14px;
+      font-size: clamp(2.4rem, 5vw, 4.3rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      cursor: default;
+      user-select: none;
     }
 
     .sub {
-      margin: 0 auto;
-      max-width: 780px;
+      max-width: 48rem;
+      margin: 0;
+      line-height: 1.58;
       color: var(--muted);
-      line-height: 1.6;
-      font-size: 1rem;
+      font-size: 1.04rem;
     }
 
-    .main {
-      padding: 20px;
+    .hero-stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.05);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .join-card,
+    .student-stage,
+    .admin-panel {
+      padding: 24px;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .field-grid {
       display: grid;
-      gap: 18px;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 20px;
-    }
-
-    .grid {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-
-    .grid-2 {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     label {
       display: block;
-      font-weight: 700;
       margin-bottom: 8px;
-    }
-
-    input[type="text"], input[type="password"], select {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--card-2);
-      color: var(--text);
-      font-size: 1rem;
-      outline: none;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(103,232,249,0.18);
-    }
-
-    .mission {
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      margin-bottom: 14px;
-    }
-
-    .mission-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .mission-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(103,232,249,0.12);
-      color: #cffafe;
-      border: 1px solid rgba(103,232,249,0.16);
-      border-radius: 999px;
-      padding: 7px 11px;
-      font-size: 0.84rem;
       font-weight: 700;
+      font-size: 0.96rem;
     }
 
-    .answers {
+    input[type="text"],
+    input[type="password"],
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 14px 16px;
+      border-radius: 18px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    textarea { min-height: 116px; resize: vertical; }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(10, 132, 255, 0.44);
+      box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .stack {
       display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .answer {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: var(--card-2);
-      border: 1px solid transparent;
-      cursor: pointer;
-      line-height: 1.45;
-    }
-
-    .answer:hover {
-      border-color: rgba(103,232,249,0.45);
+      gap: 16px;
     }
 
     .row {
       display: flex;
-      flex-wrap: wrap;
       gap: 12px;
+      flex-wrap: wrap;
       align-items: center;
     }
 
     button {
       border: 0;
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 13px 18px;
-      font-size: 0.98rem;
-      font-weight: 700;
       cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      font-weight: 700;
+      letter-spacing: -0.01em;
     }
 
-    .primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #082f49; }
-    .ghost { background: rgba(255,255,255,0.07); color: var(--text); }
-    .ok { background: var(--ok); color: white; }
-    .warn { background: var(--warn); color: #1f2937; }
-    .danger { background: var(--danger); color: white; }
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
 
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(103,232,249,0.12);
-      color: #cffafe;
-      border: 1px solid rgba(103,232,249,0.16);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 0.9rem;
-      margin-bottom: 14px;
+    .primary {
+      background: linear-gradient(180deg, #1d9bff, #0a84ff);
+      color: white;
+      box-shadow: 0 14px 32px rgba(10, 132, 255, 0.24);
     }
 
-    .muted { color: var(--muted); }
+    .secondary {
+      background: rgba(15, 23, 42, 0.07);
+      color: var(--text);
+    }
+
+    .success { background: rgba(48, 209, 88, 0.16); color: #147a2e; }
+    .warning { background: rgba(255, 159, 10, 0.18); color: #9c6200; }
+    .danger { background: rgba(255, 69, 58, 0.16); color: #a9231c; }
+
+    .status-line,
+    .inline-message {
+      min-height: 1.4em;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .workspace {
+      margin-top: 16px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
     .hidden { display: none !important; }
 
-    .center-box {
-      text-align: center;
-      padding: 28px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-    }
-
-    .state-badge {
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-weight: 700;
-      margin-bottom: 14px;
-      background: rgba(255,255,255,0.08);
-    }
-
-    .state-waiting { color: #fde68a; }
-    .state-live { color: #86efac; }
-    .state-stopped { color: #fca5a5; }
-
-    .info-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px;
-      line-height: 1.55;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .chip {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-size: 0.92rem;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 110px;
+    .banner {
       padding: 14px 16px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--card-2);
-      color: var(--text);
-      font-size: 1rem;
-      resize: vertical;
-      outline: none;
-      font-family: inherit;
+      border-radius: 20px;
+      background: rgba(10, 132, 255, 0.1);
+      color: #084b92;
+      border: 1px solid rgba(10, 132, 255, 0.14);
+      line-height: 1.5;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    .banner.warn {
+      background: rgba(255, 159, 10, 0.13);
+      color: #7a4c00;
+      border-color: rgba(255, 159, 10, 0.22);
+    }
+
+    .student-stage {
+      display: grid;
+      gap: 16px;
+    }
+
+    .progress {
+      height: 12px;
+      background: rgba(15, 23, 42, 0.08);
+      border-radius: 999px;
       overflow: hidden;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.02);
     }
 
-    th, td {
-      padding: 12px 10px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.95rem;
-      vertical-align: top;
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #66b6ff, #0a84ff 45%, #30d158);
+      border-radius: inherit;
+      transition: width 0.25s ease;
     }
 
-    th { color: #cffafe; }
+    .task-card {
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: var(--panel-strong);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+    }
 
-    .kpis {
+    .task-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .task-step {
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .task-title {
+      margin: 0;
+      font-size: clamp(1.35rem, 2vw, 1.7rem);
+      line-height: 1.16;
+      letter-spacing: -0.03em;
+    }
+
+    .option-list {
       display: grid;
       gap: 12px;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      margin-bottom: 14px;
+      margin-top: 18px;
+    }
+
+    .option {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 15px 16px;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.05);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .option input { margin-top: 3px; }
+
+    .kpi-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
     .kpi {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px;
+      padding: 18px;
+      border-radius: 22px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(15, 23, 42, 0.08);
     }
 
     .kpi strong {
       display: block;
-      font-size: 1.8rem;
       margin-top: 6px;
+      font-size: 1.8rem;
+      letter-spacing: -0.04em;
+    }
+
+    .admin-toolbar,
+    .teacher-grid,
+    .student-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .student-grid {
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: 24px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .student-card header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .student-name {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: rgba(15, 23, 42, 0.07);
+    }
+
+    .badge.live { color: #0a66c2; background: rgba(10, 132, 255, 0.12); }
+    .badge.done { color: #1d7f3b; background: rgba(48, 209, 88, 0.15); }
+    .badge.wait { color: #946000; background: rgba(255, 159, 10, 0.15); }
+
+    .meta {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.93rem;
+      margin-bottom: 14px;
+    }
+
+    .snapshot {
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      background: white;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
     }
 
     .footer-note {
-      font-size: 0.9rem;
+      margin-top: 10px;
       color: var(--muted);
+      font-size: 0.88rem;
       line-height: 1.5;
     }
 
-    .status-line {
-      font-size: 0.92rem;
-      color: var(--muted);
-      margin-top: 8px;
+    .admin-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 15, 25, 0.24);
+      backdrop-filter: blur(18px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+      z-index: 20;
     }
 
-    @media (max-width: 640px) {
-      .hero, .main { padding: 16px; }
-      .card { padding: 16px; }
+    .admin-sheet {
+      width: min(460px, 100%);
+      padding: 24px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(28px);
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .admin-toolbar,
+      .teacher-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 14px, 1240px); margin: 8px auto; padding: 10px; border-radius: 28px; }
+      .hero-copy, .join-card, .student-stage, .admin-panel { padding: 18px; }
+      .field-grid, .kpi-grid { grid-template-columns: 1fr; }
+      .task-top { flex-direction: column; }
       .row button { width: 100%; }
-      .mission-head { flex-direction: column; align-items: flex-start; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
-  <div class="wrap">
-    <div class="app">
-      <section class="hero">
-        <h1>Automatenlabor</h1>
-        <p class="sub">Mission Snackautomat: Untersuche ein System mit Zuständen, Eingaben, Übergängen und Funktionen. Beobachte genau, wie der Automat reagiert, und sichere deine Erkenntnisse im Laborprotokoll.</p>
+  <div class="shell">
+    <section class="hero">
+      <div class="hero-copy glass">
+        <div class="eyebrow">Automatenlabor</div>
+        <h1 id="heroTitle">Mission Snackautomat</h1>
+        <p class="sub">
+          Melde dich an, beobachte den Automaten und löse die Laboraufgaben Schritt fur Schritt.
+          Deine Lehrkraft kann dir wahrenddessen Tipps schicken, Aufgaben freigeben und live begleiten.
+        </p>
+        <div class="hero-stats">
+          <span class="chip">Name + Klasse eingeben</span>
+          <span class="chip">Aufgaben nacheinander</span>
+          <span class="chip">Live Tipps der Lehrkraft</span>
+          <span class="chip">Apple-inspirierte Optik</span>
+        </div>
+        <p class="footer-note">
+          Versteckter Admin-Zugang: Tippe funfmal schnell auf den Titel oder drucke <strong>Shift + Alt + A</strong>.
+        </p>
+      </div>
+
+      <section class="join-card glass" id="landingCard">
+        <h2 class="section-title">Mission starten</h2>
+        <p class="muted">Vor dem Start kurz anmelden. Danach lauft die Mission automatisch weiter.</p>
+
+        <div class="field-grid">
+          <div>
+            <label for="firstName">Vorname</label>
+            <input id="firstName" type="text" maxlength="40" placeholder="z. B. Mia" />
+          </div>
+          <div>
+            <label for="className">Klasse / Gruppe</label>
+            <select id="className">
+              <option value="6a">6a</option>
+              <option value="6b">6b</option>
+              <option value="6c">6c</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 18px;">
+          <button class="primary" id="joinBtn">Mission beginnen</button>
+          <button class="secondary" id="resetBtn">Neu anfangen</button>
+        </div>
+
+        <div class="status-line" id="landingMessage"></div>
+        <div class="status-line" id="connectionStatus">Verbinde mit dem Klassenraum ...</div>
+      </section>
+    </section>
+
+    <main class="workspace">
+      <section class="student-stage glass hidden" id="studentStage">
+        <div class="row" style="justify-content: space-between;">
+          <div>
+            <div class="eyebrow" id="studentLabel">Laborplatz</div>
+            <div class="muted" id="studentStatusLine"></div>
+          </div>
+          <div class="row">
+            <button class="secondary" id="leaveBtn">Abmelden</button>
+          </div>
+        </div>
+
+        <div class="banner hidden" id="broadcastBanner"></div>
+        <div class="banner warn hidden" id="teacherBanner"></div>
+
+        <div class="task-card">
+          <div class="row" style="justify-content: space-between; margin-bottom: 10px;">
+            <strong id="progressLabel">Aufgabe 1 von 6</strong>
+            <span class="muted" id="missionStateLabel">Status: wartet</span>
+          </div>
+          <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+        </div>
+
+        <section class="task-card" id="taskCard">
+          <div class="task-top">
+            <div>
+              <p class="task-title" id="taskTitle"></p>
+              <p class="muted" id="taskHelp"></p>
+            </div>
+            <div class="task-step" id="taskTag"></div>
+          </div>
+
+          <div id="taskAnswerArea"></div>
+        </section>
+
+        <div class="row">
+          <button class="secondary" id="prevBtn">Zuruck</button>
+          <button class="primary" id="nextBtn">Weiter</button>
+          <button class="primary hidden" id="submitBtn">Abgeben</button>
+          <span class="inline-message" id="studentMessage"></span>
+        </div>
       </section>
 
-      <main class="main">
-        <section class="card" id="landingCard">
-          <div class="pill">Zugang zur Mission</div>
-          <div class="grid">
-            <div>
-              <label for="firstName">Vorname</label>
-              <input id="firstName" type="text" maxlength="30" placeholder="z. B. Mia" />
-            </div>
-            <div>
-              <label for="className">Klasse / Gruppe</label>
-              <select id="className">
-                <option value="6a">6a</option>
-                <option value="6b">6b</option>
-                <option value="6c">6c</option>
-              </select>
-            </div>
+      <section class="admin-panel glass hidden" id="adminPanel">
+        <div class="row" style="justify-content: space-between; align-items: flex-start;">
+          <div>
+            <div class="eyebrow">Laborleitung</div>
+            <h2 class="section-title" style="margin-bottom: 4px;">Live-Dashboard fur Lehrkraft</h2>
+            <p class="muted" style="margin: 0;">Steuere die Mission, sende Hinweise und begleite angemeldete SuS in Echtzeit.</p>
           </div>
-          <div class="grid-2" style="margin-top:16px;">
-            <div class="info-box">
-              <strong>Systemdaten</strong>
-              <div class="chips">
-                <span class="chip">Gummibärchen · 1 €</span>
-                <span class="chip">Schokoriegel · 1,50 €</span>
-                <span class="chip">Chips · 2 €</span>
-                <span class="chip">Münzen: 50 ct, 1 €, 2 €</span>
-                <span class="chip">Taste: Rückgabe</span>
-              </div>
-            </div>
-            <div class="info-box">
-              <strong>Auftrag</strong>
-              <div class="muted" style="margin-top:8px;">Finde heraus, wie der Snackautomat aufgebaut ist. Achte auf Startzustand, Folgezustände, erlaubte Eingaben und die Wirkung der Rückgabe-Taste.</div>
-            </div>
-          </div>
-          <div class="row" style="margin-top:16px;">
-            <button class="primary" id="joinBtn">Mission starten</button>
-            <span id="landingMessage" class="muted"></span>
-          </div>
-          <div id="connectionStatus" class="status-line">Verbindung wird aufgebaut …</div>
-        </section>
-
-        <section class="card hidden" id="waitingCard">
-          <div class="pill">Bereitstellungsraum</div>
-          <div class="center-box">
-            <div id="studentStateBadge" class="state-badge state-waiting">Wartet auf Freigabe</div>
-            <h2 id="waitingTitle">Mission vorbereitet</h2>
-            <p id="waitingText" class="sub">Bitte warte, bis die Laborleitung die Mission freigibt.</p>
-            <div class="row" style="justify-content:center; margin-top:18px;">
-              <button class="ghost" id="backToStartBtn">Zurück</button>
-            </div>
-          </div>
-        </section>
-
-        <section id="quizCard" class="card hidden">
-          <div class="pill">Mission Snackautomat</div>
-          <p class="muted" id="studentIntro"></p>
-
-          <div class="mission">
-            <div class="mission-head">
-              <h2>Laborauftrag</h2>
-              <span class="mission-tag">Beobachten · Ordnen · Erklären</span>
-            </div>
-            <p class="muted">Bearbeite die Missionen in Ruhe. Es geht darum, den Automaten zu verstehen: Welche Zustände gibt es, welche Eingaben sind sinnvoll und was passiert bei der Rückgabe?</p>
-          </div>
-
-          <div id="questionsBox" style="margin-top: 18px;"></div>
-
           <div class="row">
-            <button class="primary" id="submitBtn">Laborprotokoll abgeben</button>
-            <button class="ghost" id="resetStudentBtn">Antworten löschen</button>
-            <span id="studentMessage" class="muted"></span>
+            <button class="secondary" id="logoutAdminBtn">Lehrkraft abmelden</button>
+            <button class="secondary" id="closeAdminBtn">Schliessen</button>
           </div>
-        </section>
+        </div>
 
-        <section class="card">
-          <div class="pill">Admin-Zugang</div>
-          <div class="grid">
+        <div class="kpi-grid" style="margin-top: 18px;">
+          <div class="kpi"><span class="muted">Mission</span><strong id="kpiMission">Wartet</strong></div>
+          <div class="kpi"><span class="muted">Aktiv</span><strong id="kpiActive">0</strong></div>
+          <div class="kpi"><span class="muted">Abgaben</span><strong id="kpiSubmissions">0</strong></div>
+          <div class="kpi"><span class="muted">Durchschnitt</span><strong id="kpiAverage">0%</strong></div>
+        </div>
+
+        <div class="teacher-grid" style="margin-top: 18px;">
+          <section class="card stack">
             <div>
-              <label for="teacherCode">Passwort</label>
-              <input id="teacherCode" type="password" placeholder="Passwort eingeben" />
+              <h3 class="section-title">Mission steuern</h3>
+              <p class="muted">Global freigeben, pausieren oder eine Nachricht an alle schicken.</p>
             </div>
-            <div style="display:flex;align-items:end;">
-              <button class="ghost" id="toggleAdminBtn">Laborleitung öffnen</button>
+            <div class="row">
+              <button class="success" id="startMissionBtn">Freigeben</button>
+              <button class="warning" id="pauseMissionBtn">Pausieren</button>
+              <button class="secondary" id="waitingMissionBtn">Warten</button>
+            </div>
+            <div>
+              <label for="broadcastInput">Nachricht an alle</label>
+              <textarea id="broadcastInput" placeholder="z. B. Denkt an die Ruckgabe-Taste."></textarea>
+            </div>
+            <button class="primary" id="sendBroadcastBtn">An alle senden</button>
+          </section>
+
+          <section class="card stack">
+            <div>
+              <h3 class="section-title">Auswertung</h3>
+              <p class="muted">Schneller Blick auf Anmeldung, Bearbeitung und Ergebnisse.</p>
+            </div>
+            <div class="meta">
+              <div id="adminStatusLine">Noch keine Daten geladen.</div>
+              <div id="adminConnectionLine">Live-Updates aktiv, sobald Supabase verbunden ist.</div>
+            </div>
+            <div class="row">
+              <button class="secondary" id="refreshAdminBtn">Neu laden</button>
+              <button class="secondary" id="exportCsvBtn">CSV</button>
+              <button class="secondary" id="exportJsonBtn">JSON</button>
+            </div>
+          </section>
+        </div>
+
+        <section class="card" style="margin-top: 18px;">
+          <div class="row" style="justify-content: space-between;">
+            <div>
+              <h3 class="section-title">Angemeldete SuS</h3>
+              <p class="muted">Einzeln Tipps geben, Aufgabe vorspulen oder eine Momentaufnahme anfordern.</p>
             </div>
           </div>
-          <p class="footer-note">Im Prototyp lautet das Passwort <strong>schule6</strong>. Diese Version speichert Status und Abgaben zentral in Supabase. Das Admin-Passwort in der Website ist nur ein leichter Schutz. Wirklich sichere Admin-Rechte sollten später über ein kleines Server-Backend laufen.</p>
+          <div class="student-grid" id="studentGrid" style="margin-top: 12px;"></div>
         </section>
+      </section>
+    </main>
+  </div>
 
-        <section id="adminView" class="card hidden">
-          <div class="pill">Laborleitung</div>
-
-          <div class="kpis">
-            <div class="kpi"><span class="muted">Status</span><strong id="kpiState">WARTEN</strong></div>
-            <div class="kpi"><span class="muted">Abgaben</span><strong id="kpiSubmissions">0</strong></div>
-            <div class="kpi"><span class="muted">Trefferquote</span><strong id="kpiAverage">0%</strong></div>
-            <div class="kpi"><span class="muted">Beste Quote</span><strong id="kpiBest">0%</strong></div>
-          </div>
-
-          <div class="row" style="margin-bottom: 14px;">
-            <button class="ok" id="startQuizBtn">Mission freigeben</button>
-            <button class="danger" id="stopQuizBtn">Mission stoppen</button>
-            <button class="ghost" id="setWaitingBtn">Auf Warten setzen</button>
-          </div>
-
-          <div class="row" style="margin-bottom: 14px;">
-            <button class="ok" id="refreshAdminBtn">Neu laden</button>
-            <button class="ok" id="exportCsvBtn">CSV exportieren</button>
-            <button class="warn" id="exportJsonBtn">JSON exportieren</button>
-          </div>
-
-          <div style="overflow-x:auto;">
-            <table>
-              <thead>
-                <tr>
-                  <th>Vorname</th>
-                  <th>Klasse</th>
-                  <th>Treffer</th>
-                  <th>Quote</th>
-                  <th>Notiz</th>
-                  <th>Zeit</th>
-                </tr>
-              </thead>
-              <tbody id="resultsBody"></tbody>
-            </table>
-          </div>
-        </section>
-      </main>
+  <div class="admin-overlay hidden" id="adminOverlay">
+    <div class="admin-sheet">
+      <div class="eyebrow">Versteckter Bereich</div>
+      <h2 class="section-title">Admin-Zugang</h2>
+      <p class="muted">Mit deinem Supabase-Lehrkraftkonto anmelden, um den Lehrkraftbereich zu offnen.</p>
+      <div class="stack">
+        <div>
+          <label for="teacherEmail">E-Mail</label>
+          <input id="teacherEmail" type="text" placeholder="lehrkraft@schule.de" />
+        </div>
+        <div>
+          <label for="teacherPassword">Passwort</label>
+          <input id="teacherPassword" type="password" placeholder="Passwort" />
+        </div>
+      </div>
+      <div class="row" style="margin-top: 18px;">
+        <button class="primary" id="openAdminBtn">Offnen</button>
+        <button class="secondary" id="cancelAdminBtn">Abbrechen</button>
+      </div>
+      <div class="status-line" id="adminLoginMessage"></div>
+      <p class="footer-note">Der Zugriff laeuft jetzt ueber Supabase Auth. Fuer Lehrkraftrechte braucht dein Benutzer zusaetzlich einen Eintrag mit Rolle <strong>teacher</strong> in der Tabelle <strong>profiles</strong>.</p>
     </div>
   </div>
 
   <script>
-    const SUPABASE_URL = 'https://ksuqarrjolkhpwojrjav.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj';
+    const SUPABASE_URL = "https://ksuqarrjolkhpwojrjav.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const SESSION_KEY = 'automatenlabor_session_v4';
-    const TEACHER_CODE = 'schule6';
-    const MISSION_CODE = 'main';
+    const SESSION_KEY = "automatenlabor_session_v6";
+    const MISSION_CODE = "main";
+    const SNAPSHOT_BUCKET = "automatenlabor-snapshots";
 
-    const STATE_WAITING = 'waiting';
-    const STATE_LIVE = 'live';
-    const STATE_STOPPED = 'stopped';
+    const STATE_WAITING = "waiting";
+    const STATE_LIVE = "live";
+    const STATE_PAUSED = "paused";
 
     const questions = [
       {
-        id: 'q1',
-        type: 'single',
-        tag: 'Mission 1',
-        text: 'Welcher Zustand ist der Startzustand des Snackautomaten?',
-        options: ['0 €', '0,50 €', '1 €', '2 €'],
+        id: "q1",
+        type: "single",
+        tag: "Mission 1",
+        text: "Welcher Zustand ist der Startzustand des Snackautomaten?",
+        help: "Suche den Zustand, in dem der Automat ganz am Anfang ist.",
+        options: ["0 Euro", "50 Cent", "1 Euro", "2 Euro"],
         correctIndex: 0
       },
       {
-        id: 'q2',
-        type: 'single',
-        tag: 'Mission 2',
-        text: 'Welche Eingaben akzeptiert der Automat?',
+        id: "q2",
+        type: "single",
+        tag: "Mission 2",
+        text: "Welche Eingaben akzeptiert der Automat?",
+        help: "Achte auf die zugelassenen Munzen.",
+        options: ["10 ct, 20 ct und 50 ct", "50 ct, 1 Euro und 2 Euro", "Nur 1 Euro und 2 Euro", "Beliebige Munzen"],
+        correctIndex: 1
+      },
+      {
+        id: "q3",
+        type: "single",
+        tag: "Mission 3",
+        text: "Was passiert im Zustand 0 Euro, wenn die Taste fur Gummibarchen gedruckt wird?",
+        help: "Prufe, ob genug Geld im Automaten liegt.",
+        options: ["Die Gummibarchen werden ausgegeben", "Der Zustand bleibt bei 0 Euro", "Der Zustand springt auf 1 Euro", "Es wird Ruckgeld ausgegeben"],
+        correctIndex: 1
+      },
+      {
+        id: "q4",
+        type: "single",
+        tag: "Mission 4",
+        text: "Welche Beschreibung passt am besten zur Ruckgabe-Taste?",
+        help: "Denk daran, was mit Geld und Zustand passiert.",
         options: [
-          '10 ct, 20 ct und 50 ct',
-          '50 ct, 1 € und 2 €',
-          'Nur 1 € und 2 €',
-          'Beliebige Münzen'
+          "Sie erhoht den Geldbetrag im Automaten",
+          "Sie setzt den Automaten je nach Zustand zuruck und gibt Geld zuruck",
+          "Sie gibt immer Chips aus",
+          "Sie wechselt das Produkt"
         ],
         correctIndex: 1
       },
       {
-        id: 'q3',
-        type: 'single',
-        tag: 'Mission 3',
-        text: 'Was passiert, wenn sich der Automat im Zustand 0 € befindet und die Taste für Gummibärchen gedrückt wird?',
+        id: "q5",
+        type: "single",
+        tag: "Mission 5",
+        text: "Warum kann der Automat kein Wechselgeld ausgeben?",
+        help: "Die Antwort steckt im Aufbau des Modells.",
         options: [
-          'Die Gummibärchen werden ausgegeben',
-          'Der Zustand bleibt bei 0 €',
-          'Der Zustand springt direkt zu 1 €',
-          'Es wird Rückgeld ausgegeben'
-        ],
-        correctIndex: 1
-      },
-      {
-        id: 'q4',
-        type: 'single',
-        tag: 'Mission 4',
-        text: 'Welche Beschreibung passt am besten zur Rückgabe-Taste?',
-        options: [
-          'Sie erhöht den Geldbetrag im Automaten',
-          'Sie setzt den Automaten abhängig vom Zustand zurück und gibt eingeworfenes Geld zurück',
-          'Sie gibt immer Chips aus',
-          'Sie wechselt das Produkt'
-        ],
-        correctIndex: 1
-      },
-      {
-        id: 'q5',
-        type: 'single',
-        tag: 'Mission 5',
-        text: 'Warum kann der Automat kein Wechselgeld ausgeben?',
-        options: [
-          'Weil er nur Zustände für eingeworfene Beträge nutzt und keine Rückgabe von Restgeld vorgesehen ist',
-          'Weil 2-€-Münzen verboten sind',
-          'Weil Scratch keine Zahlen speichern kann',
-          'Weil Produkte immer kostenlos sind'
+          "Weil nur Zustande fur eingeworfene Betrage genutzt werden und keine Restgeld-Regel vorgesehen ist",
+          "Weil 2-Euro-Munzen verboten sind",
+          "Weil Webseiten keine Zahlen speichern konnen",
+          "Weil alle Produkte kostenlos sind"
         ],
         correctIndex: 0
       },
       {
-        id: 'q6',
-        type: 'text',
-        tag: 'Mission 6',
-        text: 'Beschreibe in 1–2 Sätzen, wie man an einem Zustandsdiagramm erkennt, was Zustand, Eingabe, Folgezustand und Ausgabe sind.',
-        placeholder: 'Beispiel: Ein Zustand ist ... Die Eingabe ist ...'
+        id: "q6",
+        type: "text",
+        tag: "Mission 6",
+        text: "Beschreibe in 1 bis 2 Satzen, woran man in einem Zustandsdiagramm Zustand, Eingabe, Folgezustand und Ausgabe erkennt.",
+        help: "Nutze einfache Worte. Es geht um Verstehen, nicht um Fachsprache.",
+        placeholder: "Beispiel: Der Zustand ist ... Die Eingabe erkennt man an ..."
       }
     ];
 
-    const landingCard = document.getElementById('landingCard');
-    const waitingCard = document.getElementById('waitingCard');
-    const quizCard = document.getElementById('quizCard');
-    const adminView = document.getElementById('adminView');
+    const elements = {
+      heroTitle: document.getElementById("heroTitle"),
+      landingCard: document.getElementById("landingCard"),
+      studentStage: document.getElementById("studentStage"),
+      joinBtn: document.getElementById("joinBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      leaveBtn: document.getElementById("leaveBtn"),
+      firstNameInput: document.getElementById("firstName"),
+      classNameInput: document.getElementById("className"),
+      landingMessage: document.getElementById("landingMessage"),
+      connectionStatus: document.getElementById("connectionStatus"),
+      studentLabel: document.getElementById("studentLabel"),
+      studentStatusLine: document.getElementById("studentStatusLine"),
+      broadcastBanner: document.getElementById("broadcastBanner"),
+      teacherBanner: document.getElementById("teacherBanner"),
+      progressLabel: document.getElementById("progressLabel"),
+      missionStateLabel: document.getElementById("missionStateLabel"),
+      progressBar: document.getElementById("progressBar"),
+      taskTitle: document.getElementById("taskTitle"),
+      taskHelp: document.getElementById("taskHelp"),
+      taskTag: document.getElementById("taskTag"),
+      taskAnswerArea: document.getElementById("taskAnswerArea"),
+      prevBtn: document.getElementById("prevBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      submitBtn: document.getElementById("submitBtn"),
+      studentMessage: document.getElementById("studentMessage"),
+      adminPanel: document.getElementById("adminPanel"),
+      adminOverlay: document.getElementById("adminOverlay"),
+      teacherEmailInput: document.getElementById("teacherEmail"),
+      teacherPasswordInput: document.getElementById("teacherPassword"),
+      adminLoginMessage: document.getElementById("adminLoginMessage"),
+      openAdminBtn: document.getElementById("openAdminBtn"),
+      cancelAdminBtn: document.getElementById("cancelAdminBtn"),
+      closeAdminBtn: document.getElementById("closeAdminBtn"),
+      logoutAdminBtn: document.getElementById("logoutAdminBtn"),
+      startMissionBtn: document.getElementById("startMissionBtn"),
+      pauseMissionBtn: document.getElementById("pauseMissionBtn"),
+      waitingMissionBtn: document.getElementById("waitingMissionBtn"),
+      broadcastInput: document.getElementById("broadcastInput"),
+      sendBroadcastBtn: document.getElementById("sendBroadcastBtn"),
+      refreshAdminBtn: document.getElementById("refreshAdminBtn"),
+      exportCsvBtn: document.getElementById("exportCsvBtn"),
+      exportJsonBtn: document.getElementById("exportJsonBtn"),
+      kpiMission: document.getElementById("kpiMission"),
+      kpiActive: document.getElementById("kpiActive"),
+      kpiSubmissions: document.getElementById("kpiSubmissions"),
+      kpiAverage: document.getElementById("kpiAverage"),
+      adminStatusLine: document.getElementById("adminStatusLine"),
+      adminConnectionLine: document.getElementById("adminConnectionLine"),
+      studentGrid: document.getElementById("studentGrid")
+    };
 
-    const joinBtn = document.getElementById('joinBtn');
-    const backToStartBtn = document.getElementById('backToStartBtn');
-    const firstNameInput = document.getElementById('firstName');
-    const classNameInput = document.getElementById('className');
-    const landingMessage = document.getElementById('landingMessage');
-    const studentStateBadge = document.getElementById('studentStateBadge');
-    const waitingTitle = document.getElementById('waitingTitle');
-    const waitingText = document.getElementById('waitingText');
-    const studentIntro = document.getElementById('studentIntro');
-    const questionsBox = document.getElementById('questionsBox');
-    const submitBtn = document.getElementById('submitBtn');
-    const resetStudentBtn = document.getElementById('resetStudentBtn');
-    const studentMessage = document.getElementById('studentMessage');
-    const connectionStatus = document.getElementById('connectionStatus');
+    let mission = {
+      status: STATE_WAITING,
+      broadcast_message: "",
+      teacher_hint: "",
+      updated_at: null
+    };
+    let studentSessions = [];
+    let submissions = [];
+    let session = loadSession();
+    let adminTapCount = 0;
+    let adminTapTimer = null;
+    let heartbeatHandle = null;
+    let currentQuestionIndex = 0;
+    let answers = {};
+    let authUser = null;
+    let teacherProfile = null;
+    let snapshotUrls = {};
 
-    const teacherCodeInput = document.getElementById('teacherCode');
-    const toggleAdminBtn = document.getElementById('toggleAdminBtn');
-    const startQuizBtn = document.getElementById('startQuizBtn');
-    const stopQuizBtn = document.getElementById('stopQuizBtn');
-    const setWaitingBtn = document.getElementById('setWaitingBtn');
-    const refreshAdminBtn = document.getElementById('refreshAdminBtn');
-
-    const resultsBody = document.getElementById('resultsBody');
-    const kpiState = document.getElementById('kpiState');
-    const kpiSubmissions = document.getElementById('kpiSubmissions');
-    const kpiAverage = document.getElementById('kpiAverage');
-    const kpiBest = document.getElementById('kpiBest');
-    const exportCsvBtn = document.getElementById('exportCsvBtn');
-    const exportJsonBtn = document.getElementById('exportJsonBtn');
-
-    let currentMissionStatus = STATE_WAITING;
-    let lastFetchedResults = [];
-
-    function renderQuestions() {
-      questionsBox.innerHTML = '';
-      questions.forEach((question, index) => {
-        const block = document.createElement('div');
-        block.className = 'mission';
-
-        if (question.type === 'single') {
-          block.innerHTML = `
-            <div class="mission-head">
-              <h3>${index + 1}. ${question.text}</h3>
-              <span class="mission-tag">${question.tag}</span>
-            </div>
-            <div class="answers">
-              ${question.options.map((option, optionIndex) => `
-                <label class="answer">
-                  <input type="radio" name="${question.id}" value="${optionIndex}" />
-                  <span>${option}</span>
-                </label>
-              `).join('')}
-            </div>
-          `;
-        } else {
-          block.innerHTML = `
-            <div class="mission-head">
-              <h3>${index + 1}. ${question.text}</h3>
-              <span class="mission-tag">${question.tag}</span>
-            </div>
-            <textarea id="${question.id}" placeholder="${question.placeholder}"></textarea>
-          `;
-        }
-
-        questionsBox.appendChild(block);
-      });
+    function createDefaultSession() {
+      return {
+        studentKey: crypto.randomUUID(),
+        student: null,
+        currentQuestionIndex: 0,
+        answers: {},
+        hasSubmitted: false,
+        lastSnapshotRequestedAt: null
+      };
     }
 
-    function getSession() {
+    function loadSession() {
       try {
-        return JSON.parse(localStorage.getItem(SESSION_KEY)) || {
-          student: null,
-          hasSubmitted: false
-        };
+        return { ...createDefaultSession(), ...JSON.parse(localStorage.getItem(SESSION_KEY) || "{}") };
       } catch (error) {
-        return { student: null, hasSubmitted: false };
+        return createDefaultSession();
       }
     }
 
-    function saveSession(session) {
+    function saveSession() {
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
     }
 
-    function formatDate(isoString) {
-      return new Date(isoString).toLocaleString('de-DE');
+    function isTeacher() {
+      return teacherProfile?.role === "teacher";
+    }
+
+    function userId() {
+      return authUser?.id || null;
     }
 
     function escapeHtml(value) {
-      return String(value || '')
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    function collectAnswers() {
-      const answers = {};
+    function formatDate(value) {
+      if (!value) return "noch nicht";
+      return new Date(value).toLocaleString("de-DE");
+    }
+
+    function summarizeText(text) {
+      if (!text) return "";
+      return text.length > 110 ? `${text.slice(0, 110)}...` : text;
+    }
+
+    function dataUrlToBlob(dataUrl) {
+      const parts = dataUrl.split(",");
+      const mime = parts[0].match(/:(.*?);/)?.[1] || "image/jpeg";
+      const binary = atob(parts[1]);
+      const array = new Uint8Array(binary.length);
+      for (let index = 0; index < binary.length; index += 1) {
+        array[index] = binary.charCodeAt(index);
+      }
+      return new Blob([array], { type: mime });
+    }
+
+    function getMissionStateLabel(state) {
+      if (state === STATE_LIVE) return "Mission lauft";
+      if (state === STATE_PAUSED) return "Mission pausiert";
+      return "Mission wartet";
+    }
+
+    function getStudentRecord() {
+      if (!session.student) return null;
+      return studentSessions.find((entry) => entry.student_key === session.studentKey) || null;
+    }
+
+    function ensureAnswerShape() {
       for (const question of questions) {
-        if (question.type === 'single') {
-          const checked = document.querySelector(`input[name="${question.id}"]:checked`);
-          answers[question.id] = checked ? Number(checked.value) : null;
-        } else {
-          const field = document.getElementById(question.id);
-          answers[question.id] = field ? field.value.trim() : '';
+        if (!(question.id in answers)) {
+          answers[question.id] = question.type === "single" ? null : "";
         }
       }
-      return answers;
     }
 
-    function scoreAnswers(answers) {
-      let points = 0;
-      let maxPoints = 0;
-      questions.forEach((question) => {
-        if (question.type === 'single') {
-          maxPoints += 1;
-          if (answers[question.id] === question.correctIndex) {
-            points += 1;
-          }
-        }
-      });
-      return { points, maxPoints };
-    }
+    function renderTask() {
+      ensureAnswerShape();
+      const question = questions[currentQuestionIndex];
+      const isInteractive = mission.status === STATE_LIVE && !session.hasSubmitted;
+      elements.progressLabel.textContent = `Aufgabe ${currentQuestionIndex + 1} von ${questions.length}`;
+      elements.missionStateLabel.textContent = getMissionStateLabel(mission.status);
+      elements.progressBar.style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
+      elements.taskTag.textContent = question.tag;
+      elements.taskTitle.textContent = question.text;
+      elements.taskHelp.textContent = question.help;
+      elements.prevBtn.disabled = currentQuestionIndex === 0 || !isInteractive;
+      elements.nextBtn.disabled = !isInteractive;
+      elements.submitBtn.disabled = !isInteractive;
+      elements.nextBtn.classList.toggle("hidden", currentQuestionIndex === questions.length - 1);
+      elements.submitBtn.classList.toggle("hidden", currentQuestionIndex !== questions.length - 1);
 
-    function validateStudentInput(firstName, answers) {
-      if (!firstName || firstName.trim().length < 2) {
-        return 'Bitte gib einen Vornamen mit mindestens 2 Zeichen ein.';
+      if (question.type === "single") {
+        elements.taskAnswerArea.innerHTML = `
+          <div class="option-list">
+            ${question.options.map((option, index) => `
+              <label class="option">
+                <input type="radio" name="${question.id}" value="${index}" ${answers[question.id] === index ? "checked" : ""} />
+                <span>${escapeHtml(option)}</span>
+              </label>
+            `).join("")}
+          </div>
+        `;
+        document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
+          input.disabled = !isInteractive;
+          input.addEventListener("change", (event) => {
+            answers[question.id] = Number(event.target.value);
+            session.answers = answers;
+            saveSession();
+            syncStudentSession().catch(console.error);
+          });
+        });
+      } else {
+        elements.taskAnswerArea.innerHTML = `
+          <textarea id="textAnswer" placeholder="${escapeHtml(question.placeholder)}">${escapeHtml(answers[question.id] || "")}</textarea>
+        `;
+        const field = document.getElementById("textAnswer");
+        field.disabled = !isInteractive;
+        field.addEventListener("input", () => {
+          answers[question.id] = field.value.trimStart();
+          session.answers = answers;
+          saveSession();
+        });
+        field.addEventListener("blur", () => syncStudentSession().catch(console.error));
       }
-      const missingSingle = questions
-        .filter((question) => question.type === 'single')
-        .some((question) => answers[question.id] === null);
-      if (missingSingle) {
-        return 'Bitte bearbeite alle Missionen mit Auswahl.';
-      }
-      return '';
-    }
-
-    function summarizeTextAnswer(text) {
-      if (!text) return '';
-      return text.length > 80 ? `${text.slice(0, 80)}…` : text;
-    }
-
-    function setConnectionStatus(message) {
-      connectionStatus.textContent = message;
-    }
-
-    function resetStudentForm(clearMessage = true) {
-      document.querySelectorAll('input[type="radio"]').forEach((input) => {
-        input.checked = false;
-      });
-      questions.filter((q) => q.type === 'text').forEach((q) => {
-        const field = document.getElementById(q.id);
-        if (field) field.value = '';
-      });
-      if (clearMessage) {
-        studentMessage.textContent = '';
-      }
-    }
-
-    function joinWaitingRoom() {
-      const firstName = firstNameInput.value.trim();
-      const className = classNameInput.value;
-      if (!firstName || firstName.length < 2) {
-        landingMessage.textContent = 'Bitte zuerst einen Vornamen eingeben.';
-        return;
-      }
-      const session = getSession();
-      session.student = { firstName, className };
-      session.hasSubmitted = false;
-      saveSession(session);
-      landingMessage.textContent = '';
-      studentIntro.textContent = `Mission aktiviert für ${firstName} (${className})`;
-      renderStudentView();
-    }
-
-    function backToStart() {
-      const session = getSession();
-      session.student = null;
-      session.hasSubmitted = false;
-      saveSession(session);
-      studentMessage.textContent = '';
-      landingMessage.textContent = '';
-      resetStudentForm(false);
-      renderStudentView();
     }
 
     function renderStudentView() {
-      const session = getSession();
-      const hasStudent = !!session.student;
-
-      landingCard.classList.toggle('hidden', hasStudent);
-      waitingCard.classList.add('hidden');
-      quizCard.classList.add('hidden');
+      const hasStudent = Boolean(session.student);
+      elements.landingCard.classList.toggle("hidden", hasStudent);
+      elements.studentStage.classList.toggle("hidden", !hasStudent);
 
       if (!hasStudent) return;
 
-      studentIntro.textContent = `Mission aktiviert für ${session.student.firstName} (${session.student.className})`;
+      const record = getStudentRecord();
+      const studentName = `${session.student.firstName} (${session.student.className})`;
+      elements.studentLabel.textContent = studentName;
+      elements.studentStatusLine.textContent = session.hasSubmitted
+        ? "Deine Antworten wurden bereits abgegeben."
+        : "Du arbeitest im Automatenlabor.";
 
-      if (session.hasSubmitted) {
-        waitingCard.classList.remove('hidden');
-        studentStateBadge.className = 'state-badge state-live';
-        studentStateBadge.textContent = 'Mission abgeschlossen';
-        waitingTitle.textContent = `Stark, ${session.student.firstName}!`;
-        waitingText.textContent = 'Dein Laborprotokoll wurde gespeichert. Bitte warte auf die nächste Anweisung.';
+      const broadcastText = mission.broadcast_message || "";
+      elements.broadcastBanner.textContent = broadcastText;
+      elements.broadcastBanner.classList.toggle("hidden", !broadcastText);
+
+      const teacherText = record?.teacher_message || "";
+      elements.teacherBanner.textContent = teacherText;
+      elements.teacherBanner.classList.toggle("hidden", !teacherText);
+
+      if (!session.hasSubmitted && mission.status !== STATE_LIVE && !teacherText) {
+        elements.teacherBanner.textContent = mission.status === STATE_PAUSED
+          ? "Die Mission ist gerade pausiert. Bitte warte auf die Lehrkraft."
+          : "Die Mission ist vorbereitet. Bitte warte, bis die Lehrkraft freigibt.";
+        elements.teacherBanner.classList.remove("hidden");
+      }
+
+      if (typeof record?.forced_question_index === "number" && record.forced_question_index !== currentQuestionIndex) {
+        currentQuestionIndex = Math.max(0, Math.min(questions.length - 1, record.forced_question_index));
+        session.currentQuestionIndex = currentQuestionIndex;
+        saveSession();
+      }
+
+      renderTask();
+    }
+
+    function renderAdmin() {
+      const activeStudents = studentSessions.filter((entry) => !entry.has_submitted);
+      const submittedStudents = submissions.length;
+      const avgScore = submissions.length
+        ? Math.round(submissions.reduce((sum, item) => sum + (item.percentage || 0), 0) / submissions.length)
+        : 0;
+
+      elements.kpiMission.textContent = getMissionStateLabel(mission.status).replace("Mission ", "");
+      elements.kpiActive.textContent = String(activeStudents.length);
+      elements.kpiSubmissions.textContent = String(submittedStudents);
+      elements.kpiAverage.textContent = `${avgScore}%`;
+      elements.adminStatusLine.textContent = isTeacher()
+        ? `${studentSessions.length} angemeldet, zuletzt aktualisiert: ${formatDate(mission.updated_at)}`
+        : "Lehrkraft-Login erforderlich.";
+
+      if (!isTeacher()) {
+        elements.studentGrid.innerHTML = `<div class="card"><p class="muted" style="margin: 0;">Bitte zuerst mit einem Lehrkraftkonto in Supabase anmelden.</p></div>`;
         return;
       }
 
-      if (currentMissionStatus === STATE_WAITING) {
-        waitingCard.classList.remove('hidden');
-        studentStateBadge.className = 'state-badge state-waiting';
-        studentStateBadge.textContent = 'Bereit';
-        waitingTitle.textContent = `Hallo ${session.student.firstName}!`;
-        waitingText.textContent = 'Die Mission wird gleich freigegeben.';
-      } else if (currentMissionStatus === STATE_LIVE) {
-        quizCard.classList.remove('hidden');
-      } else {
-        waitingCard.classList.remove('hidden');
-        studentStateBadge.className = 'state-badge state-stopped';
-        studentStateBadge.textContent = 'Pausiert';
-        waitingTitle.textContent = `Hallo ${session.student.firstName}!`;
-        waitingText.textContent = 'Die Mission wurde pausiert. Bitte warte auf weitere Anweisungen.';
+      if (studentSessions.length === 0) {
+        elements.studentGrid.innerHTML = `<div class="card"><p class="muted" style="margin: 0;">Noch keine SuS angemeldet.</p></div>`;
+        return;
       }
+
+      elements.studentGrid.innerHTML = studentSessions.map((entry) => {
+        const statusClass = entry.has_submitted ? "done" : mission.status === STATE_LIVE ? "live" : "wait";
+        const statusText = entry.has_submitted ? "fertig" : mission.status === STATE_LIVE ? "aktiv" : "wartet";
+        const previewUrl = snapshotUrls[entry.student_key] || "";
+        const preview = previewUrl
+          ? `<img class="snapshot" src="${previewUrl}" alt="Momentaufnahme von ${escapeHtml(entry.first_name)}" />`
+          : `<div class="snapshot" style="display:grid;place-items:center;color:var(--muted);">Noch keine Momentaufnahme</div>`;
+
+        return `
+          <article class="card student-card">
+            <header>
+              <div>
+                <div class="student-name">${escapeHtml(entry.first_name)}</div>
+                <div class="muted">${escapeHtml(entry.class_name || "")}</div>
+              </div>
+              <span class="badge ${statusClass}">${statusText}</span>
+            </header>
+            <div class="meta">
+              <div>Aufgabe: ${(entry.current_question_index ?? 0) + 1} / ${questions.length}</div>
+              <div>Zuletzt gesehen: ${formatDate(entry.last_seen_at)}</div>
+              <div>Screenshot: ${entry.snapshot_updated_at ? formatDate(entry.snapshot_updated_at) : "noch keiner"}</div>
+              <div>Notiz der SuS: ${escapeHtml(summarizeText(entry.note_preview || "")) || "-"}</div>
+            </div>
+            <div class="stack">
+              <div>
+                <label for="msg-${entry.student_key}">Nachricht an ${escapeHtml(entry.first_name)}</label>
+                <textarea id="msg-${entry.student_key}" placeholder="z. B. Schau noch einmal auf die Ruckgabe-Taste.">${escapeHtml(entry.teacher_message || "")}</textarea>
+              </div>
+              <div class="row">
+                <button class="primary" data-action="send-message" data-student="${entry.student_key}">Nachricht senden</button>
+                <button class="secondary" data-action="skip-task" data-student="${entry.student_key}">Aufgabe uberspringen</button>
+                <button class="secondary" data-action="request-snapshot" data-student="${entry.student_key}">Screenshot anfordern</button>
+              </div>
+              ${preview}
+            </div>
+          </article>
+        `;
+      }).join("");
     }
 
-    async function fetchMissionStatus() {
+    async function fetchMission() {
       const { data, error } = await supabaseClient
-        .from('missions')
-        .select('status')
-        .eq('code', MISSION_CODE)
+        .from("missions")
+        .select("status, broadcast_message, teacher_hint, updated_at")
+        .eq("code", MISSION_CODE)
         .single();
 
       if (error) throw error;
-      currentMissionStatus = data?.status || STATE_WAITING;
+      mission = {
+        status: data?.status || STATE_WAITING,
+        broadcast_message: data?.broadcast_message || "",
+        teacher_hint: data?.teacher_hint || "",
+        updated_at: data?.updated_at || null
+      };
       renderStudentView();
-      renderAdminTable();
+      renderAdmin();
     }
 
-    async function updateMissionStatus(newState) {
-      const { error } = await supabaseClient
-        .from('missions')
-        .update({ status: newState, updated_at: new Date().toISOString() })
-        .eq('code', MISSION_CODE);
+    async function fetchStudentSessions() {
+      const { data, error } = await supabaseClient
+        .from("student_sessions")
+        .select("student_key, first_name, class_name, current_question_index, teacher_message, forced_question_index, last_seen_at, note_preview, has_submitted, snapshot_requested_at, snapshot_path, snapshot_updated_at")
+        .eq("mission_code", MISSION_CODE)
+        .order("last_seen_at", { ascending: false });
 
       if (error) throw error;
-      currentMissionStatus = newState;
+      studentSessions = data || [];
+      if (isTeacher()) {
+        await refreshSnapshotUrls();
+      }
       renderStudentView();
-      renderAdminTable();
+      renderAdmin();
+      await maybeHandleSnapshotRequest();
     }
 
     async function fetchSubmissions() {
       const { data, error } = await supabaseClient
-        .from('submissions')
-        .select('first_name, class_name, score, max_score, percentage, note, created_at, answers')
-        .eq('mission_code', MISSION_CODE)
-        .order('created_at', { ascending: false });
+        .from("submissions")
+        .select("student_key, first_name, class_name, score, max_score, percentage, note, created_at")
+        .eq("mission_code", MISSION_CODE)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
-      lastFetchedResults = data || [];
-      renderAdminTable();
+      submissions = data || [];
+      renderAdmin();
+    }
+
+    async function refreshSnapshotUrls() {
+      const nextUrls = {};
+      const snapshotEntries = studentSessions.filter((entry) => entry.snapshot_path);
+      for (const entry of snapshotEntries) {
+        const { data, error } = await supabaseClient.storage
+          .from(SNAPSHOT_BUCKET)
+          .createSignedUrl(entry.snapshot_path, 60 * 60);
+        if (!error && data?.signedUrl) {
+          nextUrls[entry.student_key] = data.signedUrl;
+        }
+      }
+      snapshotUrls = nextUrls;
+    }
+
+    async function ensureAuthSession() {
+      const { data, error } = await supabaseClient.auth.getSession();
+      if (error) throw error;
+
+      if (!data.session) {
+        const { error: anonError } = await supabaseClient.auth.signInAnonymously();
+        if (anonError) throw anonError;
+      }
+
+      await refreshAuthState();
+    }
+
+    async function refreshAuthState() {
+      const { data, error } = await supabaseClient.auth.getUser();
+      if (error) throw error;
+      authUser = data.user || null;
+      teacherProfile = null;
+
+      if (authUser && !authUser.is_anonymous) {
+        const { data: profile, error: profileError } = await supabaseClient
+          .from("profiles")
+          .select("role, display_name")
+          .eq("id", authUser.id)
+          .maybeSingle();
+
+        if (profileError) {
+          throw profileError;
+        }
+
+        teacherProfile = profile;
+      }
+
+      elements.adminConnectionLine.textContent = authUser
+        ? `${authUser.is_anonymous ? "Anonyme Schueler-Session" : "Lehrkraft angemeldet"}`
+        : "Nicht angemeldet";
+    }
+
+    async function joinMission() {
+      if (!userId()) {
+        elements.landingMessage.textContent = "Die Schueler-Session wird noch vorbereitet. Bitte kurz warten.";
+        return;
+      }
+
+      const firstName = elements.firstNameInput.value.trim();
+      const className = elements.classNameInput.value;
+      if (firstName.length < 2) {
+        elements.landingMessage.textContent = "Bitte gib einen Vornamen mit mindestens 2 Zeichen ein.";
+        return;
+      }
+
+      session.student = { firstName, className };
+      session.hasSubmitted = false;
+      session.currentQuestionIndex = 0;
+      currentQuestionIndex = 0;
+      answers = {};
+      session.answers = answers;
+      saveSession();
+
+      await syncStudentSession();
+      elements.landingMessage.textContent = "";
+      renderStudentView();
+    }
+
+    async function syncStudentSession(extra = {}) {
+      if (!session.student) return;
+
+      const notePreview = typeof answers.q6 === "string" ? summarizeText(answers.q6) : "";
+      const payload = {
+        mission_code: MISSION_CODE,
+        student_key: session.studentKey,
+        user_id: userId(),
+        first_name: session.student.firstName,
+        class_name: session.student.className,
+        current_question_index: currentQuestionIndex,
+        note_preview: notePreview,
+        has_submitted: Boolean(session.hasSubmitted),
+        last_seen_at: new Date().toISOString(),
+        ...extra
+      };
+
+      const { error } = await supabaseClient
+        .from("student_sessions")
+        .upsert(payload, { onConflict: "student_key" });
+
+      if (error) throw error;
+    }
+
+    function validateAnswers() {
+      const unanswered = questions.find((question) => {
+        if (question.type === "single") return answers[question.id] === null || typeof answers[question.id] === "undefined";
+        return !String(answers[question.id] || "").trim();
+      });
+      return unanswered ? "Bitte bearbeite alle Aufgaben, bevor du abgibst." : "";
+    }
+
+    function scoreAnswers() {
+      let points = 0;
+      let maxPoints = 0;
+      for (const question of questions) {
+        if (question.type === "single") {
+          maxPoints += 1;
+          if (answers[question.id] === question.correctIndex) points += 1;
+        }
+      }
+      return { points, maxPoints };
     }
 
     async function submitAnswers() {
-      const session = getSession();
-      if (!session.student) {
-        studentMessage.textContent = 'Bitte zuerst auf der Startseite anmelden.';
-        return;
-      }
-      if (currentMissionStatus !== STATE_LIVE) {
-        studentMessage.textContent = 'Die Mission ist aktuell nicht freigegeben.';
-        return;
-      }
-      if (session.hasSubmitted) {
-        studentMessage.textContent = 'Dein Laborprotokoll wurde bereits gespeichert.';
+      if (!session.student) return;
+      if (mission.status !== STATE_LIVE) {
+        elements.studentMessage.textContent = "Die Mission ist gerade nicht freigegeben.";
         return;
       }
 
-      const answers = collectAnswers();
-      const validationError = validateStudentInput(session.student.firstName, answers);
+      const validationError = validateAnswers();
       if (validationError) {
-        studentMessage.textContent = validationError;
+        elements.studentMessage.textContent = validationError;
         return;
       }
 
-      const { points, maxPoints } = scoreAnswers(answers);
+      const { points, maxPoints } = scoreAnswers();
       const payload = {
         mission_code: MISSION_CODE,
+        student_key: session.studentKey,
+        user_id: userId(),
         first_name: session.student.firstName,
         class_name: session.student.className,
         answers,
         score: points,
         max_score: maxPoints,
         percentage: maxPoints ? Math.round((points / maxPoints) * 100) : 0,
-        note: summarizeTextAnswer(answers.q6)
+        note: summarizeText(answers.q6 || ""),
+        created_at: new Date().toISOString()
       };
 
-      studentMessage.textContent = 'Speichere Laborprotokoll …';
-      const { error } = await supabaseClient.from('submissions').insert(payload);
+      elements.studentMessage.textContent = "Speichere deine Antworten ...";
+      const { error } = await supabaseClient
+        .from("submissions")
+        .upsert(payload, { onConflict: "mission_code,student_key" });
+
       if (error) {
-        studentMessage.textContent = 'Speichern fehlgeschlagen. Bitte noch einmal versuchen.';
+        elements.studentMessage.textContent = "Speichern fehlgeschlagen. Bitte probiere es noch einmal.";
         console.error(error);
         return;
       }
 
       session.hasSubmitted = true;
-      saveSession(session);
-      studentMessage.textContent = 'Laborprotokoll gespeichert. Danke für deine Analyse.';
+      saveSession();
+      await syncStudentSession({ has_submitted: true });
       await fetchSubmissions();
+      elements.studentMessage.textContent = "Abgabe gespeichert. Danke!";
       renderStudentView();
     }
 
-    function renderAdminTable() {
-      const stateMap = { waiting: 'WARTEN', live: 'LIVE', stopped: 'PAUSIERT' };
-      kpiState.textContent = stateMap[currentMissionStatus] || 'WARTEN';
-      resultsBody.innerHTML = '';
+    async function updateMissionStatus(newState) {
+      if (!isTeacher()) return;
+      const { error } = await supabaseClient
+        .from("missions")
+        .update({
+          status: newState,
+          updated_at: new Date().toISOString()
+        })
+        .eq("code", MISSION_CODE);
 
-      if (lastFetchedResults.length === 0) {
-        resultsBody.innerHTML = '<tr><td colspan="6">Noch keine Laborprotokolle vorhanden.</td></tr>';
-        kpiSubmissions.textContent = '0';
-        kpiAverage.textContent = '0%';
-        kpiBest.textContent = '0%';
-        return;
-      }
-
-      let sum = 0;
-      let best = 0;
-      lastFetchedResults.forEach((entry) => {
-        sum += entry.percentage || 0;
-        best = Math.max(best, entry.percentage || 0);
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${escapeHtml(entry.first_name)}</td>
-          <td>${escapeHtml(entry.class_name)}</td>
-          <td>${entry.score}/${entry.max_score}</td>
-          <td>${entry.percentage || 0}%</td>
-          <td>${escapeHtml(entry.note || '')}</td>
-          <td>${formatDate(entry.created_at)}</td>
-        `;
-        resultsBody.appendChild(row);
-      });
-
-      kpiSubmissions.textContent = String(lastFetchedResults.length);
-      kpiAverage.textContent = `${Math.round(sum / lastFetchedResults.length)}%`;
-      kpiBest.textContent = `${best}%`;
+      if (error) throw error;
     }
 
-    function openAdmin() {
-      if (teacherCodeInput.value !== TEACHER_CODE) {
-        alert('Das Admin-Passwort ist nicht korrekt.');
-        return;
+    async function sendBroadcast() {
+      if (!isTeacher()) return;
+      const message = elements.broadcastInput.value.trim();
+      const { error } = await supabaseClient
+        .from("missions")
+        .update({
+          broadcast_message: message,
+          updated_at: new Date().toISOString()
+        })
+        .eq("code", MISSION_CODE);
+
+      if (error) throw error;
+      elements.broadcastInput.value = message;
+    }
+
+    async function updateStudentField(studentKey, changes) {
+      if (!isTeacher() && studentKey !== session.studentKey) return;
+      const { error } = await supabaseClient
+        .from("student_sessions")
+        .update(changes)
+        .eq("student_key", studentKey);
+
+      if (error) throw error;
+    }
+
+    async function maybeHandleSnapshotRequest() {
+      const record = getStudentRecord();
+      if (!record || !record.snapshot_requested_at || !session.student) return;
+      if (session.lastSnapshotRequestedAt === record.snapshot_requested_at) return;
+
+      session.lastSnapshotRequestedAt = record.snapshot_requested_at;
+      saveSession();
+
+      try {
+        const canvas = await html2canvas(document.querySelector(".shell"), {
+          backgroundColor: "#f4f7fb",
+          scale: 0.75,
+          useCORS: true
+        });
+        const snapshotData = canvas.toDataURL("image/jpeg", 0.62);
+        const snapshotPath = `${userId()}/${MISSION_CODE}/${session.studentKey}.jpg`;
+        const snapshotBlob = dataUrlToBlob(snapshotData);
+
+        const { error: uploadError } = await supabaseClient.storage
+          .from(SNAPSHOT_BUCKET)
+          .upload(snapshotPath, snapshotBlob, {
+            contentType: "image/jpeg",
+            upsert: true
+          });
+
+        if (uploadError) throw uploadError;
+
+        await updateStudentField(session.studentKey, {
+          snapshot_path: snapshotPath,
+          snapshot_updated_at: new Date().toISOString(),
+          snapshot_requested_at: null
+        });
+      } catch (error) {
+        console.error(error);
       }
-      adminView.classList.toggle('hidden');
-      fetchMissionStatus().catch(console.error);
-      fetchSubmissions().catch(console.error);
     }
 
     function downloadFile(filename, content, mimeType) {
       const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
       URL.revokeObjectURL(url);
     }
 
     function toCsv(rows) {
-  return rows
-    .map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(';'))
-    .join('\n');
-}
+      return rows
+        .map((row) => row.map((value) => `"${String(value ?? "").replaceAll('"', '""')}"`).join(";"))
+        .join("\n");
+    }
 
     function exportCsv() {
-      const header = ['Vorname', 'Klasse', 'Treffer', 'MaxTreffer', 'Quote', 'Notiz', 'Zeit'];
-      const rows = lastFetchedResults.map((r) => [
-        r.first_name,
-        r.class_name,
-        r.score,
-        r.max_score,
-        r.percentage || 0,
-        r.note || '',
-        r.created_at
+      const rows = submissions.map((entry) => [
+        entry.first_name,
+        entry.class_name,
+        entry.score,
+        entry.max_score,
+        entry.percentage,
+        entry.note,
+        entry.created_at
       ]);
-      const csv = toCsv([header, ...rows]);
-      downloadFile('automatenlabor-auswertung.csv', csv, 'text/csv;charset=utf-8;');
+      downloadFile("automatenlabor-auswertung.csv", toCsv([["Vorname", "Klasse", "Treffer", "Max", "Quote", "Notiz", "Zeit"], ...rows]), "text/csv;charset=utf-8;");
     }
 
     function exportJson() {
-      downloadFile('automatenlabor-auswertung.json', JSON.stringify(lastFetchedResults, null, 2), 'application/json');
+      downloadFile("automatenlabor-auswertung.json", JSON.stringify(submissions, null, 2), "application/json");
+    }
+
+    function resetLocalSession() {
+      session = createDefaultSession();
+      currentQuestionIndex = 0;
+      answers = {};
+      saveSession();
+      renderStudentView();
+      elements.firstNameInput.value = "";
+      elements.studentMessage.textContent = "";
+    }
+
+    function openAdminLogin() {
+      elements.adminOverlay.classList.remove("hidden");
+      elements.teacherEmailInput.focus();
+    }
+
+    function closeAdminLogin() {
+      elements.adminOverlay.classList.add("hidden");
+      elements.adminLoginMessage.textContent = "";
+      elements.teacherEmailInput.value = "";
+      elements.teacherPasswordInput.value = "";
+    }
+
+    function openAdminPanel() {
+      elements.adminPanel.classList.remove("hidden");
+      closeAdminLogin();
+      fetchMission().catch(console.error);
+      fetchStudentSessions().catch(console.error);
+      fetchSubmissions().catch(console.error);
+    }
+
+    function handleTitleTap() {
+      adminTapCount += 1;
+      clearTimeout(adminTapTimer);
+      adminTapTimer = setTimeout(() => { adminTapCount = 0; }, 1400);
+      if (adminTapCount >= 5) {
+        adminTapCount = 0;
+        openAdminLogin();
+      }
+    }
+
+    function handleAdminGridClick(event) {
+      if (!isTeacher()) return;
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+
+      const studentKey = button.dataset.student;
+      const action = button.dataset.action;
+      const textarea = document.getElementById(`msg-${studentKey}`);
+      const student = studentSessions.find((entry) => entry.student_key === studentKey);
+      if (!student) return;
+
+      if (action === "send-message") {
+        updateStudentField(studentKey, {
+          teacher_message: textarea ? textarea.value.trim() : "",
+          forced_question_index: student.current_question_index
+        }).catch(console.error);
+      }
+
+      if (action === "skip-task") {
+        const nextIndex = Math.min((student.current_question_index ?? 0) + 1, questions.length - 1);
+        updateStudentField(studentKey, {
+          teacher_message: textarea ? textarea.value.trim() : "Die Lehrkraft hat die Aufgabe ubersprungen.",
+          forced_question_index: nextIndex
+        }).catch(console.error);
+      }
+
+      if (action === "request-snapshot") {
+        updateStudentField(studentKey, {
+          snapshot_requested_at: new Date().toISOString()
+        }).catch(console.error);
+      }
+    }
+
+    function startHeartbeat() {
+      clearInterval(heartbeatHandle);
+      heartbeatHandle = setInterval(() => {
+        if (session.student) {
+          syncStudentSession().catch(console.error);
+        }
+      }, 15000);
     }
 
     function setupRealtime() {
       supabaseClient
-        .channel('automatenlabor-live')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'missions' }, async () => {
-          await fetchMissionStatus();
+        .channel("automatenlabor-live")
+        .on("postgres_changes", { event: "*", schema: "public", table: "missions" }, () => {
+          fetchMission().catch(console.error);
         })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'submissions' }, async () => {
-          await fetchSubmissions();
+        .on("postgres_changes", { event: "*", schema: "public", table: "student_sessions" }, () => {
+          fetchStudentSessions().catch(console.error);
         })
-        .subscribe();
+        .on("postgres_changes", { event: "*", schema: "public", table: "submissions" }, () => {
+          fetchSubmissions().catch(console.error);
+        })
+        .subscribe((status) => {
+          elements.adminConnectionLine.textContent = `Live-Status: ${status}`;
+        });
+
+      supabaseClient.auth.onAuthStateChange(() => {
+        refreshAuthState()
+          .then(() => fetchStudentSessions().catch(() => {}))
+          .then(() => fetchSubmissions().catch(() => {}))
+          .then(() => renderAdmin())
+          .catch(console.error);
+      });
     }
 
     async function initialLoad() {
       try {
-        setConnectionStatus('Verbindung zu Supabase erfolgreich.');
-        await fetchMissionStatus();
+        ensureAnswerShape();
+        answers = { ...answers, ...(session.answers || {}) };
+        currentQuestionIndex = session.currentQuestionIndex || 0;
+        await ensureAuthSession();
+        await fetchMission();
+        await fetchStudentSessions();
         await fetchSubmissions();
+        renderStudentView();
+        elements.connectionStatus.textContent = "Verbindung mit Supabase erfolgreich.";
       } catch (error) {
         console.error(error);
-        setConnectionStatus('Verbindung fehlgeschlagen. Prüfe Tabellen und Freigaben in Supabase.');
+        elements.connectionStatus.textContent = "Verbindung fehlgeschlagen. Bitte Supabase-Tabellen und Rechte prufen.";
       }
     }
 
     function runSelfTests() {
-      const perfect = { q1: 0, q2: 1, q3: 1, q4: 1, q5: 0, q6: 'Zustand ist der Kreis.' };
-      const result = scoreAnswers(perfect);
-      console.assert(result.points === 5, 'scoreAnswers sollte 5 Treffer liefern');
-      console.assert(result.maxPoints === 5, 'scoreAnswers sollte 5 MaxTreffer liefern');
-      console.assert(validateStudentInput('Mi', perfect) === '', 'validateStudentInput sollte gültige Eingaben akzeptieren');
-      console.assert(validateStudentInput('', perfect).length > 0, 'validateStudentInput sollte leeren Namen ablehnen');
-      console.assert(toCsv([['A', 'B'], ['1', '2']]) === '"A";"B"
-"1";"2"', 'toCsv sollte korrekten Zeilenumbruch erzeugen');
-      console.assert(escapeHtml('<script>') === '&lt;script&gt;', 'escapeHtml sollte HTML maskieren');
+      const sampleAnswers = { q1: 0, q2: 1, q3: 1, q4: 1, q5: 0, q6: "Ein Zustand ist ein Kreis." };
+      answers = { ...answers, ...sampleAnswers };
+      const result = scoreAnswers();
+      console.assert(result.points === 5, "scoreAnswers sollte 5 Punkte liefern");
+      console.assert(result.maxPoints === 5, "scoreAnswers sollte 5 Maximalpunkte liefern");
+      console.assert(toCsv([["A", "B"], ["1", "2"]]) === "\"A\";\"B\"\n\"1\";\"2\"", "CSV Export sollte stimmen");
+      console.assert(escapeHtml("<b>") === "&lt;b&gt;", "HTML Escaping sollte funktionieren");
+      answers = session.answers || {};
     }
 
-    joinBtn.addEventListener('click', joinWaitingRoom);
-    backToStartBtn.addEventListener('click', backToStart);
-    submitBtn.addEventListener('click', () => submitAnswers().catch(console.error));
-    resetStudentBtn.addEventListener('click', () => resetStudentForm());
+    elements.joinBtn.addEventListener("click", () => joinMission().catch(console.error));
+    elements.resetBtn.addEventListener("click", resetLocalSession);
+    elements.leaveBtn.addEventListener("click", async () => {
+      if (session.student) {
+        await updateStudentField(session.studentKey, { teacher_message: "", has_submitted: false }).catch(() => {});
+      }
+      resetLocalSession();
+    });
+    elements.prevBtn.addEventListener("click", () => {
+      currentQuestionIndex = Math.max(0, currentQuestionIndex - 1);
+      session.currentQuestionIndex = currentQuestionIndex;
+      saveSession();
+      renderTask();
+      syncStudentSession().catch(console.error);
+    });
+    elements.nextBtn.addEventListener("click", () => {
+      currentQuestionIndex = Math.min(questions.length - 1, currentQuestionIndex + 1);
+      session.currentQuestionIndex = currentQuestionIndex;
+      saveSession();
+      renderTask();
+      syncStudentSession().catch(console.error);
+    });
+    elements.submitBtn.addEventListener("click", () => submitAnswers().catch(console.error));
 
-    toggleAdminBtn.addEventListener('click', openAdmin);
-    startQuizBtn.addEventListener('click', () => updateMissionStatus(STATE_LIVE).catch(console.error));
-    stopQuizBtn.addEventListener('click', () => updateMissionStatus(STATE_STOPPED).catch(console.error));
-    setWaitingBtn.addEventListener('click', () => updateMissionStatus(STATE_WAITING).catch(console.error));
-    refreshAdminBtn.addEventListener('click', async () => {
-      await fetchMissionStatus();
+    elements.heroTitle.addEventListener("click", handleTitleTap);
+    document.addEventListener("keydown", (event) => {
+      if (event.shiftKey && event.altKey && event.key.toLowerCase() === "a") {
+        openAdminLogin();
+      }
+    });
+
+    elements.openAdminBtn.addEventListener("click", () => {
+      const email = elements.teacherEmailInput.value.trim();
+      const password = elements.teacherPasswordInput.value;
+      if (!email || !password) {
+        elements.adminLoginMessage.textContent = "Bitte E-Mail und Passwort eingeben.";
+        return;
+      }
+
+      supabaseClient.auth.signInWithPassword({ email, password })
+        .then(async ({ error }) => {
+          if (error) throw error;
+          await refreshAuthState();
+          if (!isTeacher()) {
+            elements.adminLoginMessage.textContent = "Dieser Benutzer hat keine Lehrkraftrolle.";
+            await supabaseClient.auth.signOut();
+            await supabaseClient.auth.signInAnonymously();
+            await refreshAuthState();
+            return;
+          }
+          openAdminPanel();
+        })
+        .catch((error) => {
+          console.error(error);
+          elements.adminLoginMessage.textContent = "Anmeldung fehlgeschlagen.";
+        });
+    });
+    elements.cancelAdminBtn.addEventListener("click", closeAdminLogin);
+    elements.closeAdminBtn.addEventListener("click", () => {
+      elements.adminPanel.classList.add("hidden");
+    });
+    elements.logoutAdminBtn.addEventListener("click", () => {
+      supabaseClient.auth.signOut()
+        .then(() => supabaseClient.auth.signInAnonymously())
+        .then(() => refreshAuthState())
+        .then(() => {
+          elements.adminPanel.classList.add("hidden");
+        })
+        .catch(console.error);
+    });
+
+    elements.startMissionBtn.addEventListener("click", () => updateMissionStatus(STATE_LIVE).catch(console.error));
+    elements.pauseMissionBtn.addEventListener("click", () => updateMissionStatus(STATE_PAUSED).catch(console.error));
+    elements.waitingMissionBtn.addEventListener("click", () => updateMissionStatus(STATE_WAITING).catch(console.error));
+    elements.sendBroadcastBtn.addEventListener("click", () => sendBroadcast().catch(console.error));
+    elements.refreshAdminBtn.addEventListener("click", async () => {
+      await fetchMission();
+      await fetchStudentSessions();
       await fetchSubmissions();
     });
-    exportCsvBtn.addEventListener('click', exportCsv);
-    exportJsonBtn.addEventListener('click', exportJson);
+    elements.exportCsvBtn.addEventListener("click", exportCsv);
+    elements.exportJsonBtn.addEventListener("click", exportJson);
+    elements.studentGrid.addEventListener("click", handleAdminGridClick);
 
-    renderQuestions();
-    renderStudentView();
     runSelfTests();
+    renderStudentView();
     initialLoad();
     setupRealtime();
+    startHeartbeat();
   </script>
 </body>
 </html>

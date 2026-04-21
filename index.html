@@ -123,7 +123,7 @@
       outline: none;
     }
 
-    input:focus, select:focus {
+    input:focus, select:focus, textarea:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(103,232,249,0.18);
     }
@@ -320,6 +320,12 @@
       line-height: 1.5;
     }
 
+    .status-line {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
     @media (max-width: 640px) {
       .hero, .main { padding: 16px; }
       .card { padding: 16px; }
@@ -327,6 +333,7 @@
       .mission-head { flex-direction: column; align-items: flex-start; }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="wrap">
@@ -373,6 +380,7 @@
             <button class="primary" id="joinBtn">Mission starten</button>
             <span id="landingMessage" class="muted"></span>
           </div>
+          <div id="connectionStatus" class="status-line">Verbindung wird aufgebaut …</div>
         </section>
 
         <section class="card hidden" id="waitingCard">
@@ -419,7 +427,7 @@
               <button class="ghost" id="toggleAdminBtn">Laborleitung öffnen</button>
             </div>
           </div>
-          <p class="footer-note">Im Prototyp lautet das Passwort <strong>schule6</strong>. Die Mission wirkt für die Lernenden spielerisch. Im Hintergrund werden die Antworten dennoch gespeichert, damit du den Wissensstand auswerten kannst.</p>
+          <p class="footer-note">Im Prototyp lautet das Passwort <strong>schule6</strong>. Diese Version speichert Status und Abgaben zentral in Supabase. Das Admin-Passwort in der Website ist nur ein leichter Schutz. Wirklich sichere Admin-Rechte sollten später über ein kleines Server-Backend laufen.</p>
         </section>
 
         <section id="adminView" class="card hidden">
@@ -439,9 +447,9 @@
           </div>
 
           <div class="row" style="margin-bottom: 14px;">
+            <button class="ok" id="refreshAdminBtn">Neu laden</button>
             <button class="ok" id="exportCsvBtn">CSV exportieren</button>
             <button class="warn" id="exportJsonBtn">JSON exportieren</button>
-            <button class="danger" id="clearAllBtn">Alle Daten löschen</button>
           </div>
 
           <div style="overflow-x:auto;">
@@ -465,9 +473,13 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'automatenlabor_results_v3';
-    const SESSION_KEY = 'automatenlabor_session_v3';
+    const SUPABASE_URL = 'https://ksuqarrjolkhpwojrjav.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const SESSION_KEY = 'automatenlabor_session_v4';
     const TEACHER_CODE = 'schule6';
+    const MISSION_CODE = 'main';
 
     const STATE_WAITING = 'waiting';
     const STATE_LIVE = 'live';
@@ -561,12 +573,14 @@
     const submitBtn = document.getElementById('submitBtn');
     const resetStudentBtn = document.getElementById('resetStudentBtn');
     const studentMessage = document.getElementById('studentMessage');
+    const connectionStatus = document.getElementById('connectionStatus');
 
     const teacherCodeInput = document.getElementById('teacherCode');
     const toggleAdminBtn = document.getElementById('toggleAdminBtn');
     const startQuizBtn = document.getElementById('startQuizBtn');
     const stopQuizBtn = document.getElementById('stopQuizBtn');
     const setWaitingBtn = document.getElementById('setWaitingBtn');
+    const refreshAdminBtn = document.getElementById('refreshAdminBtn');
 
     const resultsBody = document.getElementById('resultsBody');
     const kpiState = document.getElementById('kpiState');
@@ -575,7 +589,9 @@
     const kpiBest = document.getElementById('kpiBest');
     const exportCsvBtn = document.getElementById('exportCsvBtn');
     const exportJsonBtn = document.getElementById('exportJsonBtn');
-    const clearAllBtn = document.getElementById('clearAllBtn');
+
+    let currentMissionStatus = STATE_WAITING;
+    let lastFetchedResults = [];
 
     function renderQuestions() {
       questionsBox.innerHTML = '';
@@ -612,31 +628,14 @@
       });
     }
 
-    function getStoredResults() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function saveStoredResults(results) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
-    }
-
     function getSession() {
       try {
         return JSON.parse(localStorage.getItem(SESSION_KEY)) || {
           student: null,
-          quizState: STATE_WAITING,
           hasSubmitted: false
         };
       } catch (error) {
-        return {
-          student: null,
-          quizState: STATE_WAITING,
-          hasSubmitted: false
-        };
+        return { student: null, hasSubmitted: false };
       }
     }
 
@@ -644,20 +643,12 @@
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
     }
 
-    function updateQuizState(newState) {
-      const session = getSession();
-      session.quizState = newState;
-      saveSession(session);
-      renderStudentView();
-      renderAdminTable();
-    }
-
     function formatDate(isoString) {
       return new Date(isoString).toLocaleString('de-DE');
     }
 
     function escapeHtml(value) {
-      return String(value)
+      return String(value || '')
         .replaceAll('&', '&amp;')
         .replaceAll('<', '&lt;')
         .replaceAll('>', '&gt;')
@@ -711,31 +702,8 @@
       return text.length > 80 ? `${text.slice(0, 80)}…` : text;
     }
 
-    function joinWaitingRoom() {
-      const firstName = firstNameInput.value.trim();
-      const className = classNameInput.value;
-      if (!firstName || firstName.length < 2) {
-        landingMessage.textContent = 'Bitte zuerst einen Vornamen eingeben.';
-        return;
-      }
-      const session = getSession();
-      session.student = { firstName, className };
-      session.hasSubmitted = false;
-      saveSession(session);
-      landingMessage.textContent = '';
-      studentIntro.textContent = `Angemeldet als ${firstName} (${className})`;
-      renderStudentView();
-    }
-
-    function backToStart() {
-      const session = getSession();
-      session.student = null;
-      session.hasSubmitted = false;
-      saveSession(session);
-      studentMessage.textContent = '';
-      landingMessage.textContent = '';
-      resetStudentForm(false);
-      renderStudentView();
+    function setConnectionStatus(message) {
+      connectionStatus.textContent = message;
     }
 
     function resetStudentForm(clearMessage = true) {
@@ -751,55 +719,35 @@
       }
     }
 
-    function submitAnswers() {
+    function joinWaitingRoom() {
+      const firstName = firstNameInput.value.trim();
+      const className = classNameInput.value;
+      if (!firstName || firstName.length < 2) {
+        landingMessage.textContent = 'Bitte zuerst einen Vornamen eingeben.';
+        return;
+      }
       const session = getSession();
-      if (!session.student) {
-        studentMessage.textContent = 'Bitte zuerst auf der Startseite anmelden.';
-        return;
-      }
-      if (session.quizState !== STATE_LIVE) {
-        studentMessage.textContent = 'Die Mission ist aktuell nicht freigegeben.';
-        return;
-      }
-      if (session.hasSubmitted) {
-        studentMessage.textContent = 'Dein Laborprotokoll wurde bereits gespeichert.';
-        return;
-      }
-
-      const answers = collectAnswers();
-      const validationError = validateStudentInput(session.student.firstName, answers);
-      if (validationError) {
-        studentMessage.textContent = validationError;
-        return;
-      }
-
-      const { points, maxPoints } = scoreAnswers(answers);
-      const entry = {
-        id: window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : String(Date.now()),
-        firstName: session.student.firstName,
-        className: session.student.className,
-        answers,
-        points,
-        maxPoints,
-        percentage: maxPoints ? Math.round((points / maxPoints) * 100) : 0,
-        note: summarizeTextAnswer(answers.q6),
-        submittedAt: new Date().toISOString()
-      };
-
-      const results = getStoredResults();
-      results.push(entry);
-      saveStoredResults(results);
-
-      session.hasSubmitted = true;
+      session.student = { firstName, className };
+      session.hasSubmitted = false;
       saveSession(session);
-      studentMessage.textContent = 'Laborprotokoll gespeichert. Danke für deine Analyse.';
-      renderAdminTable();
+      landingMessage.textContent = '';
+      studentIntro.textContent = `Mission aktiviert für ${firstName} (${className})`;
+      renderStudentView();
+    }
+
+    function backToStart() {
+      const session = getSession();
+      session.student = null;
+      session.hasSubmitted = false;
+      saveSession(session);
+      studentMessage.textContent = '';
+      landingMessage.textContent = '';
+      resetStudentForm(false);
       renderStudentView();
     }
 
     function renderStudentView() {
       const session = getSession();
-      const state = session.quizState || STATE_WAITING;
       const hasStudent = !!session.student;
 
       landingCard.classList.toggle('hidden', hasStudent);
@@ -819,13 +767,13 @@
         return;
       }
 
-      if (state === STATE_WAITING) {
+      if (currentMissionStatus === STATE_WAITING) {
         waitingCard.classList.remove('hidden');
         studentStateBadge.className = 'state-badge state-waiting';
         studentStateBadge.textContent = 'Bereit';
         waitingTitle.textContent = `Hallo ${session.student.firstName}!`;
         waitingText.textContent = 'Die Mission wird gleich freigegeben.';
-      } else if (state === STATE_LIVE) {
+      } else if (currentMissionStatus === STATE_LIVE) {
         quizCard.classList.remove('hidden');
       } else {
         waitingCard.classList.remove('hidden');
@@ -836,14 +784,98 @@
       }
     }
 
-    function renderAdminTable() {
-      const results = getStoredResults();
+    async function fetchMissionStatus() {
+      const { data, error } = await supabaseClient
+        .from('missions')
+        .select('status')
+        .eq('code', MISSION_CODE)
+        .single();
+
+      if (error) throw error;
+      currentMissionStatus = data?.status || STATE_WAITING;
+      renderStudentView();
+      renderAdminTable();
+    }
+
+    async function updateMissionStatus(newState) {
+      const { error } = await supabaseClient
+        .from('missions')
+        .update({ status: newState, updated_at: new Date().toISOString() })
+        .eq('code', MISSION_CODE);
+
+      if (error) throw error;
+      currentMissionStatus = newState;
+      renderStudentView();
+      renderAdminTable();
+    }
+
+    async function fetchSubmissions() {
+      const { data, error } = await supabaseClient
+        .from('submissions')
+        .select('first_name, class_name, score, max_score, percentage, note, created_at, answers')
+        .eq('mission_code', MISSION_CODE)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      lastFetchedResults = data || [];
+      renderAdminTable();
+    }
+
+    async function submitAnswers() {
       const session = getSession();
+      if (!session.student) {
+        studentMessage.textContent = 'Bitte zuerst auf der Startseite anmelden.';
+        return;
+      }
+      if (currentMissionStatus !== STATE_LIVE) {
+        studentMessage.textContent = 'Die Mission ist aktuell nicht freigegeben.';
+        return;
+      }
+      if (session.hasSubmitted) {
+        studentMessage.textContent = 'Dein Laborprotokoll wurde bereits gespeichert.';
+        return;
+      }
+
+      const answers = collectAnswers();
+      const validationError = validateStudentInput(session.student.firstName, answers);
+      if (validationError) {
+        studentMessage.textContent = validationError;
+        return;
+      }
+
+      const { points, maxPoints } = scoreAnswers(answers);
+      const payload = {
+        mission_code: MISSION_CODE,
+        first_name: session.student.firstName,
+        class_name: session.student.className,
+        answers,
+        score: points,
+        max_score: maxPoints,
+        percentage: maxPoints ? Math.round((points / maxPoints) * 100) : 0,
+        note: summarizeTextAnswer(answers.q6)
+      };
+
+      studentMessage.textContent = 'Speichere Laborprotokoll …';
+      const { error } = await supabaseClient.from('submissions').insert(payload);
+      if (error) {
+        studentMessage.textContent = 'Speichern fehlgeschlagen. Bitte noch einmal versuchen.';
+        console.error(error);
+        return;
+      }
+
+      session.hasSubmitted = true;
+      saveSession(session);
+      studentMessage.textContent = 'Laborprotokoll gespeichert. Danke für deine Analyse.';
+      await fetchSubmissions();
+      renderStudentView();
+    }
+
+    function renderAdminTable() {
       const stateMap = { waiting: 'WARTEN', live: 'LIVE', stopped: 'PAUSIERT' };
-      kpiState.textContent = stateMap[session.quizState] || 'WARTEN';
+      kpiState.textContent = stateMap[currentMissionStatus] || 'WARTEN';
       resultsBody.innerHTML = '';
 
-      if (results.length === 0) {
+      if (lastFetchedResults.length === 0) {
         resultsBody.innerHTML = '<tr><td colspan="6">Noch keine Laborprotokolle vorhanden.</td></tr>';
         kpiSubmissions.textContent = '0';
         kpiAverage.textContent = '0%';
@@ -853,26 +885,23 @@
 
       let sum = 0;
       let best = 0;
-      results
-        .slice()
-        .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt))
-        .forEach((entry) => {
-          sum += entry.percentage;
-          best = Math.max(best, entry.percentage);
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${escapeHtml(entry.firstName)}</td>
-            <td>${escapeHtml(entry.className)}</td>
-            <td>${entry.points}/${entry.maxPoints}</td>
-            <td>${entry.percentage}%</td>
-            <td>${escapeHtml(entry.note || '')}</td>
-            <td>${formatDate(entry.submittedAt)}</td>
-          `;
-          resultsBody.appendChild(row);
-        });
+      lastFetchedResults.forEach((entry) => {
+        sum += entry.percentage || 0;
+        best = Math.max(best, entry.percentage || 0);
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${escapeHtml(entry.first_name)}</td>
+          <td>${escapeHtml(entry.class_name)}</td>
+          <td>${entry.score}/${entry.max_score}</td>
+          <td>${entry.percentage || 0}%</td>
+          <td>${escapeHtml(entry.note || '')}</td>
+          <td>${formatDate(entry.created_at)}</td>
+        `;
+        resultsBody.appendChild(row);
+      });
 
-      kpiSubmissions.textContent = String(results.length);
-      kpiAverage.textContent = `${Math.round(sum / results.length)}%`;
+      kpiSubmissions.textContent = String(lastFetchedResults.length);
+      kpiAverage.textContent = `${Math.round(sum / lastFetchedResults.length)}%`;
       kpiBest.textContent = `${best}%`;
     }
 
@@ -882,7 +911,8 @@
         return;
       }
       adminView.classList.toggle('hidden');
-      renderAdminTable();
+      fetchMissionStatus().catch(console.error);
+      fetchSubmissions().catch(console.error);
     }
 
     function downloadFile(filename, content, mimeType) {
@@ -905,35 +935,45 @@
     }
 
     function exportCsv() {
-      const results = getStoredResults();
       const header = ['Vorname', 'Klasse', 'Treffer', 'MaxTreffer', 'Quote', 'Notiz', 'Zeit'];
-      const rows = results.map((r) => [
-        r.firstName,
-        r.className,
-        r.points,
-        r.maxPoints,
-        r.percentage,
+      const rows = lastFetchedResults.map((r) => [
+        r.first_name,
+        r.class_name,
+        r.score,
+        r.max_score,
+        r.percentage || 0,
         r.note || '',
-        r.submittedAt
+        r.created_at
       ]);
       const csv = toCsv([header, ...rows]);
       downloadFile('automatenlabor-auswertung.csv', csv, 'text/csv;charset=utf-8;');
     }
 
     function exportJson() {
-      const results = getStoredResults();
-      downloadFile('automatenlabor-auswertung.json', JSON.stringify(results, null, 2), 'application/json');
+      downloadFile('automatenlabor-auswertung.json', JSON.stringify(lastFetchedResults, null, 2), 'application/json');
     }
 
-    function clearAllData() {
-      const confirmed = confirm('Wirklich alle gespeicherten Daten löschen?');
-      if (!confirmed) return;
-      localStorage.removeItem(STORAGE_KEY);
-      const session = getSession();
-      session.hasSubmitted = false;
-      saveSession(session);
-      renderAdminTable();
-      renderStudentView();
+    function setupRealtime() {
+      supabaseClient
+        .channel('automatenlabor-live')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'missions' }, async () => {
+          await fetchMissionStatus();
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'submissions' }, async () => {
+          await fetchSubmissions();
+        })
+        .subscribe();
+    }
+
+    async function initialLoad() {
+      try {
+        setConnectionStatus('Verbindung zu Supabase erfolgreich.');
+        await fetchMissionStatus();
+        await fetchSubmissions();
+      } catch (error) {
+        console.error(error);
+        setConnectionStatus('Verbindung fehlgeschlagen. Prüfe Tabellen und Freigaben in Supabase.');
+      }
     }
 
     function runSelfTests() {
@@ -950,26 +990,25 @@
 
     joinBtn.addEventListener('click', joinWaitingRoom);
     backToStartBtn.addEventListener('click', backToStart);
-    submitBtn.addEventListener('click', submitAnswers);
+    submitBtn.addEventListener('click', () => submitAnswers().catch(console.error));
     resetStudentBtn.addEventListener('click', () => resetStudentForm());
 
     toggleAdminBtn.addEventListener('click', openAdmin);
-    startQuizBtn.addEventListener('click', () => updateQuizState(STATE_LIVE));
-    stopQuizBtn.addEventListener('click', () => updateQuizState(STATE_STOPPED));
-    setWaitingBtn.addEventListener('click', () => updateQuizState(STATE_WAITING));
+    startQuizBtn.addEventListener('click', () => updateMissionStatus(STATE_LIVE).catch(console.error));
+    stopQuizBtn.addEventListener('click', () => updateMissionStatus(STATE_STOPPED).catch(console.error));
+    setWaitingBtn.addEventListener('click', () => updateMissionStatus(STATE_WAITING).catch(console.error));
+    refreshAdminBtn.addEventListener('click', async () => {
+      await fetchMissionStatus();
+      await fetchSubmissions();
+    });
     exportCsvBtn.addEventListener('click', exportCsv);
     exportJsonBtn.addEventListener('click', exportJson);
-    clearAllBtn.addEventListener('click', clearAllData);
-
-    window.addEventListener('storage', () => {
-      renderStudentView();
-      renderAdminTable();
-    });
 
     renderQuestions();
     renderStudentView();
-    renderAdminTable();
     runSelfTests();
+    initialLoad();
+    setupRealtime();
   </script>
 </body>
 </html>

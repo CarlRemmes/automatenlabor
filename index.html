@@ -6,22 +6,21 @@
   <title>Automatenlabor</title>
   <style>
     :root {
-      --bg: #eef2f7;
-      --panel: rgba(255, 255, 255, 0.78);
-      --panel-strong: rgba(255, 255, 255, 0.92);
-      --panel-border: rgba(15, 23, 42, 0.08);
-      --text: #0f172a;
-      --muted: #516079;
-      --accent: #0a84ff;
-      --accent-soft: rgba(10, 132, 255, 0.12);
-      --green: #30d158;
-      --amber: #ff9f0a;
-      --red: #ff453a;
-      --shadow: 0 24px 80px rgba(15, 23, 42, 0.14);
-      --radius-xl: 32px;
-      --radius-lg: 24px;
-      --radius-md: 18px;
-      --blur: blur(24px);
+      --bg: #f3f6fb;
+      --panel: rgba(255, 255, 255, 0.84);
+      --panel-strong: rgba(255, 255, 255, 0.96);
+      --text: #10233d;
+      --muted: #5e6d82;
+      --line: rgba(16, 35, 61, 0.1);
+      --accent: #007aff;
+      --accent-soft: rgba(0, 122, 255, 0.12);
+      --ok: #1f9d55;
+      --warn: #f59e0b;
+      --danger: #e11d48;
+      --shadow: 0 22px 70px rgba(16, 35, 61, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
     }
 
     * { box-sizing: border-box; }
@@ -29,296 +28,177 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(10, 132, 255, 0.12), transparent 24%),
-        radial-gradient(circle at bottom right, rgba(48, 209, 88, 0.1), transparent 24%),
-        linear-gradient(180deg, #f8fafd 0%, #eef3f8 48%, #e9eef5 100%);
+        radial-gradient(circle at top left, rgba(0, 122, 255, 0.12), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(31, 157, 85, 0.1), transparent 20%),
+        linear-gradient(180deg, #f8fbff, #eef3f8 55%, #e8edf5);
     }
 
-    button, input, select, textarea {
+    button, input, textarea {
       font: inherit;
     }
 
     .shell {
-      width: min(1240px, calc(100% - 28px));
-      margin: 18px auto;
-      padding: 16px;
-      border-radius: 38px;
+      width: min(1180px, calc(100% - 24px));
+      margin: 14px auto;
+      padding: 14px;
+      border-radius: 36px;
       background: rgba(255, 255, 255, 0.42);
-      border: 1px solid rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: var(--shadow);
-      backdrop-filter: var(--blur);
+      backdrop-filter: blur(18px);
+    }
+
+    .glass {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 10px 28px rgba(16, 35, 61, 0.06);
+      backdrop-filter: blur(20px);
     }
 
     .hero {
       display: grid;
       gap: 18px;
-      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.9fr);
-      align-items: stretch;
+      grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
     }
 
-    .glass {
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      backdrop-filter: var(--blur);
-      border-radius: var(--radius-xl);
-      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
-    }
-
-    .hero-copy {
-      padding: 28px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-copy::after {
-      content: "";
-      position: absolute;
-      inset: auto -30px -40px auto;
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle, rgba(10, 132, 255, 0.18), transparent 70%);
-      pointer-events: none;
+    .hero-copy,
+    .hero-visual,
+    .workspace {
+      padding: 26px;
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 16px;
       padding: 8px 12px;
       border-radius: 999px;
+      background: var(--accent-soft);
       color: var(--accent);
-      background: rgba(10, 132, 255, 0.1);
       font-weight: 700;
       font-size: 0.92rem;
+      margin-bottom: 16px;
     }
 
     h1 {
-      margin: 0 0 14px;
-      font-size: clamp(2.4rem, 5vw, 4.3rem);
+      margin: 0 0 12px;
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
       line-height: 0.95;
       letter-spacing: -0.05em;
       cursor: default;
       user-select: none;
     }
 
-    .sub {
-      max-width: 48rem;
+    h2, h3 {
       margin: 0;
-      line-height: 1.58;
+      letter-spacing: -0.03em;
+    }
+
+    .sub {
+      margin: 0;
+      max-width: 46rem;
       color: var(--muted);
+      line-height: 1.58;
       font-size: 1.04rem;
     }
 
-    .hero-stats {
+    .chip-row {
       display: flex;
-      gap: 12px;
       flex-wrap: wrap;
-      margin-top: 20px;
+      gap: 10px;
+      margin-top: 18px;
     }
 
     .chip {
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.05);
-      color: var(--text);
+      background: rgba(16, 35, 61, 0.05);
       font-weight: 600;
-      font-size: 0.95rem;
+      color: var(--text);
     }
 
-    .join-card,
-    .student-stage,
-    .admin-panel {
-      padding: 24px;
-    }
-
-    .section-title {
-      margin: 0 0 12px;
-      font-size: 1.25rem;
-      letter-spacing: -0.02em;
-    }
-
-    .muted {
-      color: var(--muted);
-    }
-
-    .field-grid {
+    .machine-grid {
       display: grid;
       gap: 14px;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 12px;
     }
 
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 700;
-      font-size: 0.96rem;
+    .machine-card {
+      padding: 16px;
+      border-radius: 22px;
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      min-height: 150px;
     }
 
-    input[type="text"],
-    input[type="password"],
-    select,
-    textarea {
-      width: 100%;
-      border: 1px solid rgba(15, 23, 42, 0.1);
-      background: rgba(255, 255, 255, 0.82);
-      padding: 14px 16px;
-      border-radius: 18px;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
-    }
-
-    textarea { min-height: 116px; resize: vertical; }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: rgba(10, 132, 255, 0.44);
-      box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.12);
-      transform: translateY(-1px);
-    }
-
-    .stack {
+    .machine-graphic {
       display: grid;
-      gap: 16px;
+      place-items: center;
+      height: 86px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(0, 122, 255, 0.08), rgba(16, 35, 61, 0.03));
+      margin-bottom: 12px;
+      overflow: hidden;
     }
 
-    .row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    button {
-      border: 0;
-      border-radius: 16px;
-      padding: 13px 18px;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-
-    button:hover { transform: translateY(-1px); }
-    button:active { transform: translateY(0); }
-    button:disabled { opacity: 0.55; cursor: not-allowed; }
-
-    .primary {
-      background: linear-gradient(180deg, #1d9bff, #0a84ff);
-      color: white;
-      box-shadow: 0 14px 32px rgba(10, 132, 255, 0.24);
-    }
-
-    .secondary {
-      background: rgba(15, 23, 42, 0.07);
-      color: var(--text);
-    }
-
-    .success { background: rgba(48, 209, 88, 0.16); color: #147a2e; }
-    .warning { background: rgba(255, 159, 10, 0.18); color: #9c6200; }
-    .danger { background: rgba(255, 69, 58, 0.16); color: #a9231c; }
-
-    .status-line,
-    .inline-message {
-      min-height: 1.4em;
-      color: var(--muted);
-      font-size: 0.95rem;
+    .machine-svg {
+      width: 100%;
+      height: 100%;
     }
 
     .workspace {
-      margin-top: 16px;
+      margin-top: 18px;
       display: grid;
+      gap: 18px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       gap: 16px;
-      grid-template-columns: minmax(0, 1fr);
+      flex-wrap: wrap;
     }
 
-    .hidden { display: none !important; }
-
-    .banner {
-      padding: 14px 16px;
-      border-radius: 20px;
-      background: rgba(10, 132, 255, 0.1);
-      color: #084b92;
-      border: 1px solid rgba(10, 132, 255, 0.14);
-      line-height: 1.5;
-    }
-
-    .banner.warn {
-      background: rgba(255, 159, 10, 0.13);
-      color: #7a4c00;
-      border-color: rgba(255, 159, 10, 0.22);
-    }
-
-    .student-stage {
-      display: grid;
-      gap: 16px;
-    }
-
-    .waiting-room {
-      display: grid;
-      gap: 16px;
+    .progress-box,
+    .question-card,
+    .finish-card {
       padding: 22px;
       border-radius: var(--radius-lg);
       background: var(--panel-strong);
-      border: 1px solid rgba(15, 23, 42, 0.08);
-    }
-
-    .waiting-room h3 {
-      margin: 0;
-      font-size: 1.5rem;
-      letter-spacing: -0.03em;
-    }
-
-    .roster {
-      display: grid;
-      gap: 10px;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    }
-
-    .roster-item {
-      padding: 12px 14px;
-      border-radius: 18px;
-      background: rgba(15, 23, 42, 0.04);
-      border: 1px solid rgba(15, 23, 42, 0.06);
-      font-size: 0.95rem;
+      border: 1px solid var(--line);
     }
 
     .progress {
+      margin-top: 10px;
       height: 12px;
-      background: rgba(15, 23, 42, 0.08);
       border-radius: 999px;
+      background: rgba(16, 35, 61, 0.08);
       overflow: hidden;
     }
 
     .progress-bar {
       height: 100%;
       width: 0;
-      background: linear-gradient(90deg, #66b6ff, #0a84ff 45%, #30d158);
       border-radius: inherit;
+      background: linear-gradient(90deg, #79b8ff, #007aff 45%, #1f9d55);
       transition: width 0.25s ease;
     }
 
-    .task-card {
-      padding: 22px;
-      border-radius: var(--radius-lg);
-      background: var(--panel-strong);
-      border: 1px solid rgba(15, 23, 42, 0.08);
-    }
-
-    .task-top {
+    .question-head {
       display: flex;
       justify-content: space-between;
-      gap: 14px;
+      gap: 12px;
       align-items: flex-start;
       margin-bottom: 14px;
     }
 
-    .task-step {
+    .question-tag {
       padding: 7px 12px;
       border-radius: 999px;
       background: var(--accent-soft);
@@ -327,431 +207,380 @@
       white-space: nowrap;
     }
 
-    .task-title {
-      margin: 0;
+    .question-text {
+      margin: 0 0 8px;
       font-size: clamp(1.35rem, 2vw, 1.7rem);
       line-height: 1.16;
-      letter-spacing: -0.03em;
     }
 
-    .option-list {
+    .question-help {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .answers {
       display: grid;
       gap: 12px;
       margin-top: 18px;
     }
 
-    .option {
+    .answer {
       display: flex;
       gap: 12px;
       align-items: flex-start;
       padding: 15px 16px;
-      border-radius: 20px;
-      background: rgba(15, 23, 42, 0.04);
-      border: 1px solid rgba(15, 23, 42, 0.06);
-    }
-
-    .option input { margin-top: 3px; }
-
-    .kpi-grid {
-      display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .kpi {
-      padding: 18px;
-      border-radius: 22px;
-      background: var(--panel-strong);
-      border: 1px solid rgba(15, 23, 42, 0.08);
-    }
-
-    .kpi strong {
-      display: block;
-      margin-top: 6px;
-      font-size: 1.8rem;
-      letter-spacing: -0.04em;
-    }
-
-    .admin-toolbar,
-    .teacher-grid,
-    .student-grid {
-      display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .student-grid {
-      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    }
-
-    .card {
-      padding: 18px;
-      border-radius: 24px;
-      background: var(--panel-strong);
-      border: 1px solid rgba(15, 23, 42, 0.08);
-    }
-
-    .student-card header {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: flex-start;
-      margin-bottom: 10px;
-    }
-
-    .student-name {
-      font-size: 1.1rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
-    .badge {
-      display: inline-flex;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      background: rgba(15, 23, 42, 0.07);
-    }
-
-    .badge.live { color: #0a66c2; background: rgba(10, 132, 255, 0.12); }
-    .badge.done { color: #1d7f3b; background: rgba(48, 209, 88, 0.15); }
-    .badge.wait { color: #946000; background: rgba(255, 159, 10, 0.15); }
-
-    .meta {
-      display: grid;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 0.93rem;
-      margin-bottom: 14px;
-    }
-
-    .snapshot {
-      width: 100%;
       border-radius: 18px;
-      border: 1px solid rgba(15, 23, 42, 0.08);
-      background: white;
-      aspect-ratio: 16 / 10;
-      object-fit: cover;
+      background: rgba(16, 35, 61, 0.04);
+      border: 1px solid rgba(16, 35, 61, 0.06);
     }
 
-    .footer-note {
-      margin-top: 10px;
+    textarea, input[type="text"] {
+      width: 100%;
+      border: 1px solid rgba(16, 35, 61, 0.1);
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 14px 16px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 13px 18px;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      transition: transform 0.15s ease, opacity 0.18s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .primary {
+      background: linear-gradient(180deg, #2690ff, #007aff);
+      color: white;
+      box-shadow: 0 14px 28px rgba(0, 122, 255, 0.22);
+    }
+
+    .secondary {
+      background: rgba(16, 35, 61, 0.07);
+      color: var(--text);
+    }
+
+    .warning {
+      background: rgba(245, 158, 11, 0.18);
+      color: #9a6200;
+    }
+
+    .success {
+      background: rgba(31, 157, 85, 0.16);
+      color: #176c3d;
+    }
+
+    .muted { color: var(--muted); }
+    .hidden { display: none !important; }
+
+    .mini-gallery {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(16, 35, 61, 0.04);
+      border: 1px solid rgba(16, 35, 61, 0.06);
+    }
+
+    .mini-graphic {
+      height: 74px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(0, 122, 255, 0.09), rgba(16, 35, 61, 0.03));
+      margin-bottom: 10px;
+      display: grid;
+      place-items: center;
+    }
+
+    .status-line {
+      min-height: 1.4em;
       color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.5;
     }
 
-    .admin-overlay {
+    .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(10, 15, 25, 0.24);
-      backdrop-filter: blur(18px);
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 18px;
+      background: rgba(14, 20, 30, 0.26);
+      backdrop-filter: blur(16px);
       z-index: 20;
     }
 
-    .admin-sheet {
-      width: min(460px, 100%);
+    .overlay-card {
+      width: min(420px, 100%);
       padding: 24px;
-      border-radius: 30px;
-      background: rgba(255, 255, 255, 0.86);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(28px);
     }
 
-    @media (max-width: 980px) {
-      .hero,
-      .admin-toolbar,
-      .teacher-grid {
+    .skip-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .skip-item {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(16, 35, 61, 0.05);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 920px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        width: min(100% - 10px, 1180px);
+        margin: 6px auto;
+        padding: 8px;
+        border-radius: 26px;
+      }
+
+      .hero-copy,
+      .hero-visual,
+      .workspace {
+        padding: 18px;
+      }
+
+      .machine-grid {
         grid-template-columns: 1fr;
       }
 
-      .kpi-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .question-head {
+        flex-direction: column;
+      }
+
+      .row button {
+        width: 100%;
       }
     }
-
-    @media (max-width: 720px) {
-      .shell { width: min(100% - 14px, 1240px); margin: 8px auto; padding: 10px; border-radius: 28px; }
-      .hero-copy, .join-card, .student-stage, .admin-panel { padding: 18px; }
-      .field-grid, .kpi-grid { grid-template-columns: 1fr; }
-      .task-top { flex-direction: column; }
-      .row button { width: 100%; }
-    }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="shell">
     <section class="hero">
-      <div class="hero-copy glass">
+      <section class="hero-copy glass">
         <div class="eyebrow">Automatenlabor</div>
-        <h1 id="heroTitle">Mission Snackautomat</h1>
+        <h1 id="heroTitle">Automaten<br />verstehen</h1>
         <p class="sub">
-          Melde dich an, beobachte den Automaten und löse die Laboraufgaben Schritt für Schritt.
-          Deine Lehrkraft kann dir währenddessen Tipps schicken, Aufgaben freigeben und dich live begleiten.
+          Beantworte Fragen zu Automaten, Zuständen, Eingaben und Ausgaben.
+          Schau dir Beispiele an und entscheide: Ist das ein Automat oder nicht?
         </p>
-        <div class="hero-stats">
-          <span class="chip">Name + Klasse eingeben</span>
-          <span class="chip">Aufgaben nacheinander</span>
-          <span class="chip">Live-Tipps der Lehrkraft</span>
-          <span class="chip">Apple-inspirierte Optik</span>
+        <div class="chip-row">
+          <span class="chip">Mehr Bilder</span>
+          <span class="chip">Klare Fragen</span>
+          <span class="chip">Einfache Auswertung</span>
+          <span class="chip">Download am Ende</span>
         </div>
-        <p class="footer-note">
-          Versteckter Admin-Zugang: Tippe fünfmal schnell auf den Titel oder drücke <strong>Shift + Alt + A</strong>.
-        </p>
-      </div>
+      </section>
 
-      <section class="join-card glass" id="landingCard">
-        <h2 class="section-title">Mission starten</h2>
-        <p class="muted">Vor dem Start kurz anmelden. Danach läuft die Mission automatisch weiter.</p>
-
-        <div class="field-grid">
-          <div>
-            <label for="firstName">Vorname</label>
-            <input id="firstName" type="text" maxlength="40" placeholder="z. B. Mia" />
-          </div>
-          <div>
-            <label for="className">Klasse / Gruppe</label>
-            <select id="className">
-              <option value="6a">6a</option>
-              <option value="6b">6b</option>
-              <option value="6c">6c</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top: 18px;">
-          <button class="primary" id="joinBtn">Mission beginnen</button>
-          <button class="secondary" id="resetBtn">Neu anfangen</button>
-        </div>
-
-        <div class="status-line" id="landingMessage"></div>
-        <div class="status-line" id="connectionStatus">Verbinde mit dem Klassenraum ...</div>
-        <div class="card" style="margin-top: 18px;">
-          <h3 class="section-title">Schon angemeldet</h3>
-          <div class="roster" id="landingRoster"></div>
+      <section class="hero-visual glass">
+        <div class="eyebrow">Beispiele</div>
+        <h2>Automaten im Alltag</h2>
+        <div class="machine-grid">
+          <article class="machine-card">
+            <div class="machine-graphic">
+              <svg class="machine-svg" viewBox="0 0 220 100" aria-hidden="true">
+                <rect x="64" y="8" width="92" height="84" rx="16" fill="#dfe9f8"></rect>
+                <rect x="82" y="20" width="56" height="22" rx="8" fill="#8bc3ff"></rect>
+                <circle cx="92" cy="60" r="7" fill="#007aff"></circle>
+                <circle cx="112" cy="60" r="7" fill="#007aff"></circle>
+                <circle cx="132" cy="60" r="7" fill="#007aff"></circle>
+                <rect x="100" y="72" width="20" height="10" rx="3" fill="#5e6d82"></rect>
+              </svg>
+            </div>
+            <strong>Snackautomat</strong>
+            <p class="muted">Eingabe, Zustand, Auswahl, Ausgabe</p>
+          </article>
+          <article class="machine-card">
+            <div class="machine-graphic">
+              <svg class="machine-svg" viewBox="0 0 220 100" aria-hidden="true">
+                <circle cx="58" cy="50" r="26" fill="#cae6ff"></circle>
+                <circle cx="110" cy="50" r="26" fill="#cae6ff"></circle>
+                <circle cx="162" cy="50" r="26" fill="#cae6ff"></circle>
+                <path d="M82 50h22" stroke="#007aff" stroke-width="6" stroke-linecap="round"></path>
+                <path d="M134 50h22" stroke="#007aff" stroke-width="6" stroke-linecap="round"></path>
+              </svg>
+            </div>
+            <strong>Zustandsdiagramm</strong>
+            <p class="muted">Zustände und Übergänge</p>
+          </article>
+          <article class="machine-card">
+            <div class="machine-graphic">
+              <svg class="machine-svg" viewBox="0 0 220 100" aria-hidden="true">
+                <rect x="48" y="16" width="124" height="68" rx="16" fill="#dff5e8"></rect>
+                <rect x="62" y="30" width="60" height="12" rx="6" fill="#1f9d55"></rect>
+                <rect x="62" y="50" width="92" height="12" rx="6" fill="#87d8a8"></rect>
+              </svg>
+            </div>
+            <strong>Waschmaschine</strong>
+            <p class="muted">Programm wählen, starten, stoppen</p>
+          </article>
+          <article class="machine-card">
+            <div class="machine-graphic">
+              <svg class="machine-svg" viewBox="0 0 220 100" aria-hidden="true">
+                <rect x="74" y="14" width="72" height="72" rx="20" fill="#ffe8bf"></rect>
+                <path d="M92 48h36" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"></path>
+                <path d="M110 30v36" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"></path>
+              </svg>
+            </div>
+            <strong>Ampel</strong>
+            <p class="muted">Wechselt geordnet zwischen Zuständen</p>
+          </article>
         </div>
       </section>
     </section>
 
-    <main class="workspace">
-      <section class="student-stage glass hidden" id="studentStage">
-        <div class="row" style="justify-content: space-between;">
-          <div>
-            <div class="eyebrow" id="studentLabel">Laborplatz</div>
-            <div class="muted" id="studentStatusLine"></div>
-          </div>
-          <div class="row">
-            <button class="secondary" id="leaveBtn">Abmelden</button>
-          </div>
+    <main class="workspace glass">
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Arbeitsbereich</div>
+          <div class="muted">Verstecktes Hilfemenü: fünfmal auf den Titel tippen</div>
         </div>
-
-        <div class="banner hidden" id="broadcastBanner"></div>
-        <div class="banner warn hidden" id="teacherBanner"></div>
-
-        <section class="waiting-room hidden" id="waitingRoomCard">
-          <div>
-            <h3>Warteraum</h3>
-            <p class="muted" id="waitingRoomText">Die Mission startet gleich gemeinsam.</p>
-          </div>
-          <div>
-            <strong>Schon angemeldet</strong>
-            <div class="roster" id="studentRoster" style="margin-top: 10px;"></div>
-          </div>
-        </section>
-
-        <div class="task-card">
-          <div class="row" style="justify-content: space-between; margin-bottom: 10px;">
-            <strong id="progressLabel">Aufgabe 1 von 6</strong>
-            <span class="muted" id="missionStateLabel">Status: wartet</span>
-          </div>
-          <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
-        </div>
-
-        <section class="task-card" id="taskCard">
-          <div class="task-top">
-            <div>
-              <p class="task-title" id="taskTitle"></p>
-              <p class="muted" id="taskHelp"></p>
-            </div>
-            <div class="task-step" id="taskTag"></div>
-          </div>
-
-          <div id="taskAnswerArea"></div>
-        </section>
-
         <div class="row">
-          <button class="secondary" id="prevBtn">Zurück</button>
+          <button class="secondary" id="backBtn">Zurück</button>
           <button class="primary" id="nextBtn">Weiter</button>
-          <button class="primary hidden" id="submitBtn">Abgeben</button>
-          <span class="inline-message" id="studentMessage"></span>
         </div>
+      </div>
+
+      <section class="progress-box">
+        <strong id="progressLabel">Frage 1 von 12</strong>
+        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="status-line" id="statusLine"></div>
       </section>
 
-      <section class="admin-panel glass hidden" id="adminPanel">
-        <div class="row" style="justify-content: space-between; align-items: flex-start;">
+      <section class="question-card" id="questionCard">
+        <div class="question-head">
           <div>
-            <div class="eyebrow">Laborleitung</div>
-            <h2 class="section-title" style="margin-bottom: 4px;">Live-Dashboard für die Lehrkraft</h2>
-            <p class="muted" style="margin: 0;">Steuere die Mission, sende Hinweise und begleite angemeldete SuS in Echtzeit.</p>
+            <h2 class="question-text" id="questionText"></h2>
+            <p class="question-help" id="questionHelp"></p>
           </div>
-          <div class="row">
-            <button class="secondary" id="logoutAdminBtn">Lehrkraft abmelden</button>
-            <button class="secondary" id="closeAdminBtn">Schließen</button>
-          </div>
+          <div class="question-tag" id="questionTag"></div>
         </div>
 
-        <div class="kpi-grid" style="margin-top: 18px;">
-          <div class="kpi"><span class="muted">Mission</span><strong id="kpiMission">Wartet</strong></div>
-          <div class="kpi"><span class="muted">Aktiv</span><strong id="kpiActive">0</strong></div>
-          <div class="kpi"><span class="muted">Abgaben</span><strong id="kpiSubmissions">0</strong></div>
-          <div class="kpi"><span class="muted">Durchschnitt</span><strong id="kpiAverage">0%</strong></div>
+        <div id="questionVisual"></div>
+        <div id="questionAnswer"></div>
+      </section>
+
+      <section class="finish-card hidden" id="finishCard">
+        <div class="eyebrow">Fertig</div>
+        <h2>Auswertung herunterladen</h2>
+        <p class="sub" style="max-width: none;">
+          Gib jetzt deinen Namen ein. Danach kannst du deine Auswertung herunterladen und in einem Ordner auf dem Computer speichern.
+        </p>
+        <div style="margin-top: 16px;">
+          <label for="studentName"><strong>Name</strong></label>
+          <input id="studentName" type="text" placeholder="Vorname und Nachname" />
         </div>
-
-        <div class="teacher-grid" style="margin-top: 18px;">
-          <section class="card stack">
-            <div>
-              <h3 class="section-title">Mission steuern</h3>
-              <p class="muted">Global freigeben, pausieren oder eine Nachricht an alle schicken.</p>
-            </div>
-            <div class="row">
-              <button class="success" id="startMissionBtn">Freigeben</button>
-              <button class="warning" id="pauseMissionBtn">Pausieren</button>
-              <button class="secondary" id="waitingMissionBtn">Warten</button>
-            </div>
-            <div class="status-line" id="adminActionMessage"></div>
-            <div>
-              <label for="broadcastInput">Nachricht an alle</label>
-              <textarea id="broadcastInput" placeholder="z. B. Denkt an die Rückgabe-Taste."></textarea>
-            </div>
-            <button class="primary" id="sendBroadcastBtn">An alle senden</button>
-          </section>
-
-          <section class="card stack">
-            <div>
-              <h3 class="section-title">Auswertung</h3>
-              <p class="muted">Schneller Blick auf Anmeldung, Bearbeitung und Ergebnisse.</p>
-            </div>
-            <div class="meta">
-              <div id="adminStatusLine">Noch keine Daten geladen.</div>
-              <div id="adminConnectionLine">Live-Updates aktiv, sobald Supabase verbunden ist.</div>
-            </div>
-            <div class="row">
-              <button class="secondary" id="refreshAdminBtn">Neu laden</button>
-              <button class="secondary" id="exportCsvBtn">CSV</button>
-              <button class="secondary" id="exportJsonBtn">JSON</button>
-            </div>
-          </section>
+        <div class="skip-list" id="skipSummary"></div>
+        <div class="row" style="margin-top: 18px;">
+          <button class="primary" id="downloadBtn">Auswertung downloaden</button>
+          <button class="secondary" id="restartBtn">Neu starten</button>
         </div>
-
-        <section class="card" style="margin-top: 18px;">
-          <div class="row" style="justify-content: space-between;">
-            <div>
-              <h3 class="section-title">Angemeldete SuS</h3>
-              <p class="muted">Einzeln Tipps geben, Aufgabe vorspulen oder eine Momentaufnahme anfordern.</p>
-            </div>
-          </div>
-          <div class="student-grid" id="studentGrid" style="margin-top: 12px;"></div>
-        </section>
+        <div class="status-line" id="downloadMessage"></div>
       </section>
     </main>
   </div>
 
-  <div class="admin-overlay hidden" id="adminOverlay">
-    <div class="admin-sheet">
-      <div class="eyebrow">Versteckter Bereich</div>
-      <h2 class="section-title">Admin-Zugang</h2>
-      <p class="muted">Melde dich mit deinem Supabase-Lehrkraftkonto an, um den Lehrkraftbereich zu öffnen.</p>
-      <div class="stack">
-        <div>
-          <label for="teacherEmail">E-Mail</label>
-          <input id="teacherEmail" type="text" placeholder="lehrkraft@schule.de" />
-        </div>
-        <div>
-          <label for="teacherPassword">Passwort</label>
-          <input id="teacherPassword" type="password" placeholder="Passwort" />
-        </div>
-      </div>
+  <div class="overlay hidden" id="skipOverlay">
+    <div class="overlay-card">
+      <div class="eyebrow">Hilfemenü</div>
+      <h3>Aufgabe überspringen</h3>
+      <p class="sub" style="max-width: none;">
+        Wenn du einer einzelnen Schülerin oder einem einzelnen Schüler helfen möchtest, kannst du die aktuelle Aufgabe überspringen.
+        Das wird in der Auswertung vermerkt.
+      </p>
       <div class="row" style="margin-top: 18px;">
-        <button class="primary" id="openAdminBtn">Öffnen</button>
-        <button class="secondary" id="cancelAdminBtn">Abbrechen</button>
+        <button class="warning" id="skipQuestionBtn">Aktuelle Aufgabe überspringen</button>
+        <button class="secondary" id="closeOverlayBtn">Schließen</button>
       </div>
-      <div class="status-line" id="adminLoginMessage"></div>
-      <p class="footer-note">Der Zugriff läuft jetzt über Supabase Auth. Für Lehrkraftrechte braucht dein Benutzer zusätzlich einen Eintrag mit der Rolle <strong>teacher</strong> in der Tabelle <strong>profiles</strong>.</p>
+      <div class="status-line" id="skipMessage"></div>
     </div>
   </div>
 
   <script>
-    const SUPABASE_URL = "https://ksuqarrjolkhpwojrjav.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj";
-    const studentClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { storageKey: "automatenlabor-student-auth" }
-    });
-    const adminClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { storageKey: "automatenlabor-admin-auth" }
-    });
-
-    const SESSION_KEY = "automatenlabor_session_v6";
-    const MISSION_CODE = "main";
-    const SNAPSHOT_BUCKET = "automatenlabor-snapshots";
-
-    const STATE_WAITING = "waiting";
-    const STATE_LIVE = "live";
-    const STATE_PAUSED = "paused";
+    const STORAGE_KEY = "automatenlabor_local_exam_v1";
 
     const questions = [
       {
         id: "q1",
+        tag: "Frage 1",
         type: "single",
-        tag: "Mission 1",
-        text: "Welcher Zustand ist der Startzustand des Snackautomaten?",
-        help: "Suche den Zustand, in dem der Automat ganz am Anfang ist.",
+        text: "Welcher Zustand ist der Startzustand eines Snackautomaten ohne eingeworfenes Geld?",
+        help: "Überlege, in welchem Zustand der Automat ganz am Anfang ist.",
         options: ["0 Euro", "50 Cent", "1 Euro", "2 Euro"],
-        correctIndex: 0
+        correct: 0
       },
       {
         id: "q2",
+        tag: "Frage 2",
         type: "single",
-        tag: "Mission 2",
         text: "Welche Eingaben akzeptiert der Automat?",
         help: "Achte auf die zugelassenen Münzen.",
-        options: ["10 ct, 20 ct und 50 ct", "50 ct, 1 Euro und 2 Euro", "Nur 1 Euro und 2 Euro", "Beliebige Münzen"],
-        correctIndex: 1
+        options: ["10 Cent, 20 Cent und 50 Cent", "50 Cent, 1 Euro und 2 Euro", "Nur 1 Euro und 2 Euro", "Beliebige Münzen"],
+        correct: 1
       },
       {
         id: "q3",
+        tag: "Frage 3",
         type: "single",
-        tag: "Mission 3",
         text: "Was passiert im Zustand 0 Euro, wenn die Taste für Gummibärchen gedrückt wird?",
-        help: "Prüfe, ob genug Geld im Automaten liegt.",
+        help: "Prüfe, ob bereits genug Geld vorhanden ist.",
         options: ["Die Gummibärchen werden ausgegeben", "Der Zustand bleibt bei 0 Euro", "Der Zustand springt auf 1 Euro", "Es wird Rückgeld ausgegeben"],
-        correctIndex: 1
+        correct: 1
       },
       {
         id: "q4",
+        tag: "Frage 4",
         type: "single",
-        tag: "Mission 4",
         text: "Welche Beschreibung passt am besten zur Rückgabe-Taste?",
-        help: "Denke daran, was mit Geld und Zustand passiert.",
+        help: "Denke daran, was mit dem Zustand und dem Geld passiert.",
         options: [
           "Sie erhöht den Geldbetrag im Automaten",
           "Sie setzt den Automaten je nach Zustand zurück und gibt Geld zurück",
           "Sie gibt immer Chips aus",
           "Sie wechselt das Produkt"
         ],
-        correctIndex: 1
+        correct: 1
       },
       {
         id: "q5",
+        tag: "Frage 5",
         type: "single",
-        tag: "Mission 5",
         text: "Warum kann der Automat kein Wechselgeld ausgeben?",
         help: "Die Antwort steckt im Aufbau des Modells.",
         options: [
@@ -760,12 +589,12 @@
           "Weil Webseiten keine Zahlen speichern können",
           "Weil alle Produkte kostenlos sind"
         ],
-        correctIndex: 0
+        correct: 0
       },
       {
         id: "q6",
+        tag: "Frage 6",
         type: "single",
-        tag: "Mission 6",
         text: "Welche Zustandsfolge ist möglich, wenn zuerst 50 Cent und danach 1 Euro eingeworfen werden?",
         help: "Beobachte die Reihenfolge der Beträge.",
         options: [
@@ -774,157 +603,111 @@
           "0 Euro → 2 Euro → 50 Cent",
           "0 Euro → 50 Cent → 2 Euro"
         ],
-        correctIndex: 1
+        correct: 1
       },
       {
         id: "q7",
-        type: "single",
-        tag: "Mission 7",
-        text: "Wann gibt der Automat eine Ausgabe aus?",
-        help: "Achte darauf, wann genug Geld für ein Produkt vorhanden ist.",
-        options: [
-          "Sobald irgendeine Münze eingeworfen wurde",
-          "Wenn ein Produkt ausgewählt wird und der passende Zustand erreicht ist",
-          "Nur bei der Rückgabe-Taste",
-          "Immer nach zwei Eingaben"
-        ],
-        correctIndex: 1
+        tag: "Frage 7",
+        type: "yesno",
+        text: "Ist eine Ampel ein Automat?",
+        help: "Begründe für dich mit Zuständen und Wechseln.",
+        visual: "traffic"
       },
       {
         id: "q8",
-        type: "single",
-        tag: "Mission 8",
-        text: "Welche Information steht in einem Zustandsdiagramm normalerweise an einem Pfeil?",
-        help: "Denke an das, was zwischen zwei Zuständen passiert.",
-        options: [
-          "Die Farbe des Zustands",
-          "Die Eingabe oder Aktion, die den Übergang auslöst",
-          "Der Name der Lehrkraft",
-          "Die Reihenfolge der Aufgaben"
-        ],
-        correctIndex: 1
+        tag: "Frage 8",
+        type: "yesno",
+        text: "Ist ein normaler Stein auf dem Schulhof ein Automat?",
+        help: "Überlege, ob er feste Zustände und Eingaben hat.",
+        visual: "rock"
       },
       {
         id: "q9",
+        tag: "Frage 9",
+        type: "yesno",
+        text: "Ist eine Waschmaschine ein Automat?",
+        help: "Denke an Programme, Start, Stopp und Zustandswechsel.",
+        visual: "washer"
+      },
+      {
+        id: "q10",
+        tag: "Frage 10",
+        type: "yesno",
+        text: "Ist ein Fahrkartenautomat ein Automat?",
+        help: "Achte auf Eingaben, Zustände und Ausgaben.",
+        visual: "ticket"
+      },
+      {
+        id: "q11",
+        tag: "Frage 11",
+        type: "single",
+        text: "Welche Information steht in einem Zustandsdiagramm meistens an einem Pfeil?",
+        help: "Denke an das, was zwischen zwei Zuständen passiert.",
+        options: [
+          "Die Farbe eines Zustands",
+          "Die Eingabe oder Aktion, die den Übergang auslöst",
+          "Der Name der Lehrkraft",
+          "Die Nummer der Aufgabe"
+        ],
+        correct: 1
+      },
+      {
+        id: "q12",
+        tag: "Frage 12",
         type: "text",
-        tag: "Mission 9",
-        text: "Beschreibe in 1 bis 2 Sätzen, woran man in einem Zustandsdiagramm Zustand, Eingabe, Folgezustand und Ausgabe erkennt.",
-        help: "Nutze einfache Worte. Es geht um Verstehen, nicht um Fachsprache.",
-        placeholder: "Beispiel: Der Zustand ist ... Die Eingabe erkennt man an ..."
+        text: "Erkläre in ein bis zwei Sätzen, woran man in einem Zustandsdiagramm Zustand, Eingabe, Folgezustand und Ausgabe erkennt.",
+        help: "Schreibe in eigenen Worten.",
+        placeholder: "Ein Zustand ist ... Die Eingabe erkennt man an ..."
       }
     ];
 
-    const elements = {
+    const state = loadState();
+    const els = {
       heroTitle: document.getElementById("heroTitle"),
-      landingCard: document.getElementById("landingCard"),
-      studentStage: document.getElementById("studentStage"),
-      waitingRoomCard: document.getElementById("waitingRoomCard"),
-      waitingRoomText: document.getElementById("waitingRoomText"),
-      joinBtn: document.getElementById("joinBtn"),
-      resetBtn: document.getElementById("resetBtn"),
-      leaveBtn: document.getElementById("leaveBtn"),
-      firstNameInput: document.getElementById("firstName"),
-      classNameInput: document.getElementById("className"),
-      landingMessage: document.getElementById("landingMessage"),
-      connectionStatus: document.getElementById("connectionStatus"),
-      landingRoster: document.getElementById("landingRoster"),
-      studentRoster: document.getElementById("studentRoster"),
-      studentLabel: document.getElementById("studentLabel"),
-      studentStatusLine: document.getElementById("studentStatusLine"),
-      broadcastBanner: document.getElementById("broadcastBanner"),
-      teacherBanner: document.getElementById("teacherBanner"),
-      progressLabel: document.getElementById("progressLabel"),
-      missionStateLabel: document.getElementById("missionStateLabel"),
-      progressBar: document.getElementById("progressBar"),
-      taskTitle: document.getElementById("taskTitle"),
-      taskHelp: document.getElementById("taskHelp"),
-      taskTag: document.getElementById("taskTag"),
-      taskAnswerArea: document.getElementById("taskAnswerArea"),
-      prevBtn: document.getElementById("prevBtn"),
+      backBtn: document.getElementById("backBtn"),
       nextBtn: document.getElementById("nextBtn"),
-      submitBtn: document.getElementById("submitBtn"),
-      studentMessage: document.getElementById("studentMessage"),
-      adminPanel: document.getElementById("adminPanel"),
-      adminOverlay: document.getElementById("adminOverlay"),
-      teacherEmailInput: document.getElementById("teacherEmail"),
-      teacherPasswordInput: document.getElementById("teacherPassword"),
-      adminLoginMessage: document.getElementById("adminLoginMessage"),
-      openAdminBtn: document.getElementById("openAdminBtn"),
-      cancelAdminBtn: document.getElementById("cancelAdminBtn"),
-      closeAdminBtn: document.getElementById("closeAdminBtn"),
-      logoutAdminBtn: document.getElementById("logoutAdminBtn"),
-      startMissionBtn: document.getElementById("startMissionBtn"),
-      pauseMissionBtn: document.getElementById("pauseMissionBtn"),
-      waitingMissionBtn: document.getElementById("waitingMissionBtn"),
-      broadcastInput: document.getElementById("broadcastInput"),
-      sendBroadcastBtn: document.getElementById("sendBroadcastBtn"),
-      refreshAdminBtn: document.getElementById("refreshAdminBtn"),
-      adminActionMessage: document.getElementById("adminActionMessage"),
-      exportCsvBtn: document.getElementById("exportCsvBtn"),
-      exportJsonBtn: document.getElementById("exportJsonBtn"),
-      kpiMission: document.getElementById("kpiMission"),
-      kpiActive: document.getElementById("kpiActive"),
-      kpiSubmissions: document.getElementById("kpiSubmissions"),
-      kpiAverage: document.getElementById("kpiAverage"),
-      adminStatusLine: document.getElementById("adminStatusLine"),
-      adminConnectionLine: document.getElementById("adminConnectionLine"),
-      studentGrid: document.getElementById("studentGrid")
+      progressLabel: document.getElementById("progressLabel"),
+      progressBar: document.getElementById("progressBar"),
+      statusLine: document.getElementById("statusLine"),
+      questionCard: document.getElementById("questionCard"),
+      questionText: document.getElementById("questionText"),
+      questionHelp: document.getElementById("questionHelp"),
+      questionTag: document.getElementById("questionTag"),
+      questionVisual: document.getElementById("questionVisual"),
+      questionAnswer: document.getElementById("questionAnswer"),
+      finishCard: document.getElementById("finishCard"),
+      studentName: document.getElementById("studentName"),
+      downloadBtn: document.getElementById("downloadBtn"),
+      restartBtn: document.getElementById("restartBtn"),
+      downloadMessage: document.getElementById("downloadMessage"),
+      skipOverlay: document.getElementById("skipOverlay"),
+      closeOverlayBtn: document.getElementById("closeOverlayBtn"),
+      skipQuestionBtn: document.getElementById("skipQuestionBtn"),
+      skipMessage: document.getElementById("skipMessage"),
+      skipSummary: document.getElementById("skipSummary")
     };
 
-    let mission = {
-      status: STATE_WAITING,
-      broadcast_message: "",
-      teacher_hint: "",
-      updated_at: null
-    };
-    let studentSessions = [];
-    let submissions = [];
-    let session = loadSession();
-    let adminTapCount = 0;
-    let adminTapTimer = null;
-    let heartbeatHandle = null;
-    let currentQuestionIndex = 0;
-    let answers = {};
-    let studentAuthUser = null;
-    let adminAuthUser = null;
-    let teacherProfile = null;
-    let snapshotUrls = {};
-    let lobbySignups = [];
+    let titleTapCount = 0;
+    let titleTapTimer = null;
 
-    function createDefaultSession() {
+    function createDefaultState() {
       return {
-        studentKey: crypto.randomUUID(),
-        student: null,
-        joinedAt: null,
-        currentQuestionIndex: 0,
+        currentIndex: 0,
         answers: {},
-        hasSubmitted: false,
-        lastSnapshotRequestedAt: null
+        skipped: []
       };
     }
 
-    function loadSession() {
+    function loadState() {
       try {
-        return { ...createDefaultSession(), ...JSON.parse(localStorage.getItem(SESSION_KEY) || "{}") };
+        return { ...createDefaultState(), ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
       } catch (error) {
-        return createDefaultSession();
+        return createDefaultState();
       }
     }
 
-    function saveSession() {
-      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-    }
-
-    function isTeacher() {
-      return teacherProfile?.role === "teacher";
-    }
-
-    function userId() {
-      return studentAuthUser?.id || null;
-    }
-
-    function getAdminDataClient() {
-      return isTeacher() ? adminClient : studentClient;
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
     function escapeHtml(value) {
@@ -936,919 +719,327 @@
         .replaceAll("'", "&#039;");
     }
 
-    function formatDate(value) {
-      if (!value) return "noch nicht";
-      return new Date(value).toLocaleString("de-DE");
+    function isAnswered(question) {
+      const answer = state.answers[question.id];
+      if (question.type === "text") return Boolean(String(answer || "").trim());
+      return typeof answer !== "undefined" && answer !== null && answer !== "";
     }
 
-    function summarizeText(text) {
-      if (!text) return "";
-      return text.length > 110 ? `${text.slice(0, 110)}...` : text;
+    function getSkippedEntry(question) {
+      return state.skipped.find((entry) => entry.id === question.id) || null;
     }
 
-    function dataUrlToBlob(dataUrl) {
-      const parts = dataUrl.split(",");
-      const mime = parts[0].match(/:(.*?);/)?.[1] || "image/jpeg";
-      const binary = atob(parts[1]);
-      const array = new Uint8Array(binary.length);
-      for (let index = 0; index < binary.length; index += 1) {
-        array[index] = binary.charCodeAt(index);
-      }
-      return new Blob([array], { type: mime });
+    function renderVisual(kind) {
+      if (!kind) return "";
+
+      const visuals = {
+        traffic: `
+          <div class="mini-gallery">
+            <div class="mini-card">
+              <div class="mini-graphic">
+                <svg viewBox="0 0 160 80" width="100%" height="100%">
+                  <rect x="58" y="8" width="44" height="64" rx="14" fill="#dbe8f8"></rect>
+                  <circle cx="80" cy="24" r="8" fill="#ef4444"></circle>
+                  <circle cx="80" cy="40" r="8" fill="#f59e0b"></circle>
+                  <circle cx="80" cy="56" r="8" fill="#1f9d55"></circle>
+                </svg>
+              </div>
+              <strong>Ampel</strong>
+              <div class="muted">Rot, Gelb, Grün</div>
+            </div>
+          </div>
+        `,
+        rock: `
+          <div class="mini-gallery">
+            <div class="mini-card">
+              <div class="mini-graphic">
+                <svg viewBox="0 0 160 80" width="100%" height="100%">
+                  <path d="M42 56c0-12 10-20 21-20 5-12 17-18 28-13 8-7 19-7 28 0 12 0 21 9 21 21 0 10-8 18-19 18H59c-10 0-17-7-17-16z" fill="#94a3b8"></path>
+                </svg>
+              </div>
+              <strong>Stein</strong>
+              <div class="muted">Ohne Eingabe und Ausgabe</div>
+            </div>
+          </div>
+        `,
+        washer: `
+          <div class="mini-gallery">
+            <div class="mini-card">
+              <div class="mini-graphic">
+                <svg viewBox="0 0 160 80" width="100%" height="100%">
+                  <rect x="40" y="8" width="80" height="64" rx="16" fill="#dff5e8"></rect>
+                  <circle cx="80" cy="42" r="18" fill="#9bd8b6"></circle>
+                  <circle cx="80" cy="42" r="10" fill="#f8fbff"></circle>
+                  <rect x="52" y="18" width="28" height="8" rx="4" fill="#1f9d55"></rect>
+                </svg>
+              </div>
+              <strong>Waschmaschine</strong>
+              <div class="muted">Programm, Start, Ende</div>
+            </div>
+          </div>
+        `,
+        ticket: `
+          <div class="mini-gallery">
+            <div class="mini-card">
+              <div class="mini-graphic">
+                <svg viewBox="0 0 160 80" width="100%" height="100%">
+                  <rect x="42" y="8" width="76" height="64" rx="16" fill="#dfe9f8"></rect>
+                  <rect x="56" y="18" width="48" height="14" rx="6" fill="#8bc3ff"></rect>
+                  <circle cx="62" cy="50" r="5" fill="#007aff"></circle>
+                  <circle cx="80" cy="50" r="5" fill="#007aff"></circle>
+                  <circle cx="98" cy="50" r="5" fill="#007aff"></circle>
+                </svg>
+              </div>
+              <strong>Fahrkartenautomat</strong>
+              <div class="muted">Auswahl und Ausgabe</div>
+            </div>
+          </div>
+        `
+      };
+
+      return visuals[kind] || "";
     }
 
-    function getMissionStateLabel(state) {
-      if (state === STATE_LIVE) return "Mission läuft";
-      if (state === STATE_PAUSED) return "Mission pausiert";
-      return "Mission wartet";
-    }
+    function renderQuestion() {
+      const question = questions[state.currentIndex];
+      const progress = ((state.currentIndex + 1) / questions.length) * 100;
+      const skipped = getSkippedEntry(question);
 
-    function getStudentRecord() {
-      if (!session.student) return null;
-      return studentSessions.find((entry) => entry.student_key === session.studentKey) || null;
-    }
+      els.progressLabel.textContent = `Frage ${state.currentIndex + 1} von ${questions.length}`;
+      els.progressBar.style.width = `${progress}%`;
+      els.statusLine.textContent = skipped
+        ? "Diese Aufgabe wurde über das Hilfemenü übersprungen."
+        : "Arbeite in Ruhe. Du kannst zwischen den Fragen wechseln.";
 
-    function canCurrentStudentStart(record) {
-      if (!record?.joined_at || mission.status !== STATE_LIVE) return false;
-      if (!mission.updated_at) return false;
-      return new Date(record.joined_at).getTime() <= new Date(mission.updated_at).getTime();
-    }
-
-    function renderRoster(target, emptyText = "Noch niemand angemeldet.") {
-      if (!target) return;
-      if (!lobbySignups.length) {
-        target.innerHTML = `<div class="roster-item muted">${emptyText}</div>`;
-        return;
-      }
-
-      target.innerHTML = lobbySignups.map((entry) => `
-        <div class="roster-item">
-          <strong>${escapeHtml(entry.first_name)}</strong><br />
-          <span class="muted">${escapeHtml(entry.class_name)}</span>
-        </div>
-      `).join("");
-    }
-
-    function ensureAnswerShape() {
-      for (const question of questions) {
-        if (!(question.id in answers)) {
-          answers[question.id] = question.type === "single" ? null : "";
-        }
-      }
-    }
-
-    function renderTask() {
-      ensureAnswerShape();
-      const question = questions[currentQuestionIndex];
-      const isInteractive = mission.status === STATE_LIVE && !session.hasSubmitted;
-      elements.progressLabel.textContent = `Aufgabe ${currentQuestionIndex + 1} von ${questions.length}`;
-      elements.missionStateLabel.textContent = getMissionStateLabel(mission.status);
-      elements.progressBar.style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
-      elements.taskTag.textContent = question.tag;
-      elements.taskTitle.textContent = question.text;
-      elements.taskHelp.textContent = question.help;
-      elements.prevBtn.disabled = currentQuestionIndex === 0 || !isInteractive;
-      elements.nextBtn.disabled = !isInteractive;
-      elements.submitBtn.disabled = !isInteractive;
-      elements.nextBtn.classList.toggle("hidden", currentQuestionIndex === questions.length - 1);
-      elements.submitBtn.classList.toggle("hidden", currentQuestionIndex !== questions.length - 1);
+      els.questionText.textContent = question.text;
+      els.questionHelp.textContent = question.help;
+      els.questionTag.textContent = question.tag;
+      els.questionVisual.innerHTML = renderVisual(question.visual);
+      els.backBtn.disabled = state.currentIndex === 0;
+      els.nextBtn.textContent = state.currentIndex === questions.length - 1 ? "Zum Abschluss" : "Weiter";
 
       if (question.type === "single") {
-        elements.taskAnswerArea.innerHTML = `
-          <div class="option-list">
+        els.questionAnswer.innerHTML = `
+          <div class="answers">
             ${question.options.map((option, index) => `
-              <label class="option">
-                <input type="radio" name="${question.id}" value="${index}" ${answers[question.id] === index ? "checked" : ""} />
+              <label class="answer">
+                <input type="radio" name="${question.id}" value="${index}" ${state.answers[question.id] === index ? "checked" : ""} />
                 <span>${escapeHtml(option)}</span>
               </label>
             `).join("")}
           </div>
         `;
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
-          input.disabled = !isInteractive;
           input.addEventListener("change", (event) => {
-            answers[question.id] = Number(event.target.value);
-            session.answers = answers;
-            saveSession();
-            syncStudentSession().catch(console.error);
+            state.answers[question.id] = Number(event.target.value);
+            saveState();
+          });
+        });
+      } else if (question.type === "yesno") {
+        els.questionAnswer.innerHTML = `
+          <div class="answers">
+            <label class="answer">
+              <input type="radio" name="${question.id}" value="ja" ${state.answers[question.id] === "ja" ? "checked" : ""} />
+              <span>Ja, das ist ein Automat.</span>
+            </label>
+            <label class="answer">
+              <input type="radio" name="${question.id}" value="nein" ${state.answers[question.id] === "nein" ? "checked" : ""} />
+              <span>Nein, das ist kein Automat.</span>
+            </label>
+          </div>
+        `;
+        document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
+          input.addEventListener("change", (event) => {
+            state.answers[question.id] = event.target.value;
+            saveState();
           });
         });
       } else {
-        elements.taskAnswerArea.innerHTML = `
-          <textarea id="textAnswer" placeholder="${escapeHtml(question.placeholder)}">${escapeHtml(answers[question.id] || "")}</textarea>
+        els.questionAnswer.innerHTML = `
+          <div class="answers">
+            <textarea id="textAnswer" placeholder="${escapeHtml(question.placeholder)}">${escapeHtml(state.answers[question.id] || "")}</textarea>
+          </div>
         `;
         const field = document.getElementById("textAnswer");
-        field.disabled = !isInteractive;
         field.addEventListener("input", () => {
-          answers[question.id] = field.value.trimStart();
-          session.answers = answers;
-          saveSession();
+          state.answers[question.id] = field.value;
+          saveState();
         });
-        field.addEventListener("blur", () => syncStudentSession().catch(console.error));
       }
     }
 
-    function renderStudentView() {
-      const hasStudent = Boolean(session.student);
-      elements.landingCard.classList.toggle("hidden", hasStudent);
-      elements.studentStage.classList.toggle("hidden", !hasStudent);
+    function renderFinish() {
+      els.questionCard.classList.add("hidden");
+      els.finishCard.classList.remove("hidden");
+      els.backBtn.classList.add("hidden");
+      els.nextBtn.classList.add("hidden");
 
-      if (!hasStudent) return;
-
-      const record = getStudentRecord();
-      const studentName = `${session.student.firstName} (${session.student.className})`;
-      const canStart = canCurrentStudentStart(record);
-      elements.studentLabel.textContent = studentName;
-      elements.studentStatusLine.textContent = session.hasSubmitted
-        ? "Deine Antworten wurden bereits abgegeben."
-        : "Du arbeitest im Automatenlabor.";
-
-      const broadcastText = mission.broadcast_message || "";
-      elements.broadcastBanner.textContent = broadcastText;
-      elements.broadcastBanner.classList.toggle("hidden", !broadcastText);
-
-      const teacherText = record?.teacher_message || "";
-      elements.teacherBanner.textContent = teacherText;
-      elements.teacherBanner.classList.toggle("hidden", !teacherText);
-
-      renderRoster(elements.studentRoster);
-
-      const isWaitingForStart = !session.hasSubmitted && (
-        mission.status === STATE_WAITING ||
-        mission.status === STATE_PAUSED ||
-        !canStart
-      );
-
-      elements.waitingRoomCard.classList.toggle("hidden", !isWaitingForStart);
-      document.getElementById("taskCard").classList.toggle("hidden", isWaitingForStart);
-      elements.prevBtn.classList.toggle("hidden", isWaitingForStart);
-      elements.nextBtn.classList.toggle("hidden", isWaitingForStart || currentQuestionIndex === questions.length - 1);
-      elements.submitBtn.classList.toggle("hidden", isWaitingForStart || currentQuestionIndex !== questions.length - 1);
-
-      if (isWaitingForStart) {
-        if (mission.status === STATE_PAUSED) {
-          elements.waitingRoomText.textContent = "Die Mission ist gerade pausiert. Bitte warte auf die nächste Freigabe.";
-        } else if (mission.status === STATE_LIVE && !canStart) {
-          elements.waitingRoomText.textContent = "Du bist angemeldet. Die nächste gemeinsame Freigabe startet gleich für alle Wartenden.";
-        } else {
-          elements.waitingRoomText.textContent = "Du bist angemeldet. Bitte warte, bis die Lehrkraft die Mission für alle startet.";
-        }
-      }
-
-      if (!session.hasSubmitted && mission.status !== STATE_LIVE && !teacherText) {
-        elements.teacherBanner.textContent = mission.status === STATE_PAUSED
-          ? "Die Mission ist gerade pausiert. Bitte warte auf die Lehrkraft."
-          : "Die Mission ist vorbereitet. Bitte warte, bis die Lehrkraft freigibt.";
-        elements.teacherBanner.classList.remove("hidden");
-      }
-
-      if (typeof record?.forced_question_index === "number" && record.forced_question_index !== currentQuestionIndex) {
-        currentQuestionIndex = Math.max(0, Math.min(questions.length - 1, record.forced_question_index));
-        session.currentQuestionIndex = currentQuestionIndex;
-        saveSession();
-      }
-
-      if (!isWaitingForStart) {
-        renderTask();
-      }
-    }
-
-    function renderAdmin() {
-      const activeStudents = studentSessions.filter((entry) => !entry.has_submitted);
-      const submittedStudents = submissions.length;
-      const avgScore = submissions.length
-        ? Math.round(submissions.reduce((sum, item) => sum + (item.percentage || 0), 0) / submissions.length)
-        : 0;
-
-      elements.kpiMission.textContent = getMissionStateLabel(mission.status).replace("Mission ", "");
-      elements.kpiActive.textContent = String(activeStudents.length);
-      elements.kpiSubmissions.textContent = String(submittedStudents);
-      elements.kpiAverage.textContent = `${avgScore}%`;
-      elements.adminStatusLine.textContent = isTeacher()
-        ? `${studentSessions.length} angemeldet, zuletzt aktualisiert: ${formatDate(mission.updated_at)}`
-        : "Lehrkraft-Login erforderlich.";
-
-      if (!isTeacher()) {
-        elements.studentGrid.innerHTML = `<div class="card"><p class="muted" style="margin: 0;">Bitte zuerst mit einem Lehrkraftkonto in Supabase anmelden.</p></div>`;
+      if (!state.skipped.length) {
+        els.skipSummary.innerHTML = `<div class="skip-item">Es wurde keine Aufgabe übersprungen.</div>`;
         return;
       }
 
-      if (studentSessions.length === 0) {
-        elements.studentGrid.innerHTML = `<div class="card"><p class="muted" style="margin: 0;">Noch keine SuS angemeldet.</p></div>`;
+      els.skipSummary.innerHTML = state.skipped.map((entry) => `
+        <div class="skip-item">${escapeHtml(entry.tag)} wurde übersprungen.</div>
+      `).join("");
+    }
+
+    function render() {
+      if (state.currentIndex >= questions.length) {
+        renderFinish();
         return;
       }
 
-      elements.studentGrid.innerHTML = studentSessions.map((entry) => {
-        const statusClass = entry.has_submitted ? "done" : mission.status === STATE_LIVE ? "live" : "wait";
-        const statusText = entry.has_submitted ? "fertig" : mission.status === STATE_LIVE ? "aktiv" : "wartet";
-        const previewUrl = snapshotUrls[entry.student_key] || "";
-        const preview = previewUrl
-          ? `<img class="snapshot" src="${previewUrl}" alt="Momentaufnahme von ${escapeHtml(entry.first_name)}" />`
-          : `<div class="snapshot" style="display:grid;place-items:center;color:var(--muted);">Noch keine Momentaufnahme</div>`;
-
-        return `
-          <article class="card student-card">
-            <header>
-              <div>
-                <div class="student-name">${escapeHtml(entry.first_name)}</div>
-                <div class="muted">${escapeHtml(entry.class_name || "")}</div>
-              </div>
-              <span class="badge ${statusClass}">${statusText}</span>
-            </header>
-            <div class="meta">
-              <div>Aufgabe: ${(entry.current_question_index ?? 0) + 1} / ${questions.length}</div>
-              <div>Zuletzt gesehen: ${formatDate(entry.last_seen_at)}</div>
-              <div>Screenshot: ${entry.snapshot_updated_at ? formatDate(entry.snapshot_updated_at) : "noch keiner"}</div>
-              <div>Notiz der SuS: ${escapeHtml(summarizeText(entry.note_preview || "")) || "-"}</div>
-            </div>
-            <div class="stack">
-              <div>
-                <label for="msg-${entry.student_key}">Nachricht an ${escapeHtml(entry.first_name)}</label>
-                <textarea id="msg-${entry.student_key}" placeholder="z. B. Schau noch einmal auf die Rückgabe-Taste.">${escapeHtml(entry.teacher_message || "")}</textarea>
-              </div>
-              <div class="row">
-                <button class="primary" data-action="send-message" data-student="${entry.student_key}">Nachricht senden</button>
-                <button class="secondary" data-action="skip-task" data-student="${entry.student_key}">Aufgabe überspringen</button>
-                <button class="secondary" data-action="request-snapshot" data-student="${entry.student_key}">Screenshot anfordern</button>
-              </div>
-              ${preview}
-            </div>
-          </article>
-        `;
-      }).join("");
+      els.questionCard.classList.remove("hidden");
+      els.finishCard.classList.add("hidden");
+      els.backBtn.classList.remove("hidden");
+      els.nextBtn.classList.remove("hidden");
+      renderQuestion();
     }
 
-    async function fetchMission() {
-      const { data, error } = await getAdminDataClient()
-        .from("missions")
-        .select("status, broadcast_message, teacher_hint, updated_at")
-        .eq("code", MISSION_CODE)
-        .single();
-
-      if (error) throw error;
-      mission = {
-        status: data?.status || STATE_WAITING,
-        broadcast_message: data?.broadcast_message || "",
-        teacher_hint: data?.teacher_hint || "",
-        updated_at: data?.updated_at || null
-      };
-      renderStudentView();
-      renderAdmin();
-    }
-
-    async function fetchStudentSessions() {
-      if (!isTeacher() && !session.studentKey) {
-        studentSessions = [];
-        renderStudentView();
-        return;
-      }
-
-      let query = (isTeacher() ? adminClient : studentClient)
-        .from("student_sessions")
-        .select("student_key, first_name, class_name, current_question_index, teacher_message, forced_question_index, last_seen_at, note_preview, has_submitted, snapshot_requested_at, snapshot_path, snapshot_updated_at, joined_at")
-        .eq("mission_code", MISSION_CODE);
-
-      if (isTeacher()) {
-        query = query.order("last_seen_at", { ascending: false });
-      } else {
-        query = query.eq("student_key", session.studentKey);
-      }
-
-      const { data, error } = await query;
-
-      if (error) throw error;
-      studentSessions = data || [];
-      if (isTeacher()) {
-        await refreshSnapshotUrls();
-      }
-      renderStudentView();
-      renderAdmin();
-      await maybeHandleSnapshotRequest();
-    }
-
-    async function fetchLobbySignups() {
-      const { data, error } = await studentClient
-        .from("lobby_signups")
-        .select("first_name, class_name, joined_at")
-        .eq("mission_code", MISSION_CODE)
-        .order("joined_at", { ascending: true });
-
-      if (error) throw error;
-      lobbySignups = data || [];
-      renderRoster(elements.landingRoster);
-      renderRoster(elements.studentRoster);
-    }
-
-    async function fetchSubmissions() {
-      let query = (isTeacher() ? adminClient : studentClient)
-        .from("submissions")
-        .select("student_key, first_name, class_name, score, max_score, percentage, note, created_at")
-        .eq("mission_code", MISSION_CODE);
-
-      if (isTeacher()) {
-        query = query.order("created_at", { ascending: false });
-      } else if (session.studentKey) {
-        query = query.eq("student_key", session.studentKey);
-      } else {
-        submissions = [];
-        renderAdmin();
-        return;
-      }
-
-      const { data, error } = await query;
-
-      if (error) throw error;
-      submissions = data || [];
-      renderAdmin();
-    }
-
-    async function refreshSnapshotUrls() {
-      const nextUrls = {};
-      const snapshotEntries = studentSessions.filter((entry) => entry.snapshot_path);
-      for (const entry of snapshotEntries) {
-        const { data, error } = await adminClient.storage
-          .from(SNAPSHOT_BUCKET)
-          .createSignedUrl(entry.snapshot_path, 60 * 60);
-        if (!error && data?.signedUrl) {
-          nextUrls[entry.student_key] = data.signedUrl;
-        }
-      }
-      snapshotUrls = nextUrls;
-    }
-
-    async function ensureAuthSession() {
-      const { data, error } = await studentClient.auth.getSession();
-      if (error) throw error;
-
-      if (!data.session) {
-        const { error: anonError } = await studentClient.auth.signInAnonymously();
-        if (anonError) throw anonError;
-      }
-
-      await refreshStudentAuthState();
-      await refreshAdminAuthState();
-    }
-
-    async function refreshStudentAuthState() {
-      const { data, error } = await studentClient.auth.getUser();
-      if (error) throw error;
-      studentAuthUser = data.user || null;
-      elements.adminConnectionLine.textContent = studentAuthUser
-        ? `${studentAuthUser.is_anonymous ? "Anonyme Schüler-Session aktiv" : "Schüler-Session aktiv"}`
-        : "Nicht angemeldet";
-    }
-
-    async function refreshAdminAuthState() {
-      const { data, error } = await adminClient.auth.getUser();
-      if (error) throw error;
-      adminAuthUser = data.user || null;
-      teacherProfile = null;
-
-      if (adminAuthUser && !adminAuthUser.is_anonymous) {
-        const { data: profile, error: profileError } = await adminClient
-          .from("profiles")
-          .select("role, display_name")
-          .eq("id", adminAuthUser.id)
-          .maybeSingle();
-
-        if (profileError) {
-          throw profileError;
-        }
-
-        teacherProfile = profile;
-      }
-
-      if (adminAuthUser && !adminAuthUser.is_anonymous) {
-        elements.adminConnectionLine.textContent = isTeacher()
-          ? "Lehrkraft angemeldet"
-          : "Benutzer angemeldet, aber ohne Lehrkraftrolle";
+    function goNext() {
+      if (state.currentIndex < questions.length) {
+        state.currentIndex += 1;
+        saveState();
+        render();
       }
     }
 
-    async function joinMission() {
-      if (!userId()) {
-        elements.landingMessage.textContent = "Die Schüler-Session wird noch vorbereitet. Bitte kurz warten.";
-        return;
+    function goBack() {
+      if (state.currentIndex > 0) {
+        state.currentIndex -= 1;
+        saveState();
+        render();
       }
+    }
 
-      const firstName = elements.firstNameInput.value.trim();
-      const className = elements.classNameInput.value;
-      if (firstName.length < 2) {
-        elements.landingMessage.textContent = "Bitte gib einen Vornamen mit mindestens 2 Zeichen ein.";
-        return;
+    function skipCurrentQuestion() {
+      const question = questions[state.currentIndex];
+      if (!getSkippedEntry(question)) {
+        state.skipped.push({
+          id: question.id,
+          tag: question.tag,
+          text: question.text
+        });
       }
-
-      session.student = { firstName, className };
-      session.hasSubmitted = false;
-      session.joinedAt = new Date().toISOString();
-      session.currentQuestionIndex = 0;
-      currentQuestionIndex = 0;
-      answers = {};
-      session.answers = answers;
-      saveSession();
-
-      await syncStudentSession();
-      await syncLobbySignup();
-      elements.landingMessage.textContent = "";
-      renderStudentView();
+      saveState();
+      els.skipMessage.textContent = `${question.tag} wurde als übersprungen markiert.`;
+      setTimeout(() => {
+        els.skipOverlay.classList.add("hidden");
+        els.skipMessage.textContent = "";
+      }, 500);
+      goNext();
     }
 
-    async function syncLobbySignup() {
-      if (!session.student) return;
-
-      const { error } = await studentClient
-        .from("lobby_signups")
-        .upsert({
-          mission_code: MISSION_CODE,
-          student_key: session.studentKey,
-          first_name: session.student.firstName,
-          class_name: session.student.className,
-          joined_at: session.joinedAt || new Date().toISOString()
-        }, { onConflict: "student_key" });
-
-      if (error) throw error;
-    }
-
-    async function removeLobbySignup() {
-      if (!session.studentKey) return;
-      const { error } = await studentClient
-        .from("lobby_signups")
-        .delete()
-        .eq("student_key", session.studentKey);
-      if (error) throw error;
-    }
-
-    async function syncStudentSession(extra = {}) {
-      if (!session.student) return;
-
-      const notePreview = typeof answers.q6 === "string" ? summarizeText(answers.q6) : "";
-      const payload = {
-        mission_code: MISSION_CODE,
-        student_key: session.studentKey,
-        user_id: userId(),
-        first_name: session.student.firstName,
-        class_name: session.student.className,
-        current_question_index: currentQuestionIndex,
-        joined_at: session.joinedAt || new Date().toISOString(),
-        note_preview: notePreview,
-        has_submitted: Boolean(session.hasSubmitted),
-        last_seen_at: new Date().toISOString(),
-        ...extra
-      };
-
-      const { error } = await studentClient
-        .from("student_sessions")
-        .upsert(payload, { onConflict: "student_key" });
-
-      if (error) throw error;
-    }
-
-    function validateAnswers() {
-      const unanswered = questions.find((question) => {
-        if (question.type === "single") return answers[question.id] === null || typeof answers[question.id] === "undefined";
-        return !String(answers[question.id] || "").trim();
-      });
-      return unanswered ? "Bitte bearbeite alle Aufgaben, bevor du abgibst." : "";
-    }
-
-    function scoreAnswers() {
+    function scoreResult() {
       let points = 0;
       let maxPoints = 0;
-      for (const question of questions) {
+      questions.forEach((question) => {
         if (question.type === "single") {
           maxPoints += 1;
-          if (answers[question.id] === question.correctIndex) points += 1;
+          if (state.answers[question.id] === question.correct) points += 1;
         }
-      }
+      });
       return { points, maxPoints };
     }
 
-    async function submitAnswers() {
-      if (!session.student) return;
-      if (mission.status !== STATE_LIVE) {
-        elements.studentMessage.textContent = "Die Mission ist gerade nicht freigegeben.";
-        return;
-      }
+    function buildReportText(name) {
+      const { points, maxPoints } = scoreResult();
+      const lines = [
+        "Automatenlabor - Auswertung",
+        "===========================",
+        `Name: ${name}`,
+        `Datum: ${new Date().toLocaleString("de-DE")}`,
+        "",
+        `Punkte aus Auswahlfragen: ${points} von ${maxPoints}`,
+        "",
+        "Antworten:",
+        "---------"
+      ];
 
-      const validationError = validateAnswers();
-      if (validationError) {
-        elements.studentMessage.textContent = validationError;
-        return;
-      }
+      questions.forEach((question, index) => {
+        const skipped = getSkippedEntry(question);
+        const answer = state.answers[question.id];
+        let answerText = "";
 
-      const { points, maxPoints } = scoreAnswers();
-      const payload = {
-        mission_code: MISSION_CODE,
-        student_key: session.studentKey,
-        user_id: userId(),
-        first_name: session.student.firstName,
-        class_name: session.student.className,
-        answers,
-        score: points,
-        max_score: maxPoints,
-        percentage: maxPoints ? Math.round((points / maxPoints) * 100) : 0,
-        note: summarizeText(answers.q6 || ""),
-        created_at: new Date().toISOString()
-      };
+        if (skipped) {
+          answerText = "[übersprungen über Hilfemenü]";
+        } else if (question.type === "single") {
+          answerText = typeof answer === "number" ? question.options[answer] : "[nicht beantwortet]";
+        } else if (question.type === "yesno") {
+          answerText = answer || "[nicht beantwortet]";
+        } else {
+          answerText = String(answer || "[nicht beantwortet]");
+        }
 
-      elements.studentMessage.textContent = "Speichere deine Antworten ...";
-      let error = null;
-      const { data: existingSubmission, error: lookupError } = await studentClient
-        .from("submissions")
-        .select("id")
-        .eq("mission_code", MISSION_CODE)
-        .eq("student_key", session.studentKey)
-        .maybeSingle();
+        lines.push(`${index + 1}. ${question.text}`);
+        lines.push(`   Antwort: ${answerText}`);
+      });
 
-      if (lookupError) {
-        elements.studentMessage.textContent = "Die Abgabe konnte nicht vorbereitet werden.";
-        console.error(lookupError);
-        return;
-      }
-
-      if (existingSubmission?.id) {
-        const result = await studentClient
-          .from("submissions")
-          .update(payload)
-          .eq("id", existingSubmission.id);
-        error = result.error;
-      } else {
-        const result = await studentClient
-          .from("submissions")
-          .insert(payload);
-        error = result.error;
-      }
-
-      if (error) {
-        elements.studentMessage.textContent = "Speichern fehlgeschlagen. Bitte probiere es noch einmal oder melde dich bei der Lehrkraft.";
-        console.error(error);
-        return;
-      }
-
-      session.hasSubmitted = true;
-      saveSession();
-      await syncStudentSession({ has_submitted: true });
-      await fetchSubmissions();
-      elements.studentMessage.textContent = "Abgabe gespeichert. Danke!";
-      renderStudentView();
-    }
-
-    async function updateMissionStatus(newState) {
-      if (!isTeacher()) return;
-      elements.adminActionMessage.textContent = "Mission wird aktualisiert ...";
-      const payload = {
-        code: MISSION_CODE,
-        status: newState,
-        updated_at: new Date().toISOString()
-      };
-
-      const { error } = await adminClient
-        .from("missions")
-        .upsert(payload, { onConflict: "code" });
-
-      if (error) {
-        elements.adminActionMessage.textContent = "Freigabe fehlgeschlagen. Bitte prüfe die Konsole.";
-        throw error;
-      }
-
-      elements.adminActionMessage.textContent = `Mission ist jetzt auf „${getMissionStateLabel(newState)}“ gesetzt.`;
-      await fetchMission();
-    }
-
-    async function sendBroadcast() {
-      if (!isTeacher()) return;
-      const message = elements.broadcastInput.value.trim();
-      elements.adminActionMessage.textContent = "Nachricht wird gesendet ...";
-      const { error } = await adminClient
-        .from("missions")
-        .upsert({
-          code: MISSION_CODE,
-          broadcast_message: message,
-          updated_at: new Date().toISOString()
-        }, { onConflict: "code" });
-
-      if (error) throw error;
-      elements.broadcastInput.value = message;
-      elements.adminActionMessage.textContent = "Nachricht an alle wurde gespeichert.";
-    }
-
-    async function updateStudentField(studentKey, changes) {
-      if (!isTeacher() && studentKey !== session.studentKey) return;
-      const { error } = await adminClient
-        .from("student_sessions")
-        .update(changes)
-        .eq("student_key", studentKey);
-
-      if (error) throw error;
-    }
-
-    async function maybeHandleSnapshotRequest() {
-      const record = getStudentRecord();
-      if (!record || !record.snapshot_requested_at || !session.student) return;
-      if (session.lastSnapshotRequestedAt === record.snapshot_requested_at) return;
-
-      session.lastSnapshotRequestedAt = record.snapshot_requested_at;
-      saveSession();
-
-      try {
-        const canvas = await html2canvas(document.querySelector(".shell"), {
-          backgroundColor: "#f4f7fb",
-          scale: 0.75,
-          useCORS: true
+      if (state.skipped.length) {
+        lines.push("");
+        lines.push("Übersprungene Aufgaben:");
+        lines.push("-----------------------");
+        state.skipped.forEach((entry) => {
+          lines.push(`- ${entry.tag}: ${entry.text}`);
         });
-        const snapshotData = canvas.toDataURL("image/jpeg", 0.62);
-        const snapshotPath = `${userId()}/${MISSION_CODE}/${session.studentKey}.jpg`;
-        const snapshotBlob = dataUrlToBlob(snapshotData);
-
-        const { error: uploadError } = await studentClient.storage
-          .from(SNAPSHOT_BUCKET)
-          .upload(snapshotPath, snapshotBlob, {
-            contentType: "image/jpeg",
-            upsert: true
-          });
-
-        if (uploadError) throw uploadError;
-
-        await updateStudentField(session.studentKey, {
-          snapshot_path: snapshotPath,
-          snapshot_updated_at: new Date().toISOString(),
-          snapshot_requested_at: null
-        });
-      } catch (error) {
-        console.error(error);
       }
+
+      return lines.join("\n");
     }
 
-    function downloadFile(filename, content, mimeType) {
-      const blob = new Blob([content], { type: mimeType });
+    function downloadReport() {
+      const name = els.studentName.value.trim();
+      if (!name) {
+        els.downloadMessage.textContent = "Bitte gib zuerst deinen Namen ein.";
+        return;
+      }
+
+      const content = buildReportText(name);
+      const safeName = name.toLowerCase().replaceAll(/[^a-z0-9äöüß]+/gi, "-").replace(/^-+|-+$/g, "");
+      const fileName = `automatenlabor-auswertung-${safeName || "schueler"}.txt`;
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = filename;
+      link.download = fileName;
       document.body.appendChild(link);
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
+      els.downloadMessage.textContent = "Die Auswertung wurde heruntergeladen. Bitte speichere sie in deinem Ordner.";
     }
 
-    function toCsv(rows) {
-      return rows
-        .map((row) => row.map((value) => `"${String(value ?? "").replaceAll('"', '""')}"`).join(";"))
-        .join("\n");
-    }
-
-    function exportCsv() {
-      const rows = submissions.map((entry) => [
-        entry.first_name,
-        entry.class_name,
-        entry.score,
-        entry.max_score,
-        entry.percentage,
-        entry.note,
-        entry.created_at
-      ]);
-      downloadFile("automatenlabor-auswertung.csv", toCsv([["Vorname", "Klasse", "Treffer", "Max", "Quote", "Notiz", "Zeit"], ...rows]), "text/csv;charset=utf-8;");
-    }
-
-    function exportJson() {
-      downloadFile("automatenlabor-auswertung.json", JSON.stringify(submissions, null, 2), "application/json");
-    }
-
-    function resetLocalSession() {
-      session = createDefaultSession();
-      currentQuestionIndex = 0;
-      answers = {};
-      saveSession();
-      renderStudentView();
-      elements.firstNameInput.value = "";
-      elements.studentMessage.textContent = "";
-      renderRoster(elements.landingRoster);
-    }
-
-    function openAdminLogin() {
-      elements.adminOverlay.classList.remove("hidden");
-      elements.teacherEmailInput.focus();
-    }
-
-    function closeAdminLogin() {
-      elements.adminOverlay.classList.add("hidden");
-      elements.adminLoginMessage.textContent = "";
-      elements.teacherEmailInput.value = "";
-      elements.teacherPasswordInput.value = "";
-    }
-
-    function openAdminPanel() {
-      elements.adminPanel.classList.remove("hidden");
-      closeAdminLogin();
-      fetchMission().catch(console.error);
-      fetchStudentSessions().catch(console.error);
-      fetchSubmissions().catch(console.error);
+    function restart() {
+      localStorage.removeItem(STORAGE_KEY);
+      Object.assign(state, createDefaultState());
+      els.studentName.value = "";
+      els.downloadMessage.textContent = "";
+      render();
     }
 
     function handleTitleTap() {
-      adminTapCount += 1;
-      clearTimeout(adminTapTimer);
-      adminTapTimer = setTimeout(() => { adminTapCount = 0; }, 1400);
-      if (adminTapCount >= 5) {
-        adminTapCount = 0;
-        openAdminLogin();
+      titleTapCount += 1;
+      clearTimeout(titleTapTimer);
+      titleTapTimer = setTimeout(() => { titleTapCount = 0; }, 1400);
+      if (titleTapCount >= 5) {
+        titleTapCount = 0;
+        els.skipOverlay.classList.remove("hidden");
       }
     }
 
-    function handleAdminGridClick(event) {
-      if (!isTeacher()) return;
-      const button = event.target.closest("button[data-action]");
-      if (!button) return;
-
-      const studentKey = button.dataset.student;
-      const action = button.dataset.action;
-      const textarea = document.getElementById(`msg-${studentKey}`);
-      const student = studentSessions.find((entry) => entry.student_key === studentKey);
-      if (!student) return;
-
-      if (action === "send-message") {
-        updateStudentField(studentKey, {
-          teacher_message: textarea ? textarea.value.trim() : "",
-          forced_question_index: student.current_question_index
-        }).catch(console.error);
-      }
-
-      if (action === "skip-task") {
-        const nextIndex = Math.min((student.current_question_index ?? 0) + 1, questions.length - 1);
-        updateStudentField(studentKey, {
-          teacher_message: textarea ? textarea.value.trim() : "Die Lehrkraft hat die Aufgabe übersprungen.",
-          forced_question_index: nextIndex
-        }).catch(console.error);
-      }
-
-      if (action === "request-snapshot") {
-        updateStudentField(studentKey, {
-          snapshot_requested_at: new Date().toISOString()
-        }).catch(console.error);
-      }
-    }
-
-    function startHeartbeat() {
-      clearInterval(heartbeatHandle);
-      heartbeatHandle = setInterval(() => {
-        if (session.student) {
-          syncStudentSession().catch(console.error);
-        }
-      }, 15000);
-    }
-
-    function setupRealtime() {
-      studentClient
-        .channel("automatenlabor-live")
-        .on("postgres_changes", { event: "*", schema: "public", table: "missions" }, () => {
-          fetchMission().catch(console.error);
-        })
-        .on("postgres_changes", { event: "*", schema: "public", table: "student_sessions" }, () => {
-          fetchStudentSessions().catch(console.error);
-        })
-        .on("postgres_changes", { event: "*", schema: "public", table: "lobby_signups" }, () => {
-          fetchLobbySignups().catch(console.error);
-        })
-        .on("postgres_changes", { event: "*", schema: "public", table: "submissions" }, () => {
-          fetchSubmissions().catch(console.error);
-        })
-        .subscribe((status) => {
-          elements.adminConnectionLine.textContent = `Live-Status: ${status}`;
-        });
-
-      studentClient.auth.onAuthStateChange(() => {
-        refreshStudentAuthState().catch(console.error);
-      });
-
-      adminClient.auth.onAuthStateChange(() => {
-        refreshAdminAuthState()
-          .then(() => fetchMission().catch(() => {}))
-          .then(() => isTeacher() ? fetchStudentSessions().catch(() => {}) : null)
-          .then(() => isTeacher() ? fetchSubmissions().catch(() => {}) : null)
-          .then(() => renderAdmin())
-          .catch(console.error);
-      });
-    }
-
-    async function initialLoad() {
-      try {
-        ensureAnswerShape();
-        answers = { ...answers, ...(session.answers || {}) };
-        currentQuestionIndex = session.currentQuestionIndex || 0;
-        await ensureAuthSession();
-        await fetchMission();
-        await fetchStudentSessions();
-        await fetchLobbySignups();
-        await fetchSubmissions();
-        renderStudentView();
-        elements.connectionStatus.textContent = "Verbindung mit Supabase erfolgreich.";
-      } catch (error) {
-        console.error(error);
-        elements.connectionStatus.textContent = "Verbindung fehlgeschlagen. Bitte prüfe Tabellen, Rechte und die Supabase-Konfiguration.";
-      }
-    }
-
-    function runSelfTests() {
-      const sampleAnswers = { q1: 0, q2: 1, q3: 1, q4: 1, q5: 0, q6: 1, q7: 1, q8: 1, q9: "Ein Zustand ist ein Kreis." };
-      answers = { ...answers, ...sampleAnswers };
-      const result = scoreAnswers();
-      console.assert(result.points === 5, "scoreAnswers sollte 5 Punkte liefern");
-      console.assert(result.maxPoints === 5, "scoreAnswers sollte 5 Maximalpunkte liefern");
-      console.assert(toCsv([["A", "B"], ["1", "2"]]) === "\"A\";\"B\"\n\"1\";\"2\"", "CSV Export sollte stimmen");
-      console.assert(escapeHtml("<b>") === "&lt;b&gt;", "HTML Escaping sollte funktionieren");
-      answers = session.answers || {};
-    }
-
-    elements.joinBtn.addEventListener("click", () => joinMission().catch(console.error));
-    elements.resetBtn.addEventListener("click", resetLocalSession);
-    elements.leaveBtn.addEventListener("click", async () => {
-      if (session.student) {
-        await updateStudentField(session.studentKey, { teacher_message: "", has_submitted: false }).catch(() => {});
-        await removeLobbySignup().catch(() => {});
-      }
-      resetLocalSession();
+    els.nextBtn.addEventListener("click", goNext);
+    els.backBtn.addEventListener("click", goBack);
+    els.downloadBtn.addEventListener("click", downloadReport);
+    els.restartBtn.addEventListener("click", restart);
+    els.heroTitle.addEventListener("click", handleTitleTap);
+    els.closeOverlayBtn.addEventListener("click", () => {
+      els.skipOverlay.classList.add("hidden");
+      els.skipMessage.textContent = "";
     });
-    elements.prevBtn.addEventListener("click", () => {
-      currentQuestionIndex = Math.max(0, currentQuestionIndex - 1);
-      session.currentQuestionIndex = currentQuestionIndex;
-      saveSession();
-      renderTask();
-      syncStudentSession().catch(console.error);
-    });
-    elements.nextBtn.addEventListener("click", () => {
-      currentQuestionIndex = Math.min(questions.length - 1, currentQuestionIndex + 1);
-      session.currentQuestionIndex = currentQuestionIndex;
-      saveSession();
-      renderTask();
-      syncStudentSession().catch(console.error);
-    });
-    elements.submitBtn.addEventListener("click", () => submitAnswers().catch(console.error));
+    els.skipQuestionBtn.addEventListener("click", skipCurrentQuestion);
 
-    elements.heroTitle.addEventListener("click", handleTitleTap);
-    document.addEventListener("keydown", (event) => {
-      if (event.shiftKey && event.altKey && event.key.toLowerCase() === "a") {
-        openAdminLogin();
-      }
-    });
-
-    elements.openAdminBtn.addEventListener("click", () => {
-      const email = elements.teacherEmailInput.value.trim();
-      const password = elements.teacherPasswordInput.value;
-      if (!email || !password) {
-        elements.adminLoginMessage.textContent = "Bitte E-Mail und Passwort eingeben.";
-        return;
-      }
-
-      adminClient.auth.signInWithPassword({ email, password })
-        .then(async ({ error }) => {
-          if (error) throw error;
-          await refreshAdminAuthState();
-          if (!isTeacher()) {
-            elements.adminLoginMessage.textContent = "Dieser Benutzer hat keine Lehrkraftrolle.";
-            await adminClient.auth.signOut();
-            await refreshAdminAuthState();
-            return;
-          }
-          openAdminPanel();
-        })
-        .catch((error) => {
-          console.error(error);
-          elements.adminLoginMessage.textContent = "Anmeldung fehlgeschlagen.";
-        });
-    });
-    elements.cancelAdminBtn.addEventListener("click", closeAdminLogin);
-    elements.closeAdminBtn.addEventListener("click", () => {
-      elements.adminPanel.classList.add("hidden");
-    });
-    elements.logoutAdminBtn.addEventListener("click", () => {
-      adminClient.auth.signOut()
-        .then(() => refreshAdminAuthState())
-        .then(() => {
-          elements.adminPanel.classList.add("hidden");
-          teacherProfile = null;
-          renderAdmin();
-        })
-        .catch(console.error);
-    });
-
-    elements.startMissionBtn.addEventListener("click", () => updateMissionStatus(STATE_LIVE).catch(console.error));
-    elements.pauseMissionBtn.addEventListener("click", () => updateMissionStatus(STATE_PAUSED).catch(console.error));
-    elements.waitingMissionBtn.addEventListener("click", () => updateMissionStatus(STATE_WAITING).catch(console.error));
-    elements.sendBroadcastBtn.addEventListener("click", () => sendBroadcast().catch(console.error));
-    elements.refreshAdminBtn.addEventListener("click", async () => {
-      await fetchMission();
-      await fetchStudentSessions();
-      await fetchSubmissions();
-    });
-    elements.exportCsvBtn.addEventListener("click", exportCsv);
-    elements.exportJsonBtn.addEventListener("click", exportJson);
-    elements.studentGrid.addEventListener("click", handleAdminGridClick);
-
-    runSelfTests();
-    renderStudentView();
-    initialLoad();
-    setupRealtime();
-    startHeartbeat();
+    render();
   </script>
 </body>
 </html>

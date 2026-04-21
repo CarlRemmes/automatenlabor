@@ -525,7 +525,7 @@
 
   <div class="overlay hidden" id="helperOverlay">
     <div class="overlay-card">
-      <input id="helperPin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" />
+      <input id="helperPin" type="password" inputmode="numeric" autocomplete="new-password" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="PIN" />
       <div class="row" style="margin-top: 14px;">
         <button class="primary" id="unlockHelperBtn">Überspringen</button>
         <button class="secondary" id="closeHelperOverlayBtn">Schließen</button>
@@ -1192,6 +1192,12 @@
     els.restartBtn.addEventListener("click", restart);
     els.heroTitle.addEventListener("click", handleTitleTap);
     els.unlockHelperBtn.addEventListener("click", () => unlockHelperMenu().catch(console.error));
+    els.helperPin.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        unlockHelperMenu().catch(console.error);
+      }
+    });
     els.closeHelperOverlayBtn.addEventListener("click", () => {
       state.helperUnlocked = false;
       updateBadges();

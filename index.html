@@ -987,6 +987,11 @@
     }
 
     function skipCurrentQuestion() {
+      if (!state.helperUnlocked) {
+        els.helperMessage.textContent = "Bitte schalte das Hilfemenü zuerst mit der PIN frei.";
+        return;
+      }
+
       const question = questions[state.currentIndex];
       if (!getSkippedEntry(question)) {
         state.skipped.push({
@@ -1129,6 +1134,7 @@
       state.studentName = currentAttempt.student_name || "";
       state.downloadedAt = currentAttempt.downloaded_at || null;
       saveLocalState();
+      els.saveBadge.textContent = "Fortschritt geladen";
     }
 
     async function saveAttempt() {
@@ -1205,6 +1211,9 @@
       try {
         await ensureAuthSession();
         await loadAttempt();
+        if (!currentAttempt) {
+          await saveAttempt();
+        }
         render();
       } catch (error) {
         console.error(error);

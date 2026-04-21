@@ -507,11 +507,11 @@
         <div class="eyebrow">Fertig</div>
         <h2>Auswertung herunterladen</h2>
         <p class="sub" style="max-width: none;">
-          Gib jetzt deinen Namen ein. Danach kannst du deine Auswertung herunterladen und in einem Ordner auf dem Computer speichern.
+          Gib jetzt deinen Vornamen ein. Danach kannst du deine Auswertung herunterladen und in einem Ordner auf dem Computer speichern.
         </p>
         <div style="margin-top: 16px;">
-          <label for="studentName"><strong>Name</strong></label>
-          <input id="studentName" type="text" placeholder="Vorname und Nachname" />
+          <label for="studentName"><strong>Vorname</strong></label>
+          <input id="studentName" type="text" placeholder="Vorname" />
         </div>
         <div class="skip-summary" id="skipSummary"></div>
         <div class="row" style="margin-top: 18px;">
@@ -1028,7 +1028,7 @@
     async function downloadReport() {
       const name = els.studentName.value.trim();
       if (!name) {
-        els.downloadMessage.textContent = "Bitte gib zuerst deinen Namen ein.";
+        els.downloadMessage.textContent = "Bitte gib zuerst deinen Vornamen ein.";
         return;
       }
 

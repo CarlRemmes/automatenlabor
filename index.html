@@ -370,55 +370,26 @@
       width: min(860px, 100%);
     }
 
-    .results-list {
-      display: grid;
-      gap: 12px;
-      margin-top: 16px;
-      max-height: min(62vh, 560px);
-      overflow: auto;
-    }
-
-    .result-card {
-      padding: 16px;
-      border-radius: 18px;
+    .result-count {
+      margin-top: 18px;
+      padding: 28px 18px;
+      border-radius: 24px;
       background: rgba(16, 35, 61, 0.04);
       border: 1px solid rgba(16, 35, 61, 0.06);
+      text-align: center;
     }
 
-    .result-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
+    .result-count-number {
+      font-size: clamp(3.5rem, 8vw, 5.5rem);
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.06em;
     }
 
-    .result-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-    }
-
-    .result-grid {
-      display: grid;
-      gap: 10px;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    }
-
-    .result-stat {
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.7);
-    }
-
-    .result-stat strong,
-    .result-stat span {
-      display: block;
-    }
-
-    .result-stat span {
+    .result-count-label {
+      margin-top: 8px;
       color: var(--muted);
-      font-size: 0.86rem;
-      margin-bottom: 4px;
+      font-size: 0.98rem;
     }
 
     @media (max-width: 940px) {
@@ -603,7 +574,10 @@
         <button class="secondary" id="downloadResultsZipBtn">ZIP</button>
       </div>
       <div class="status-line" id="resultsMessage" style="margin-top: 10px;"></div>
-      <div class="results-list" id="resultsList"></div>
+      <div class="result-count">
+        <div class="result-count-number" id="resultsCount">0</div>
+        <div class="result-count-label">Abgaben</div>
+      </div>
     </div>
   </div>
 
@@ -623,7 +597,7 @@
     let eyebrowTapTimer = null;
     let currentAttempt = null;
     let authUser = null;
-    let teacherResults = [];
+    let teacherResultCount = 0;
 
     const questions = [
       {
@@ -808,7 +782,7 @@
       resultsDate: document.getElementById("resultsDate"),
       resultsPin: document.getElementById("resultsPin"),
       resultsMessage: document.getElementById("resultsMessage"),
-      resultsList: document.getElementById("resultsList"),
+      resultsCount: document.getElementById("resultsCount"),
       loadResultsBtn: document.getElementById("loadResultsBtn"),
       downloadResultsZipBtn: document.getElementById("downloadResultsZipBtn"),
       closeResultsOverlayBtn: document.getElementById("closeResultsOverlayBtn")
@@ -1048,38 +1022,8 @@
       renderQuestion();
     }
 
-    function renderResultsList() {
-      if (!teacherResults.length) {
-        els.resultsList.innerHTML = `<div class="result-card">Noch keine abgegebenen Ergebnisse.</div>`;
-        return;
-      }
-
-      els.resultsList.innerHTML = teacherResults.map((entry) => `
-        <article class="result-card">
-          <div class="result-top">
-            <div class="result-name">${escapeHtml(entry.vorname || "Ohne Vorname")}</div>
-            <div class="badge">Frage ${Math.min(Number(entry.letzte_frage || 0), questions.length)} / ${questions.length}</div>
-          </div>
-          <div class="result-grid">
-            <div class="result-stat">
-              <span>Beantwortet</span>
-              <strong>${Number(entry.beantwortet || 0)}</strong>
-            </div>
-            <div class="result-stat">
-              <span>Übersprungen</span>
-              <strong>${Number(entry.uebersprungen || 0)}</strong>
-            </div>
-            <div class="result-stat">
-              <span>Abgeschlossen</span>
-              <strong>${formatDateTime(entry.abgeschlossen_am)}</strong>
-            </div>
-            <div class="result-stat">
-              <span>Zuletzt gespeichert</span>
-              <strong>${formatDateTime(entry.zuletzt_gespeichert)}</strong>
-            </div>
-          </div>
-        </article>
-      `).join("");
+    function renderResultsCount() {
+      els.resultsCount.textContent = String(teacherResultCount || 0);
     }
 
     function buildTeacherZipEntry(entry) {
@@ -1250,7 +1194,8 @@
         els.resultsDate.value = todayString();
         els.resultsPin.value = "";
         els.resultsMessage.textContent = "";
-        els.resultsList.innerHTML = "";
+        teacherResultCount = 0;
+        renderResultsCount();
       }
     }
 
@@ -1363,7 +1308,7 @@
       }
 
       els.resultsMessage.textContent = "Lädt ...";
-      const { data, error } = await client.rpc("list_worksheet_results", {
+      const { data, error } = await client.rpc("count_worksheet_results", {
         input_pin: pin,
         result_date: selectedDate
       });
@@ -1374,9 +1319,9 @@
         return;
       }
 
-      teacherResults = Array.isArray(data) ? data : [];
-      renderResultsList();
-      els.resultsMessage.textContent = `${teacherResults.length} Ergebnis${teacherResults.length === 1 ? "" : "se"} geladen.`;
+      teacherResultCount = Number(data || 0);
+      renderResultsCount();
+      els.resultsMessage.textContent = "";
       els.resultsPin.value = "";
     }
 
@@ -1471,7 +1416,8 @@
       els.resultsDate.value = todayString();
       els.resultsPin.value = "";
       els.resultsMessage.textContent = "";
-      els.resultsList.innerHTML = "";
+      teacherResultCount = 0;
+      renderResultsCount();
     });
     els.studentName.addEventListener("input", () => {
       state.studentName = els.studentName.value;
@@ -1485,6 +1431,7 @@
     });
 
     render();
+    renderResultsCount();
     els.resultsDate.value = todayString();
     initializeApp();
   </script>

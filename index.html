@@ -998,6 +998,13 @@
       els.backBtn.classList.add("hidden");
       els.nextBtn.classList.add("hidden");
       els.studentName.value = state.studentName || "";
+      const alreadySubmitted = Boolean(state.studentName) && state.currentIndex >= questions.length;
+      els.downloadBtn.textContent = alreadySubmitted ? "Abgegeben" : "Abgeben";
+      els.downloadBtn.disabled = alreadySubmitted;
+      els.studentName.disabled = alreadySubmitted;
+      if (alreadySubmitted) {
+        els.downloadMessage.textContent = "Abgegeben.";
+      }
 
       if (!state.skipped.length) {
         els.skipSummary.innerHTML = `<div class="skip-item">Es wurde keine Aufgabe übersprungen.</div>`;
@@ -1156,10 +1163,14 @@
         return;
       }
 
+      els.downloadBtn.disabled = true;
+      els.downloadBtn.textContent = "Speichert ...";
       state.studentName = name;
       state.currentIndex = questions.length;
       await saveAttempt();
       els.downloadMessage.textContent = "Abgegeben.";
+      els.downloadBtn.textContent = "Abgegeben";
+      els.studentName.disabled = true;
       render();
     }
 
@@ -1168,6 +1179,9 @@
       Object.assign(state, createDefaultState());
       currentAttempt = null;
       els.downloadMessage.textContent = "";
+      els.studentName.disabled = false;
+      els.downloadBtn.disabled = false;
+      els.downloadBtn.textContent = "Abgeben";
       render();
       initializeApp().catch(console.error);
     }

@@ -422,6 +422,7 @@
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/js-sha256@0.11.1/src/sha256.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
   <div class="shell">
@@ -1139,6 +1140,81 @@
       return lines.join("\n");
     }
 
+    async function buildReportPdfBlob(name) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4"
+      });
+
+      const margin = 48;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const maxWidth = pageWidth - margin * 2;
+      let y = margin;
+
+      const addWrappedText = (text, fontSize = 12, lineHeight = 18) => {
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(fontSize);
+        const lines = doc.splitTextToSize(String(text), maxWidth);
+        lines.forEach((line) => {
+          if (y > pageHeight - margin) {
+            doc.addPage();
+            y = margin;
+          }
+          doc.text(line, margin, y);
+          y += lineHeight;
+        });
+      };
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(20);
+      doc.text("Automatenlabor - Auswertung", margin, y);
+      y += 28;
+
+      addWrappedText(`Vorname: ${name}`);
+      addWrappedText(`Datum: ${new Date().toLocaleString("de-DE")}`);
+      y += 8;
+
+      const { points, maxPoints } = scoreResult();
+      addWrappedText(`Punkte aus Auswahlfragen: ${points} von ${maxPoints}`);
+      y += 8;
+
+      questions.forEach((question, index) => {
+        const skipped = getSkippedEntry(question);
+        const answer = state.answers[question.id];
+        let answerText = "";
+
+        if (skipped) {
+          answerText = "[übersprungen über Hilfemenü]";
+        } else if (question.type === "single") {
+          answerText = typeof answer === "number" ? question.options[answer] : "[nicht beantwortet]";
+        } else if (question.type === "yesno") {
+          answerText = answer || "[nicht beantwortet]";
+        } else {
+          answerText = String(answer || "[nicht beantwortet]");
+        }
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(12);
+        const questionLines = doc.splitTextToSize(`${index + 1}. ${question.text}`, maxWidth);
+        questionLines.forEach((line) => {
+          if (y > pageHeight - margin) {
+            doc.addPage();
+            y = margin;
+          }
+          doc.text(line, margin, y);
+          y += 16;
+        });
+
+        addWrappedText(`Antwort: ${answerText}`, 11, 16);
+        y += 6;
+      });
+
+      return doc.output("blob");
+    }
+
     async function saveWorksheet() {
       const name = els.studentName.value.trim();
       if (!name) {
@@ -1149,26 +1225,25 @@
       els.downloadBtn.disabled = true;
       els.downloadBtn.textContent = "Speichert ...";
       state.studentName = name;
-      const content = buildReportText(name);
+      const pdfBlob = await buildReportPdfBlob(name);
       const safeName = slugify(name) || "schueler";
-      const fileName = `automatenlabor-auswertung-${safeName}.txt`;
+      const fileName = `automatenlabor-auswertung-${safeName}.pdf`;
 
       try {
         if ("showSaveFilePicker" in window) {
           const handle = await window.showSaveFilePicker({
             suggestedName: fileName,
             types: [{
-              description: "Textdatei",
-              accept: { "text/plain": [".txt"] }
+              description: "PDF-Datei",
+              accept: { "application/pdf": [".pdf"] }
             }]
           });
           const writable = await handle.createWritable();
-          await writable.write(content);
+          await writable.write(pdfBlob);
           await writable.close();
           els.downloadMessage.textContent = "Gespeichert.";
         } else {
-          const blob = new Blob([content], { type: "text/plain;charset=utf-8;" });
-          const url = URL.createObjectURL(blob);
+          const url = URL.createObjectURL(pdfBlob);
           const link = document.createElement("a");
           link.href = url;
           link.download = fileName;

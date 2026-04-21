@@ -366,6 +366,61 @@
       box-shadow: var(--shadow);
     }
 
+    .overlay-card.wide {
+      width: min(860px, 100%);
+    }
+
+    .results-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+      max-height: min(62vh, 560px);
+      overflow: auto;
+    }
+
+    .result-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(16, 35, 61, 0.04);
+      border: 1px solid rgba(16, 35, 61, 0.06);
+    }
+
+    .result-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .result-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .result-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    }
+
+    .result-stat {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .result-stat strong,
+    .result-stat span {
+      display: block;
+    }
+
+    .result-stat span {
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-bottom: 4px;
+    }
+
     @media (max-width: 940px) {
       .hero {
         grid-template-columns: 1fr;
@@ -534,6 +589,21 @@
     </div>
   </div>
 
+  <div class="overlay hidden" id="resultsOverlay">
+    <div class="overlay-card wide">
+      <div class="row" style="justify-content: space-between; align-items: center;">
+        <div class="eyebrow" style="margin-bottom: 0;">Ergebnisse</div>
+        <button class="secondary" id="closeResultsOverlayBtn">Schließen</button>
+      </div>
+      <div class="row" style="margin-top: 14px;">
+        <input id="resultsPin" type="password" inputmode="numeric" autocomplete="new-password" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="PIN" />
+        <button class="primary" id="loadResultsBtn">Anzeigen</button>
+      </div>
+      <div class="status-line" id="resultsMessage" style="margin-top: 10px;"></div>
+      <div class="results-list" id="resultsList"></div>
+    </div>
+  </div>
+
   <script>
     const SUPABASE_URL = "https://ksuqarrjolkhpwojrjav.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj";
@@ -546,8 +616,11 @@
     let saveTimer = null;
     let titleTapCount = 0;
     let titleTapTimer = null;
+    let eyebrowTapCount = 0;
+    let eyebrowTapTimer = null;
     let currentAttempt = null;
     let authUser = null;
+    let teacherResults = [];
 
     const questions = [
       {
@@ -705,6 +778,7 @@
 
     const els = {
       heroTitle: document.getElementById("heroTitle"),
+      heroEyebrow: document.querySelector(".hero-copy .eyebrow"),
       saveBadge: document.getElementById("saveBadge"),
       backBtn: document.getElementById("backBtn"),
       nextBtn: document.getElementById("nextBtn"),
@@ -726,7 +800,13 @@
       helperPin: document.getElementById("helperPin"),
       helperMessage: document.getElementById("helperMessage"),
       unlockHelperBtn: document.getElementById("unlockHelperBtn"),
-      closeHelperOverlayBtn: document.getElementById("closeHelperOverlayBtn")
+      closeHelperOverlayBtn: document.getElementById("closeHelperOverlayBtn"),
+      resultsOverlay: document.getElementById("resultsOverlay"),
+      resultsPin: document.getElementById("resultsPin"),
+      resultsMessage: document.getElementById("resultsMessage"),
+      resultsList: document.getElementById("resultsList"),
+      loadResultsBtn: document.getElementById("loadResultsBtn"),
+      closeResultsOverlayBtn: document.getElementById("closeResultsOverlayBtn")
     };
 
     function createDefaultState() {
@@ -761,6 +841,11 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "–";
+      return new Date(value).toLocaleString("de-DE");
     }
 
     function getSkippedEntry(question) {
@@ -943,6 +1028,44 @@
       renderQuestion();
     }
 
+    function renderResultsList() {
+      if (!teacherResults.length) {
+        els.resultsList.innerHTML = `<div class="result-card">Noch keine abgegebenen Ergebnisse.</div>`;
+        return;
+      }
+
+      els.resultsList.innerHTML = teacherResults.map((entry) => `
+        <article class="result-card">
+          <div class="result-top">
+            <div class="result-name">${escapeHtml(entry.vorname || "Ohne Vorname")}</div>
+            <div class="badge">Frage ${Math.min(Number(entry.letzte_frage || 0), questions.length)} / ${questions.length}</div>
+          </div>
+          <div class="result-grid">
+            <div class="result-stat">
+              <span>Beantwortet</span>
+              <strong>${Number(entry.beantwortet || 0)}</strong>
+            </div>
+            <div class="result-stat">
+              <span>Übersprungen</span>
+              <strong>${Number(entry.uebersprungen || 0)}</strong>
+            </div>
+            <div class="result-stat">
+              <span>Abgeschlossen</span>
+              <strong>${formatDateTime(entry.abgeschlossen_am)}</strong>
+            </div>
+            <div class="result-stat">
+              <span>Heruntergeladen</span>
+              <strong>${formatDateTime(entry.heruntergeladen_am)}</strong>
+            </div>
+            <div class="result-stat">
+              <span>Zuletzt gespeichert</span>
+              <strong>${formatDateTime(entry.zuletzt_gespeichert)}</strong>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
     function goNext() {
       if (state.currentIndex < questions.length) {
         state.currentIndex += 1;
@@ -1072,6 +1195,19 @@
       }
     }
 
+    function handleEyebrowTap() {
+      eyebrowTapCount += 1;
+      clearTimeout(eyebrowTapTimer);
+      eyebrowTapTimer = setTimeout(() => { eyebrowTapCount = 0; }, 1400);
+      if (eyebrowTapCount >= 5) {
+        eyebrowTapCount = 0;
+        els.resultsOverlay.classList.remove("hidden");
+        els.resultsPin.value = "";
+        els.resultsMessage.textContent = "";
+        els.resultsList.innerHTML = "";
+      }
+    }
+
     async function ensureAuthSession() {
       const { data, error } = await client.auth.getSession();
       if (error) throw error;
@@ -1172,6 +1308,30 @@
       skipCurrentQuestion();
     }
 
+    async function loadTeacherResults() {
+      const pin = els.resultsPin.value.trim();
+      if (!pin) {
+        els.resultsMessage.textContent = "Bitte PIN eingeben.";
+        return;
+      }
+
+      els.resultsMessage.textContent = "Lädt ...";
+      const { data, error } = await client.rpc("list_worksheet_results", {
+        input_pin: pin
+      });
+
+      if (error) {
+        console.error(error);
+        els.resultsMessage.textContent = "PIN oder Abfrage nicht verfügbar.";
+        return;
+      }
+
+      teacherResults = Array.isArray(data) ? data : [];
+      renderResultsList();
+      els.resultsMessage.textContent = `${teacherResults.length} Ergebnis${teacherResults.length === 1 ? "" : "se"} geladen.`;
+      els.resultsPin.value = "";
+    }
+
     async function initializeApp() {
       try {
         await ensureAuthSession();
@@ -1191,6 +1351,7 @@
     els.downloadBtn.addEventListener("click", () => downloadReport().catch(console.error));
     els.restartBtn.addEventListener("click", restart);
     els.heroTitle.addEventListener("click", handleTitleTap);
+    els.heroEyebrow.addEventListener("click", handleEyebrowTap);
     els.unlockHelperBtn.addEventListener("click", () => unlockHelperMenu().catch(console.error));
     els.helperPin.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
@@ -1203,6 +1364,19 @@
       updateBadges();
       els.helperOverlay.classList.add("hidden");
       els.helperMessage.textContent = "";
+    });
+    els.loadResultsBtn.addEventListener("click", () => loadTeacherResults().catch(console.error));
+    els.resultsPin.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        loadTeacherResults().catch(console.error);
+      }
+    });
+    els.closeResultsOverlayBtn.addEventListener("click", () => {
+      els.resultsOverlay.classList.add("hidden");
+      els.resultsPin.value = "";
+      els.resultsMessage.textContent = "";
+      els.resultsList.innerHTML = "";
     });
     els.studentName.addEventListener("input", () => {
       state.studentName = els.studentName.value;

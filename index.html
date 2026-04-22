@@ -853,6 +853,7 @@
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
           input.addEventListener("change", (event) => {
             state.answers[question.id] = Number(event.target.value);
+            updateNextAvailability();
             queueSave();
           });
         });
@@ -872,6 +873,7 @@
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
           input.addEventListener("change", (event) => {
             state.answers[question.id] = event.target.value;
+            updateNextAvailability();
             queueSave();
           });
         });
@@ -884,6 +886,7 @@
         const field = document.getElementById("textAnswer");
         field.addEventListener("input", () => {
           state.answers[question.id] = field.value;
+          updateNextAvailability();
           queueSave();
         });
       }

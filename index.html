@@ -324,85 +324,9 @@
       box-shadow: var(--shadow);
     }
 
-    .reward-box {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      margin-top: 0;
-      padding: 28px;
-      border-radius: 0;
-      background: linear-gradient(180deg, #f8fbff, #eef4fb 56%, #e7eef8);
-      border: none;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 18px;
-    }
-
-    .reward-stage {
-      width: 100%;
-      height: min(72vh, 920px);
-      min-height: 360px;
-      border-radius: 28px;
-      background: white;
-      overflow: hidden;
-      box-shadow: 0 24px 80px rgba(16, 35, 61, 0.12);
-    }
-
-    .reward-stage svg {
-      width: min(100%, 420px);
-      height: auto;
-    }
-
-    .reward-stage img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .reward-message {
-      margin: 0;
-      font-size: clamp(1.4rem, 2vw, 2rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      text-align: center;
-    }
-
     .finish-form {
       display: grid;
       gap: 18px;
-    }
-
-    body.reward-mode {
-      overflow: hidden;
-    }
-
-    body.reward-mode .hero,
-    body.reward-mode .toolbar,
-    body.reward-mode .progress-box,
-    body.reward-mode #questionCard {
-      display: none !important;
-    }
-
-    body.reward-mode .shell {
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      border-radius: 0;
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      backdrop-filter: none;
-    }
-
-    body.reward-mode .workspace,
-    body.reward-mode .finish-card {
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      border: none;
-      box-shadow: none;
     }
 
     @media (max-width: 680px) {
@@ -424,15 +348,6 @@
 
       .row button {
         width: 100%;
-      }
-
-      .reward-box {
-        padding: 16px;
-      }
-
-      .reward-stage {
-        height: min(64vh, 620px);
-        min-height: 280px;
       }
     }
   </style>
@@ -500,14 +415,6 @@
             <button class="secondary" id="restartBtn">Neu starten</button>
           </div>
           <div class="status-line" id="downloadMessage"></div>
-        </div>
-        <div class="reward-box hidden" id="rewardBox">
-          <p class="reward-message">Herr Remmes sagt: Gut gemacht!</p>
-          <div class="reward-stage" id="rewardStage"></div>
-          <div class="row" style="justify-content: space-between; margin-top: 14px;">
-            <button class="secondary" id="prevRewardBtn">Zurück</button>
-            <button class="secondary" id="nextRewardBtn">Weiter</button>
-          </div>
         </div>
       </section>
     </main>
@@ -686,16 +593,6 @@
       }
     ];
 
-    const rewardSlides = [
-      { src: "assets/dog-07.jpeg", caption: "Gut gemacht! Jetzt gibt es einen Welpen-Moment." },
-      { src: "assets/dog-06.jpeg", caption: "Herr Remmes sagt: Gut gemacht!" },
-      { src: "assets/dog-02.jpeg", caption: "Sehr stark gearbeitet." },
-      { src: "assets/dog-05.jpeg", caption: "Pfoten hoch für deine Arbeit." },
-      { src: "assets/dog-03.jpeg", caption: "Ruhig bleiben und weiter so." },
-      { src: "assets/dog-04.jpeg", caption: "Auch kleine Chaoten sind manchmal süß." },
-      { src: "assets/dog-01.jpeg", caption: "Große Pause für große Denkleistung." }
-    ];
-
     let questions = [];
 
     const els = {
@@ -717,10 +614,6 @@
       downloadBtn: document.getElementById("downloadBtn"),
       restartBtn: document.getElementById("restartBtn"),
       downloadMessage: document.getElementById("downloadMessage"),
-      rewardBox: document.getElementById("rewardBox"),
-      rewardStage: document.getElementById("rewardStage"),
-      prevRewardBtn: document.getElementById("prevRewardBtn"),
-      nextRewardBtn: document.getElementById("nextRewardBtn"),
       skipSummary: document.getElementById("skipSummary"),
       helperOverlay: document.getElementById("helperOverlay"),
       helperPin: document.getElementById("helperPin"),
@@ -737,7 +630,6 @@
         helperUnlocked: false,
         studentName: "",
         savedLocally: false,
-        rewardIndex: 0,
         questionOrder: []
       };
     }
@@ -1008,12 +900,8 @@
       els.downloadBtn.textContent = state.savedLocally ? "Gespeichert" : "Speichern";
       els.downloadBtn.disabled = state.savedLocally;
       els.studentName.disabled = state.savedLocally;
-      els.finishForm.classList.toggle("hidden", state.savedLocally);
-      els.rewardBox.classList.toggle("hidden", !state.savedLocally);
-      document.body.classList.toggle("reward-mode", state.savedLocally);
       if (state.savedLocally) {
         els.downloadMessage.textContent = "Gespeichert.";
-        renderReward().catch(console.error);
       }
 
       if (!state.skipped.length) {
@@ -1032,9 +920,6 @@
         return;
       }
 
-      document.body.classList.remove("reward-mode");
-      els.rewardBox.classList.add("hidden");
-      els.finishForm.classList.remove("hidden");
       els.questionCard.classList.remove("hidden");
       els.finishCard.classList.add("hidden");
       els.backBtn.classList.remove("hidden");
@@ -1055,19 +940,6 @@
     function updateNextAvailability() {
       if (state.currentIndex >= questions.length) return;
       els.nextBtn.disabled = !currentQuestionHasAnswer();
-    }
-
-    async function renderReward() {
-      const slide = rewardSlides[state.rewardIndex] || rewardSlides[0];
-      try {
-        const imageUrl = await loadImageDataUrl(slide.src);
-        els.rewardStage.innerHTML = `<img src="${imageUrl}" alt="Hundebild zur Belohnung" />`;
-      } catch (error) {
-        els.rewardStage.innerHTML = `<div style="display:grid;place-items:center;height:100%;padding:24px;text-align:center;color:#607188;">Das Belohnungsbild konnte gerade nicht geladen werden.</div>`;
-      }
-      document.querySelector(".reward-message").textContent = slide.caption;
-      els.prevRewardBtn.disabled = state.rewardIndex === 0;
-      els.nextRewardBtn.disabled = state.rewardIndex === rewardSlides.length - 1;
     }
 
     function goNext() {
@@ -1325,7 +1197,6 @@
       localStorage.removeItem(STORAGE_KEY);
       Object.assign(state, createDefaultState());
       rebuildQuestions();
-      document.body.classList.remove("reward-mode");
       els.downloadMessage.textContent = "";
       els.studentName.disabled = false;
       els.downloadBtn.disabled = false;
@@ -1400,21 +1271,6 @@
         saveWorksheet().catch(console.error);
       }
     });
-    els.prevRewardBtn.addEventListener("click", () => {
-      if (state.rewardIndex > 0) {
-        state.rewardIndex -= 1;
-        saveLocalState();
-        renderReward().catch(console.error);
-      }
-    });
-    els.nextRewardBtn.addEventListener("click", () => {
-      if (state.rewardIndex < rewardSlides.length - 1) {
-        state.rewardIndex += 1;
-        saveLocalState();
-        renderReward().catch(console.error);
-      }
-    });
-
     rebuildQuestions();
     render();
   </script>

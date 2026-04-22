@@ -84,23 +84,6 @@
       margin-bottom: 16px;
     }
 
-    .hero-mark {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .school-logo {
-      width: 76px;
-      height: 76px;
-      border-radius: 22px;
-      object-fit: cover;
-      border: 1px solid rgba(16, 35, 61, 0.08);
-      background: white;
-      box-shadow: 0 10px 24px rgba(16, 35, 61, 0.08);
-    }
-
     h1 {
       margin: 0 0 12px;
       font-size: clamp(2.7rem, 5vw, 4.5rem);
@@ -384,20 +367,28 @@
     }
 
     .reward-box {
-      margin-top: 18px;
-      padding: 18px;
-      border-radius: 22px;
-      background: rgba(16, 35, 61, 0.04);
-      border: 1px solid rgba(16, 35, 61, 0.06);
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      margin-top: 0;
+      padding: 28px;
+      border-radius: 0;
+      background: linear-gradient(180deg, #f8fbff, #eef4fb 56%, #e7eef8);
+      border: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 18px;
     }
 
     .reward-stage {
-      display: grid;
-      place-items: center;
-      min-height: 220px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(232,239,248,0.92));
+      flex: 1;
+      min-height: 0;
+      max-height: calc(100vh - 210px);
+      border-radius: 28px;
+      background: white;
       overflow: hidden;
+      box-shadow: 0 24px 80px rgba(16, 35, 61, 0.12);
     }
 
     .reward-stage svg {
@@ -407,16 +398,53 @@
 
     .reward-stage img {
       width: 100%;
-      height: 320px;
+      height: 100%;
       object-fit: cover;
-      border-radius: 18px;
+      display: block;
     }
 
     .reward-message {
-      margin: 0 0 14px;
-      font-size: 1.1rem;
+      margin: 0;
+      font-size: clamp(1.4rem, 2vw, 2rem);
       font-weight: 700;
       letter-spacing: -0.02em;
+      text-align: center;
+    }
+
+    .finish-form {
+      display: grid;
+      gap: 18px;
+    }
+
+    body.reward-mode {
+      overflow: hidden;
+    }
+
+    body.reward-mode .hero,
+    body.reward-mode .toolbar,
+    body.reward-mode .progress-box,
+    body.reward-mode #questionCard {
+      display: none !important;
+    }
+
+    body.reward-mode .shell {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    body.reward-mode .workspace,
+    body.reward-mode .finish-card {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
     }
 
     @media (max-width: 940px) {
@@ -459,10 +487,7 @@
   <div class="shell">
     <section class="hero">
       <section class="hero-copy glass">
-        <div class="hero-mark">
-          <img class="school-logo" src="assets/school-logo.jpeg" alt="Schullogo" />
-          <div class="eyebrow">Automatenlabor</div>
-        </div>
+        <div class="eyebrow">Automatenlabor</div>
         <h1 id="heroTitle">Automaten<br />verstehen</h1>
         <p class="sub">
           Beantworte Fragen zu Zuständen, Eingaben, Übergängen und Ausgaben.
@@ -561,21 +586,23 @@
       </section>
 
       <section class="finish-card hidden" id="finishCard">
-        <div class="eyebrow">Fertig</div>
-        <h2>Speichern</h2>
-        <p class="sub" style="max-width: none;">
-          Gib jetzt deinen Vornamen ein und speichere deine Ergebnisse auf diesem Gerät.
-        </p>
-        <div style="margin-top: 16px;">
-          <label for="studentName"><strong>Vorname</strong></label>
-          <input id="studentName" type="text" placeholder="Vorname" />
+        <div class="finish-form" id="finishForm">
+          <div class="eyebrow">Fertig</div>
+          <h2>Speichern</h2>
+          <p class="sub" style="max-width: none;">
+            Gib jetzt deinen Vornamen ein und speichere deine Ergebnisse auf diesem Gerät.
+          </p>
+          <div style="margin-top: 16px;">
+            <label for="studentName"><strong>Vorname</strong></label>
+            <input id="studentName" type="text" placeholder="Vorname" />
+          </div>
+          <div class="skip-summary" id="skipSummary"></div>
+          <div class="row" style="margin-top: 18px;">
+            <button class="primary" id="downloadBtn">Speichern</button>
+            <button class="secondary" id="restartBtn">Neu starten</button>
+          </div>
+          <div class="status-line" id="downloadMessage"></div>
         </div>
-        <div class="skip-summary" id="skipSummary"></div>
-        <div class="row" style="margin-top: 18px;">
-          <button class="primary" id="downloadBtn">Speichern</button>
-          <button class="secondary" id="restartBtn">Neu starten</button>
-        </div>
-        <div class="status-line" id="downloadMessage"></div>
         <div class="reward-box hidden" id="rewardBox">
           <p class="reward-message">Herr Remmes sagt: Gut gemacht!</p>
           <div class="reward-stage" id="rewardStage"></div>
@@ -787,6 +814,7 @@
       questionVisual: document.getElementById("questionVisual"),
       questionAnswer: document.getElementById("questionAnswer"),
       finishCard: document.getElementById("finishCard"),
+      finishForm: document.getElementById("finishForm"),
       studentName: document.getElementById("studentName"),
       downloadBtn: document.getElementById("downloadBtn"),
       restartBtn: document.getElementById("restartBtn"),
@@ -1080,7 +1108,9 @@
       els.downloadBtn.textContent = state.savedLocally ? "Gespeichert" : "Speichern";
       els.downloadBtn.disabled = state.savedLocally;
       els.studentName.disabled = state.savedLocally;
+      els.finishForm.classList.toggle("hidden", state.savedLocally);
       els.rewardBox.classList.toggle("hidden", !state.savedLocally);
+      document.body.classList.toggle("reward-mode", state.savedLocally);
       if (state.savedLocally) {
         els.downloadMessage.textContent = "Gespeichert.";
         renderReward();
@@ -1369,6 +1399,7 @@
       localStorage.removeItem(STORAGE_KEY);
       Object.assign(state, createDefaultState());
       rebuildQuestions();
+      document.body.classList.remove("reward-mode");
       els.downloadMessage.textContent = "";
       els.studentName.disabled = false;
       els.downloadBtn.disabled = false;

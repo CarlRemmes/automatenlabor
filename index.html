@@ -361,8 +361,7 @@
         <div class="eyebrow">Automatenlabor</div>
         <h1 id="heroTitle">Automaten<br />verstehen</h1>
         <p class="sub">
-          Beantworte Fragen zu Zuständen, Eingaben, Übergängen und Ausgaben.
-          Entscheide bei mehreren Alltagsbeispielen, ob es sich um einen Automaten handelt.
+          Du arbeitest heute im Automatenlabor. Zuerst prüfst du bekanntes Wissen, danach löst du kleine Laboraufträge und wendest dein Wissen auf neue Situationen an.
         </p>
       </section>
     </section>
@@ -585,11 +584,67 @@
       },
       {
         id: "q14",
-        tag: "Frage 14",
+        tag: "Laborauftrag 1",
+        type: "single",
+        text: "Im Automatenlabor testest du einen Getränkeautomaten. Nach dem Einwerfen von 1 Euro zeigt er 1 Euro an. Welche Information fehlt dir noch, um sicher sagen zu können, ob ein Saft ausgegeben wird?",
+        help: "Überlege, welche Bedingung noch fehlen könnte.",
+        options: [
+          "Der Name der Schule",
+          "Der Preis des Safts oder die Regel für die Ausgabe",
+          "Die Farbe des Automaten",
+          "Die Uhrzeit im Klassenraum"
+        ],
+        correct: 1
+      },
+      {
+        id: "q15",
+        tag: "Laborauftrag 2",
+        type: "single",
+        text: "Ein Testautomat hat die Zustände Start, Karte geprüft und Tür offen. Welche Reihenfolge passt zu einem sinnvollen Ablauf?",
+        help: "Denke an einen geordneten Übergang.",
+        options: [
+          "Tür offen → Start → Karte geprüft",
+          "Start → Karte geprüft → Tür offen",
+          "Karte geprüft → Tür offen → Start",
+          "Start → Tür offen → Karte geprüft"
+        ],
+        correct: 1
+      },
+      {
+        id: "q16",
+        tag: "Laborauftrag 3",
+        type: "single",
+        text: "Ein Automat bleibt nach jeder Eingabe immer im gleichen Zustand und gibt nie etwas aus. Was beschreibt das am besten?",
+        help: "Frage dich, was für ein Verhalten dem Automaten fehlt.",
+        options: [
+          "Er hat keine sinnvollen Übergänge oder Ausgaben",
+          "Er hat zu viele Produkte",
+          "Er ist besonders schnell",
+          "Er ist automatisch richtig"
+        ],
+        correct: 0
+      },
+      {
+        id: "q17",
+        tag: "Laborauftrag 4",
+        type: "single",
+        text: "Du sollst für das Automatenlabor einen einfachen Tierfutterautomaten planen. Welche Angabe gehört am besten an einen Pfeil im Zustandsdiagramm?",
+        help: "Gesucht ist die Information, die den Übergang auslöst.",
+        options: [
+          "Hund glücklich",
+          "2 Euro eingeworfen",
+          "Automat ist grau",
+          "Leckerli schmeckt gut"
+        ],
+        correct: 1
+      },
+      {
+        id: "q18",
+        tag: "Abschluss",
         type: "text",
-        text: "Erkläre in ein bis zwei Sätzen, woran man in einem Zustandsdiagramm Zustand, Eingabe, Folgezustand und Ausgabe erkennt.",
-        help: "Schreibe in deinen eigenen Worten.",
-        placeholder: "Ein Zustand ist ... Die Eingabe erkennt man an ..."
+        text: "Du schreibst den Abschlussbericht für das Automatenlabor. Erkläre in zwei bis drei Sätzen, woran man in einem Zustandsdiagramm Zustand, Eingabe, Folgezustand und Ausgabe erkennt.",
+        help: "Schreibe in deinen eigenen Worten und nutze möglichst die Fachbegriffe.",
+        placeholder: "Ein Zustand ist ... Die Eingabe erkennt man an ... Der Folgezustand ist ... Die Ausgabe ist ..."
       }
     ];
 
@@ -676,8 +731,9 @@
     function ensureQuestionOrder() {
       const expectedLength = questionBank.length;
       if (Array.isArray(state.questionOrder) && state.questionOrder.length === expectedLength) return;
-      const shuffled = shuffleArray(Array.from({ length: expectedLength - 1 }, (_, index) => index));
-      state.questionOrder = [...shuffled, expectedLength - 1];
+      const randomizedPart = shuffleArray(Array.from({ length: 13 }, (_, index) => index));
+      const fixedPart = Array.from({ length: expectedLength - 13 }, (_, index) => index + 13);
+      state.questionOrder = [...randomizedPart, ...fixedPart];
     }
 
     function rebuildQuestions() {
@@ -834,7 +890,7 @@
 
       els.questionText.textContent = question.text;
       els.questionHelp.textContent = question.help;
-      els.questionTag.textContent = "Aufgabe";
+      els.questionTag.textContent = question.tag;
       els.questionVisual.innerHTML = exampleVisual(question.visual);
       els.backBtn.disabled = state.currentIndex === 0;
       els.nextBtn.textContent = state.currentIndex === questions.length - 1 ? "Zum Abschluss" : "Weiter";

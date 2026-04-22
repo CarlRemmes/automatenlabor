@@ -1032,6 +1032,9 @@
         return;
       }
 
+      document.body.classList.remove("reward-mode");
+      els.rewardBox.classList.add("hidden");
+      els.finishForm.classList.remove("hidden");
       els.questionCard.classList.remove("hidden");
       els.finishCard.classList.add("hidden");
       els.backBtn.classList.remove("hidden");

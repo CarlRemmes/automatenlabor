@@ -6,21 +6,21 @@
   <title>Automatenlabor</title>
   <style>
     :root {
-      --bg: #f1f5fb;
-      --panel: rgba(255, 255, 255, 0.84);
-      --panel-strong: rgba(255, 255, 255, 0.96);
-      --text: #10233d;
-      --muted: #607188;
-      --line: rgba(16, 35, 61, 0.1);
+      --bg: #f3f6fb;
+      --panel: rgba(255, 255, 255, 0.82);
+      --panel-strong: rgba(255, 255, 255, 0.97);
+      --text: #162338;
+      --muted: #738196;
+      --line: rgba(15, 23, 42, 0.08);
       --accent: #007aff;
       --accent-soft: rgba(0, 122, 255, 0.12);
       --green: #1f9d55;
       --amber: #f59e0b;
       --danger: #e11d48;
-      --shadow: 0 22px 80px rgba(16, 35, 61, 0.12);
-      --radius-xl: 30px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
     }
 
     * { box-sizing: border-box; }
@@ -31,9 +31,9 @@
       font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(0, 122, 255, 0.14), transparent 24%),
-        radial-gradient(circle at bottom right, rgba(31, 157, 85, 0.1), transparent 22%),
-        linear-gradient(180deg, #f8fbff, #eef3f9 56%, #e8edf5);
+        radial-gradient(circle at top left, rgba(0, 122, 255, 0.09), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(0, 122, 255, 0.05), transparent 20%),
+        linear-gradient(180deg, #fbfcfe, #f1f5fa 58%, #e9eef5);
     }
 
     button, input, textarea {
@@ -41,32 +41,29 @@
     }
 
     .shell {
-      width: min(1220px, calc(100% - 24px));
-      margin: 12px auto;
-      padding: 12px;
-      border-radius: 34px;
-      background: rgba(255, 255, 255, 0.42);
-      border: 1px solid rgba(255, 255, 255, 0.62);
+      width: min(920px, calc(100% - 28px));
+      margin: 14px auto;
+      padding: 10px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.54);
+      border: 1px solid rgba(255, 255, 255, 0.72);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
+      backdrop-filter: blur(22px);
     }
 
     .glass {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: var(--radius-xl);
-      box-shadow: 0 12px 28px rgba(16, 35, 61, 0.06);
-      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+      backdrop-filter: blur(24px);
     }
 
     .hero {
-      display: grid;
-      gap: 18px;
-      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      display: block;
     }
 
     .hero-copy,
-    .hero-gallery,
     .workspace {
       padding: 28px;
     }
@@ -106,52 +103,13 @@
       max-width: 48rem;
     }
 
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .chip {
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(16, 35, 61, 0.05);
-      font-weight: 600;
-    }
-
-    .gallery-grid {
-      display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-top: 14px;
-    }
-
-    .gallery-card {
-      padding: 16px;
-      border-radius: 22px;
-      background: var(--panel-strong);
-      border: 1px solid var(--line);
-      min-height: 168px;
-    }
-
-    .gallery-visual {
-      display: grid;
-      place-items: center;
-      height: 92px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(0, 122, 255, 0.08), rgba(16, 35, 61, 0.03));
-      margin-bottom: 12px;
-      overflow: hidden;
-    }
-
     .art {
       width: 100%;
       height: 100%;
     }
 
     .workspace {
-      margin-top: 18px;
+      margin-top: 14px;
       display: grid;
       gap: 18px;
     }
@@ -184,7 +142,7 @@
     .progress-box,
     .question-card,
     .finish-card {
-      padding: 22px;
+      padding: 24px;
       border-radius: var(--radius-lg);
       background: var(--panel-strong);
       border: 1px solid var(--line);
@@ -271,10 +229,10 @@
       display: flex;
       gap: 12px;
       align-items: flex-start;
-      padding: 15px 16px;
+      padding: 16px 18px;
       border-radius: 18px;
-      background: rgba(16, 35, 61, 0.04);
-      border: 1px solid rgba(16, 35, 61, 0.06);
+      background: rgba(248, 250, 252, 0.95);
+      border: 1px solid rgba(15, 23, 42, 0.06);
     }
 
     textarea, input[type="text"], input[type="password"] {
@@ -447,28 +405,17 @@
       box-shadow: none;
     }
 
-    @media (max-width: 940px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-    }
-
     @media (max-width: 680px) {
       .shell {
-        width: min(100% - 10px, 1220px);
+        width: min(100% - 10px, 920px);
         margin: 6px auto;
         padding: 8px;
         border-radius: 26px;
       }
 
       .hero-copy,
-      .hero-gallery,
       .workspace {
         padding: 18px;
-      }
-
-      .gallery-grid {
-        grid-template-columns: 1fr;
       }
 
       .question-head {
@@ -502,64 +449,6 @@
           Beantworte Fragen zu Zuständen, Eingaben, Übergängen und Ausgaben.
           Entscheide bei mehreren Alltagsbeispielen, ob es sich um einen Automaten handelt.
         </p>
-      </section>
-
-      <section class="hero-gallery glass">
-        <div class="eyebrow">Beispiele</div>
-        <h2>Automaten im Alltag</h2>
-        <div class="gallery-grid">
-          <article class="gallery-card">
-            <div class="gallery-visual">
-              <svg class="art" viewBox="0 0 220 100" aria-hidden="true">
-                <rect x="66" y="8" width="88" height="84" rx="16" fill="#dde9fb"></rect>
-                <rect x="84" y="20" width="52" height="22" rx="8" fill="#92c4ff"></rect>
-                <circle cx="94" cy="60" r="7" fill="#007aff"></circle>
-                <circle cx="112" cy="60" r="7" fill="#007aff"></circle>
-                <circle cx="130" cy="60" r="7" fill="#007aff"></circle>
-                <rect x="101" y="73" width="18" height="10" rx="3" fill="#607188"></rect>
-              </svg>
-            </div>
-            <strong>Snackautomat</strong>
-            <div class="muted">Eingabe, Zustand, Ausgabe</div>
-          </article>
-          <article class="gallery-card">
-            <div class="gallery-visual">
-              <svg class="art" viewBox="0 0 220 100" aria-hidden="true">
-                <circle cx="58" cy="50" r="24" fill="#d7ecff"></circle>
-                <circle cx="110" cy="50" r="24" fill="#d7ecff"></circle>
-                <circle cx="162" cy="50" r="24" fill="#d7ecff"></circle>
-                <path d="M82 50h22" stroke="#007aff" stroke-width="6" stroke-linecap="round"></path>
-                <path d="M134 50h22" stroke="#007aff" stroke-width="6" stroke-linecap="round"></path>
-              </svg>
-            </div>
-            <strong>Zustandsdiagramm</strong>
-            <div class="muted">Zustände und Übergänge</div>
-          </article>
-          <article class="gallery-card">
-            <div class="gallery-visual">
-              <svg class="art" viewBox="0 0 220 100" aria-hidden="true">
-                <rect x="70" y="10" width="80" height="78" rx="18" fill="#def5e8"></rect>
-                <circle cx="110" cy="50" r="22" fill="#9ad8b6"></circle>
-                <circle cx="110" cy="50" r="12" fill="#f7fbff"></circle>
-                <rect x="84" y="22" width="24" height="8" rx="4" fill="#1f9d55"></rect>
-              </svg>
-            </div>
-            <strong>Waschmaschine</strong>
-            <div class="muted">Programm, Start, Ende</div>
-          </article>
-          <article class="gallery-card">
-            <div class="gallery-visual">
-              <svg class="art" viewBox="0 0 220 100" aria-hidden="true">
-                <rect x="86" y="8" width="48" height="84" rx="16" fill="#fce8bf"></rect>
-                <circle cx="110" cy="28" r="8" fill="#ef4444"></circle>
-                <circle cx="110" cy="50" r="8" fill="#f59e0b"></circle>
-                <circle cx="110" cy="72" r="8" fill="#22c55e"></circle>
-              </svg>
-            </div>
-            <strong>Ampel</strong>
-            <div class="muted">Geordneter Wechsel von Zuständen</div>
-          </article>
-        </div>
       </section>
     </section>
 
@@ -1106,6 +995,8 @@
           queueSave();
         });
       }
+
+      updateNextAvailability();
     }
 
     function renderFinish() {
@@ -1148,6 +1039,21 @@
       renderQuestion();
     }
 
+    function currentQuestionHasAnswer() {
+      const question = questions[state.currentIndex];
+      if (!question) return false;
+      if (getSkippedEntry(question)) return true;
+      const answer = state.answers[question.id];
+      if (question.type === "single") return typeof answer === "number";
+      if (question.type === "yesno") return answer === "ja" || answer === "nein";
+      return typeof answer === "string" && answer.trim().length > 0;
+    }
+
+    function updateNextAvailability() {
+      if (state.currentIndex >= questions.length) return;
+      els.nextBtn.disabled = !currentQuestionHasAnswer();
+    }
+
     async function renderReward() {
       const slide = rewardSlides[state.rewardIndex] || rewardSlides[0];
       try {
@@ -1162,6 +1068,9 @@
     }
 
     function goNext() {
+      if (!currentQuestionHasAnswer()) {
+        return;
+      }
       if (state.currentIndex < questions.length) {
         state.currentIndex += 1;
         queueSave();

@@ -149,7 +149,6 @@
     }
 
     .progress {
-      margin-top: 10px;
       height: 12px;
       border-radius: 999px;
       background: rgba(16, 35, 61, 0.08);
@@ -195,6 +194,10 @@
 
     .question-visual {
       margin-top: 18px;
+    }
+
+    #progressLabel {
+      display: none;
     }
 
     .example-grid {
@@ -316,12 +319,29 @@
     }
 
     .overlay-card {
-      width: min(440px, 100%);
+      width: min(760px, 100%);
       padding: 24px;
       border-radius: 28px;
       background: rgba(255, 255, 255, 0.92);
       border: 1px solid rgba(255, 255, 255, 0.72);
       box-shadow: var(--shadow);
+    }
+
+    .solution-overview {
+      margin-top: 14px;
+      max-height: 48vh;
+      overflow: auto;
+      display: grid;
+      gap: 10px;
+    }
+
+    .solution-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(16, 35, 61, 0.05);
+      border: 1px solid rgba(15, 23, 42, 0.05);
+      font-size: 0.96rem;
+      line-height: 1.45;
     }
 
     .finish-form {
@@ -381,7 +401,7 @@
       </div>
 
       <section class="progress-box">
-        <strong id="progressLabel">Frage 1</strong>
+        <strong id="progressLabel"></strong>
         <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
       </section>
 
@@ -424,9 +444,11 @@
       <input id="helperPin" type="password" inputmode="numeric" autocomplete="new-password" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="PIN" />
       <div class="row" style="margin-top: 14px;">
         <button class="primary" id="unlockHelperBtn">Überspringen</button>
+        <button class="secondary" id="showSolutionsBtn">Lösungen</button>
         <button class="secondary" id="closeHelperOverlayBtn">Schließen</button>
       </div>
       <div class="status-line" id="helperMessage"></div>
+      <div class="solution-overview hidden" id="solutionOverview"></div>
     </div>
   </div>
 
@@ -445,6 +467,7 @@
         type: "single",
         text: "Welcher Zustand ist der Startzustand eines Snackautomaten ohne eingeworfenes Geld?",
         help: "Überlege, in welchem Zustand der Automat ganz am Anfang ist.",
+        visual: "snack-start",
         options: ["0 Euro", "50 Cent", "1 Euro", "2 Euro"],
         correct: 0
       },
@@ -454,6 +477,7 @@
         type: "single",
         text: "Welche Eingaben akzeptiert der Automat?",
         help: "Achte auf die zugelassenen Münzen.",
+        visual: "coins",
         options: ["10 Cent, 20 Cent und 50 Cent", "50 Cent, 1 Euro und 2 Euro", "Nur 1 Euro und 2 Euro", "Beliebige Münzen"],
         correct: 1
       },
@@ -463,6 +487,7 @@
         type: "single",
         text: "Was passiert im Zustand 0 Euro, wenn die Taste für Gummibärchen gedrückt wird?",
         help: "Prüfe, ob bereits genug Geld vorhanden ist.",
+        visual: "snack-button",
         options: ["Die Gummibärchen werden ausgegeben", "Der Zustand bleibt bei 0 Euro", "Der Zustand springt auf 1 Euro", "Es wird Rückgeld ausgegeben"],
         correct: 1
       },
@@ -472,6 +497,7 @@
         type: "single",
         text: "Welche Beschreibung passt am besten zur Rückgabe-Taste?",
         help: "Denke daran, was mit dem Zustand und dem Geld passiert.",
+        visual: "refund",
         options: [
           "Sie erhöht den Geldbetrag im Automaten",
           "Sie setzt den Automaten je nach Zustand zurück und gibt Geld zurück",
@@ -486,6 +512,7 @@
         type: "single",
         text: "Warum kann der Automat kein Wechselgeld ausgeben?",
         help: "Die Antwort steckt im Aufbau des Modells.",
+        visual: "no-change",
         options: [
           "Weil nur Zustände für eingeworfene Beträge genutzt werden und keine Restgeld-Regel vorgesehen ist",
           "Weil 2-Euro-Münzen verboten sind",
@@ -500,6 +527,7 @@
         type: "single",
         text: "Welche Zustandsfolge ist möglich, wenn zuerst 50 Cent und danach 1 Euro eingeworfen werden?",
         help: "Beobachte die Reihenfolge der Beträge.",
+        visual: "state-path",
         options: [
           "0 Euro → 1 Euro → 2 Euro",
           "0 Euro → 50 Cent → 1,50 Euro",
@@ -514,6 +542,7 @@
         type: "single",
         text: "Wann gibt ein Automat eine Ausgabe aus?",
         help: "Achte darauf, wann eine passende Eingabe oder ein passender Zustand erreicht ist.",
+        visual: "output",
         options: [
           "Immer nach jeder Eingabe",
           "Wenn die passende Bedingung erfüllt ist",
@@ -560,6 +589,7 @@
         type: "single",
         text: "Welche Information steht in einem Zustandsdiagramm meistens an einem Pfeil?",
         help: "Denke an das, was zwischen zwei Zuständen passiert.",
+        visual: "arrow-label",
         options: [
           "Die Farbe eines Zustands",
           "Die Eingabe oder Aktion, die den Übergang auslöst",
@@ -574,6 +604,7 @@
         type: "single",
         text: "Was ist ein Folgezustand?",
         help: "Überlege, welcher Zustand nach einer Eingabe erreicht wird.",
+        visual: "follow-state",
         options: [
           "Der Zustand vor dem Start",
           "Der Zustand nach einer Eingabe oder Aktion",
@@ -588,6 +619,7 @@
         type: "single",
         text: "Im Automatenlabor testest du einen Getränkeautomaten. Nach dem Einwerfen von 1 Euro zeigt er 1 Euro an. Welche Information fehlt dir noch, um sicher sagen zu können, ob ein Saft ausgegeben wird?",
         help: "Überlege, welche Bedingung noch fehlen könnte.",
+        visual: "lab-drink",
         options: [
           "Der Name der Schule",
           "Der Preis des Safts oder die Regel für die Ausgabe",
@@ -602,6 +634,7 @@
         type: "single",
         text: "Ein Testautomat hat die Zustände Start, Karte geprüft und Tür offen. Welche Reihenfolge passt zu einem sinnvollen Ablauf?",
         help: "Denke an einen geordneten Übergang.",
+        visual: "door-sequence",
         options: [
           "Tür offen → Start → Karte geprüft",
           "Start → Karte geprüft → Tür offen",
@@ -616,6 +649,7 @@
         type: "single",
         text: "Ein Automat bleibt nach jeder Eingabe immer im gleichen Zustand und gibt nie etwas aus. Was beschreibt das am besten?",
         help: "Frage dich, was für ein Verhalten dem Automaten fehlt.",
+        visual: "stuck-state",
         options: [
           "Er hat keine sinnvollen Übergänge oder Ausgaben",
           "Er hat zu viele Produkte",
@@ -630,6 +664,7 @@
         type: "single",
         text: "Du sollst für das Automatenlabor einen einfachen Tierfutterautomaten planen. Welche Angabe gehört am besten an einen Pfeil im Zustandsdiagramm?",
         help: "Gesucht ist die Information, die den Übergang auslöst.",
+        visual: "pet-food",
         options: [
           "Hund glücklich",
           "2 Euro eingeworfen",
@@ -674,6 +709,8 @@
       helperPin: document.getElementById("helperPin"),
       helperMessage: document.getElementById("helperMessage"),
       unlockHelperBtn: document.getElementById("unlockHelperBtn"),
+      showSolutionsBtn: document.getElementById("showSolutionsBtn"),
+      solutionOverview: document.getElementById("solutionOverview"),
       closeHelperOverlayBtn: document.getElementById("closeHelperOverlayBtn")
     };
 
@@ -813,6 +850,19 @@
 
     function updateBadges() {}
 
+    function buildSolutionsOverviewHtml() {
+      return questions
+        .filter((question) => question.type !== "text")
+        .map((question) => `
+          <div class="solution-item">
+            <strong>${escapeHtml(question.tag)}</strong><br />
+            ${escapeHtml(question.text)}<br />
+            <span class="muted">Richtige Antwort: ${escapeHtml(getCorrectAnswer(question))}</span>
+          </div>
+        `)
+        .join("");
+    }
+
     function exampleVisual(kind) {
       const visuals = {
         traffic: `
@@ -876,6 +926,221 @@
               <div class="muted">Auswahl, Zahlung und Ticket-Ausgabe.</div>
             </div>
           </div>
+        `,
+        "snack-start": `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <rect x="42" y="10" width="76" height="60" rx="18" fill="#dfe9f8"></rect>
+                  <rect x="58" y="22" width="44" height="10" rx="5" fill="#8bc3ff"></rect>
+                  <text x="80" y="56" text-anchor="middle" font-size="16" fill="#10233d" font-family="Helvetica">0 €</text>
+                </svg>
+              </div>
+              <strong>Startzustand</strong>
+              <div class="muted">Der Automat wartet auf die erste Eingabe.</div>
+            </div>
+          </div>
+        `,
+        coins: `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <circle cx="48" cy="40" r="16" fill="#f7c948"></circle>
+                  <circle cx="80" cy="32" r="16" fill="#ffd166"></circle>
+                  <circle cx="112" cy="46" r="16" fill="#f4b942"></circle>
+                  <text x="48" y="45" text-anchor="middle" font-size="11" fill="#6b4f00" font-family="Helvetica">50c</text>
+                  <text x="80" y="37" text-anchor="middle" font-size="11" fill="#6b4f00" font-family="Helvetica">1€</text>
+                  <text x="112" y="51" text-anchor="middle" font-size="11" fill="#6b4f00" font-family="Helvetica">2€</text>
+                </svg>
+              </div>
+              <strong>Eingaben</strong>
+              <div class="muted">Nur bestimmte Münzen sind erlaubt.</div>
+            </div>
+          </div>
+        `,
+        "snack-button": `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <rect x="32" y="12" width="96" height="56" rx="18" fill="#eef3fb"></rect>
+                  <circle cx="56" cy="40" r="10" fill="#007aff"></circle>
+                  <circle cx="80" cy="40" r="10" fill="#94a3b8"></circle>
+                  <circle cx="104" cy="40" r="10" fill="#94a3b8"></circle>
+                  <text x="56" y="43" text-anchor="middle" font-size="8" fill="white" font-family="Helvetica">B</text>
+                </svg>
+              </div>
+              <strong>Taste drücken</strong>
+              <div class="muted">Ohne genug Geld bleibt der Zustand gleich.</div>
+            </div>
+          </div>
+        `,
+        refund: `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <path d="M54 26h38" stroke="#007aff" stroke-width="6" stroke-linecap="round"></path>
+                  <path d="M58 18l-12 8 12 8" fill="none" stroke="#007aff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <circle cx="108" cy="44" r="14" fill="#ffd166"></circle>
+                  <text x="108" y="49" text-anchor="middle" font-size="11" fill="#6b4f00" font-family="Helvetica">€</text>
+                </svg>
+              </div>
+              <strong>Rückgabe</strong>
+              <div class="muted">Geld zurück und zurück zum passenden Zustand.</div>
+            </div>
+          </div>
+        `,
+        "no-change": `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <circle cx="58" cy="40" r="18" fill="#ffd166"></circle>
+                  <circle cx="102" cy="40" r="18" fill="#eef2f7"></circle>
+                  <path d="M78 40h12" stroke="#e11d48" stroke-width="6" stroke-linecap="round"></path>
+                  <path d="M88 30l12 10-12 10" fill="none" stroke="#e11d48" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+              <strong>Kein Wechselgeld</strong>
+              <div class="muted">Es fehlt eine Regel für das Restgeld.</div>
+            </div>
+          </div>
+        `,
+        "state-path": `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <circle cx="34" cy="40" r="16" fill="#d7ecff"></circle>
+                  <circle cx="80" cy="40" r="16" fill="#d7ecff"></circle>
+                  <circle cx="126" cy="40" r="16" fill="#d7ecff"></circle>
+                  <path d="M50 40h14" stroke="#007aff" stroke-width="5" stroke-linecap="round"></path>
+                  <path d="M96 40h14" stroke="#007aff" stroke-width="5" stroke-linecap="round"></path>
+                  <text x="34" y="44" text-anchor="middle" font-size="9" fill="#10233d" font-family="Helvetica">0</text>
+                  <text x="80" y="44" text-anchor="middle" font-size="9" fill="#10233d" font-family="Helvetica">50c</text>
+                  <text x="126" y="44" text-anchor="middle" font-size="9" fill="#10233d" font-family="Helvetica">1,50</text>
+                </svg>
+              </div>
+              <strong>Zustandsfolge</strong>
+              <div class="muted">Mehrere Eingaben erzeugen mehrere Übergänge.</div>
+            </div>
+          </div>
+        `,
+        output: `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <rect x="36" y="12" width="52" height="56" rx="14" fill="#dfe9f8"></rect>
+                  <rect x="96" y="28" width="28" height="24" rx="8" fill="#def5e8"></rect>
+                  <path d="M88 40h10" stroke="#1f9d55" stroke-width="5" stroke-linecap="round"></path>
+                  <path d="M94 34l8 6-8 6" fill="none" stroke="#1f9d55" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+              <strong>Ausgabe</strong>
+              <div class="muted">Erst bei erfüllter Bedingung kommt etwas heraus.</div>
+            </div>
+          </div>
+        `,
+        "arrow-label": `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <circle cx="42" cy="40" r="16" fill="#d7ecff"></circle>
+                  <circle cx="118" cy="40" r="16" fill="#d7ecff"></circle>
+                  <path d="M58 40h40" stroke="#007aff" stroke-width="5" stroke-linecap="round"></path>
+                  <path d="M90 32l10 8-10 8" fill="none" stroke="#007aff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <text x="80" y="24" text-anchor="middle" font-size="10" fill="#10233d" font-family="Helvetica">Eingabe</text>
+                </svg>
+              </div>
+              <strong>Pfeilbeschriftung</strong>
+              <div class="muted">Am Pfeil steht oft die auslösende Aktion.</div>
+            </div>
+          </div>
+        `,
+        "follow-state": `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <circle cx="50" cy="40" r="18" fill="#eef2f7"></circle>
+                  <circle cx="110" cy="40" r="18" fill="#d7ecff"></circle>
+                  <path d="M68 40h18" stroke="#007aff" stroke-width="5" stroke-linecap="round"></path>
+                  <path d="M80 32l10 8-10 8" fill="none" stroke="#007aff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+              <strong>Folgezustand</strong>
+              <div class="muted">Der Zustand nach der Eingabe liegt am Ziel des Pfeils.</div>
+            </div>
+          </div>
+        `,
+        "lab-drink": `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <rect x="30" y="10" width="48" height="60" rx="16" fill="#dfe9f8"></rect>
+                  <text x="54" y="44" text-anchor="middle" font-size="14" fill="#10233d" font-family="Helvetica">1 €</text>
+                  <rect x="96" y="16" width="24" height="42" rx="8" fill="#ffd166"></rect>
+                </svg>
+              </div>
+              <strong>Laborauftrag</strong>
+              <div class="muted">Für die Ausgabe fehlt noch die Preisregel.</div>
+            </div>
+          </div>
+        `,
+        "door-sequence": `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <circle cx="32" cy="40" r="14" fill="#d7ecff"></circle>
+                  <circle cx="80" cy="40" r="14" fill="#d7ecff"></circle>
+                  <circle cx="128" cy="40" r="14" fill="#d7ecff"></circle>
+                  <path d="M46 40h20" stroke="#007aff" stroke-width="5" stroke-linecap="round"></path>
+                  <path d="M94 40h20" stroke="#007aff" stroke-width="5" stroke-linecap="round"></path>
+                </svg>
+              </div>
+              <strong>Ablauf prüfen</strong>
+              <div class="muted">Ein sinnvoller Automat arbeitet in klarer Reihenfolge.</div>
+            </div>
+          </div>
+        `,
+        "stuck-state": `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <circle cx="80" cy="40" r="20" fill="#eef2f7"></circle>
+                  <path d="M80 20c10 0 18 8 18 18" fill="none" stroke="#e11d48" stroke-width="5" stroke-linecap="round"></path>
+                  <path d="M101 34l-3 10-9-5" fill="none" stroke="#e11d48" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+              <strong>Festgefahren</strong>
+              <div class="muted">Ohne Übergänge und Ausgabe funktioniert der Automat nicht richtig.</div>
+            </div>
+          </div>
+        `,
+        "pet-food": `
+          <div class="example-grid">
+            <div class="example-card">
+              <div class="example-visual">
+                <svg class="art" viewBox="0 0 160 80">
+                  <circle cx="46" cy="40" r="16" fill="#d7ecff"></circle>
+                  <circle cx="114" cy="40" r="16" fill="#d7ecff"></circle>
+                  <path d="M62 40h30" stroke="#007aff" stroke-width="5" stroke-linecap="round"></path>
+                  <path d="M84 32l10 8-10 8" fill="none" stroke="#007aff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <text x="78" y="24" text-anchor="middle" font-size="10" fill="#10233d" font-family="Helvetica">2 €</text>
+                </svg>
+              </div>
+              <strong>Planen</strong>
+              <div class="muted">Am Pfeil steht die Eingabe oder Regel für den Wechsel.</div>
+            </div>
+          </div>
         `
       };
       return visuals[kind] || "";
@@ -885,7 +1150,6 @@
       const question = questions[state.currentIndex];
       const progress = ((state.currentIndex + 1) / questions.length) * 100;
 
-      els.progressLabel.textContent = `Frage ${state.currentIndex + 1}`;
       els.progressBar.style.width = `${progress}%`;
 
       els.questionText.textContent = question.text;
@@ -1039,6 +1303,21 @@
         els.helperMessage.textContent = "";
       }, 500);
       goNext();
+    }
+
+    function verifyHelperPin() {
+      const pin = els.helperPin.value.trim();
+      if (!pin) {
+        els.helperMessage.textContent = "Bitte gib zuerst die PIN ein.";
+        return false;
+      }
+
+      if (window.sha256(pin) !== HELPER_PIN_HASH) {
+        els.helperMessage.textContent = "Die PIN ist nicht korrekt.";
+        return false;
+      }
+
+      return true;
     }
 
     function buildReportText(name) {
@@ -1288,18 +1567,16 @@
     }
 
     async function unlockHelperMenu() {
-      const pin = els.helperPin.value.trim();
-      if (!pin) {
-        els.helperMessage.textContent = "Bitte gib zuerst die PIN ein.";
-        return;
-      }
-
-      if (window.sha256(pin) !== HELPER_PIN_HASH) {
-        els.helperMessage.textContent = "Die PIN ist nicht korrekt.";
-        return;
-      }
-
+      if (!verifyHelperPin()) return;
+      els.solutionOverview.classList.add("hidden");
       skipCurrentQuestion();
+    }
+
+    function showSolutions() {
+      if (!verifyHelperPin()) return;
+      els.helperMessage.textContent = "Lösungsübersicht";
+      els.solutionOverview.innerHTML = buildSolutionsOverviewHtml();
+      els.solutionOverview.classList.remove("hidden");
     }
 
     els.nextBtn.addEventListener("click", goNext);
@@ -1308,6 +1585,7 @@
     els.restartBtn.addEventListener("click", restart);
     els.heroTitle.addEventListener("click", handleTitleTap);
     els.unlockHelperBtn.addEventListener("click", () => unlockHelperMenu().catch(console.error));
+    els.showSolutionsBtn.addEventListener("click", showSolutions);
     els.helperPin.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -1319,6 +1597,7 @@
       updateBadges();
       els.helperOverlay.classList.add("hidden");
       els.helperMessage.textContent = "";
+      els.solutionOverview.classList.add("hidden");
     });
     els.studentName.addEventListener("input", () => {
       state.studentName = els.studentName.value;

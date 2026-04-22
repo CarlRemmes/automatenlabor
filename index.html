@@ -382,9 +382,9 @@
     }
 
     .reward-stage {
-      flex: 1;
-      min-height: 0;
-      max-height: calc(100vh - 210px);
+      width: 100%;
+      height: min(72vh, 920px);
+      min-height: 360px;
       border-radius: 28px;
       background: white;
       overflow: hidden;
@@ -477,6 +477,15 @@
 
       .row button {
         width: 100%;
+      }
+
+      .reward-box {
+        padding: 16px;
+      }
+
+      .reward-stage {
+        height: min(64vh, 620px);
+        min-height: 280px;
       }
     }
   </style>
@@ -1113,7 +1122,7 @@
       document.body.classList.toggle("reward-mode", state.savedLocally);
       if (state.savedLocally) {
         els.downloadMessage.textContent = "Gespeichert.";
-        renderReward();
+        renderReward().catch(console.error);
       }
 
       if (!state.skipped.length) {
@@ -1139,9 +1148,14 @@
       renderQuestion();
     }
 
-    function renderReward() {
+    async function renderReward() {
       const slide = rewardSlides[state.rewardIndex] || rewardSlides[0];
-      els.rewardStage.innerHTML = `<img src="${slide.src}" alt="Hundebild zur Belohnung" />`;
+      try {
+        const imageUrl = await loadImageDataUrl(slide.src);
+        els.rewardStage.innerHTML = `<img src="${imageUrl}" alt="Hundebild zur Belohnung" />`;
+      } catch (error) {
+        els.rewardStage.innerHTML = `<div style="display:grid;place-items:center;height:100%;padding:24px;text-align:center;color:#607188;">Das Belohnungsbild konnte gerade nicht geladen werden.</div>`;
+      }
       document.querySelector(".reward-message").textContent = slide.caption;
       els.prevRewardBtn.disabled = state.rewardIndex === 0;
       els.nextRewardBtn.disabled = state.rewardIndex === rewardSlides.length - 1;
@@ -1478,14 +1492,14 @@
       if (state.rewardIndex > 0) {
         state.rewardIndex -= 1;
         saveLocalState();
-        renderReward();
+        renderReward().catch(console.error);
       }
     });
     els.nextRewardBtn.addEventListener("click", () => {
       if (state.rewardIndex < rewardSlides.length - 1) {
         state.rewardIndex += 1;
         saveLocalState();
-        renderReward();
+        renderReward().catch(console.error);
       }
     });
 

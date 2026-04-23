@@ -129,19 +129,19 @@
     }
 
     .brand-mark {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
       display: grid;
       place-items: center;
-      background: rgba(255, 255, 255, 0.98);
+      background: rgba(255, 255, 255, 0.92);
       border: 1px solid rgba(31, 42, 55, 0.08);
-      box-shadow: 0 8px 20px rgba(31, 42, 55, 0.06);
+      box-shadow: 0 6px 16px rgba(31, 42, 55, 0.05);
     }
 
     .brand-mark svg {
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
     }
 
     .brand-meta {
@@ -453,6 +453,57 @@
 
     .photo-card.machine-shot .machine-photo {
       width: min(100%, 280px);
+    }
+
+    .photo-card.diagram-photo .example-visual,
+    .photo-card.object-photo .example-visual {
+      min-height: 180px;
+      padding: 8px;
+      background: linear-gradient(180deg, #f8fbff, #fdfefe);
+    }
+
+    .photo-card.diagram-photo .machine-photo,
+    .photo-card.object-photo .machine-photo {
+      width: auto;
+      max-width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(31, 42, 55, 0.05);
+    }
+
+    .marked-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .marker {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-size: 0.83rem;
+      font-weight: 800;
+      color: #ffffff;
+      background: rgba(22, 119, 255, 0.92);
+      box-shadow: 0 8px 18px rgba(22, 119, 255, 0.24);
+      border: 2px solid rgba(255,255,255,0.92);
+    }
+
+    .marker-note {
+      position: absolute;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(31, 42, 55, 0.08);
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(31, 42, 55, 0.08);
+      white-space: nowrap;
     }
 
     .answers {
@@ -808,10 +859,10 @@
           <div class="brand-lockup">
             <div class="brand-mark" aria-hidden="true">
               <svg viewBox="0 0 32 32" fill="none">
-                <rect x="7" y="5" width="18" height="22" rx="6" stroke="#1f2a37" stroke-width="2"></rect>
-                <rect x="11" y="9" width="10" height="6" rx="2.5" fill="#1677ff"></rect>
-                <circle cx="12" cy="20" r="2" fill="#2e7d5a"></circle>
-                <circle cx="20" cy="20" r="2" fill="#1f2a37"></circle>
+                <rect x="8" y="4.5" width="16" height="23" rx="6.5" stroke="#1f2a37" stroke-width="2"></rect>
+                <path d="M12 10h8" stroke="#1f2a37" stroke-width="2" stroke-linecap="round"></path>
+                <path d="M12 15h8" stroke="#1f2a37" stroke-width="2" stroke-linecap="round" opacity="0.45"></path>
+                <circle cx="16" cy="22" r="2.5" fill="#1f2a37"></circle>
               </svg>
             </div>
             <div class="brand-meta">
@@ -871,10 +922,10 @@
           <div class="brand-lockup app-brand" id="heroTitle">
             <div class="brand-mark" aria-hidden="true">
               <svg viewBox="0 0 32 32" fill="none">
-                <rect x="7" y="5" width="18" height="22" rx="6" stroke="#1f2a37" stroke-width="2"></rect>
-                <rect x="11" y="9" width="10" height="6" rx="2.5" fill="#1677ff"></rect>
-                <circle cx="12" cy="20" r="2" fill="#2e7d5a"></circle>
-                <circle cx="20" cy="20" r="2" fill="#1f2a37"></circle>
+                <rect x="8" y="4.5" width="16" height="23" rx="6.5" stroke="#1f2a37" stroke-width="2"></rect>
+                <path d="M12 10h8" stroke="#1f2a37" stroke-width="2" stroke-linecap="round"></path>
+                <path d="M12 15h8" stroke="#1f2a37" stroke-width="2" stroke-linecap="round" opacity="0.45"></path>
+                <circle cx="16" cy="22" r="2.5" fill="#1f2a37"></circle>
               </svg>
             </div>
             <div class="brand-meta">
@@ -980,7 +1031,7 @@
         type: "single",
         text: "Welche Taste würdest du für einen Schokoriegel am ehesten drücken?",
         help: "Vergleiche Produktnamen und Buchstaben.",
-        visual: "machine-photo",
+        visual: "machine-buttons-photo",
         options: ["G", "S", "C", "R"],
         correct: 1,
         explanation: "Die Taste S passt zum Schokoriegel, weil der Anfangsbuchstabe mit dem Produktnamen auf dem Automaten zusammenpasst."
@@ -1000,7 +1051,7 @@
         type: "text",
         text: "Nenne zwei Stellen am Automaten, an denen der Mensch etwas eingeben oder auslösen kann.",
         help: "Gesucht sind Bedienelemente oder Eingaben von außen.",
-        visual: "machine-photo",
+        visual: "machine-inputs-photo",
         sampleAnswer: "Zum Beispiel Münzen einwerfen und eine Taste drücken.",
         placeholder: "Man kann ..."
       },
@@ -1009,7 +1060,7 @@
         type: "text",
         text: "Wo kommt das gekaufte Produkt wahrscheinlich heraus? Beschreibe die Stelle im Bild.",
         help: "Suche nach einem Fach oder einer Öffnung für die Ausgabe.",
-        visual: "machine-photo",
+        visual: "machine-output-photo",
         sampleAnswer: "Unten links im großen Ausgabefach.",
         placeholder: "Das Produkt kommt wahrscheinlich ..."
       },
@@ -1027,7 +1078,7 @@
         type: "single",
         text: "Welche Aussage lässt sich sicher aus dem Bild ablesen?",
         help: "Wähle nur etwas aus, das wirklich im Bild steht oder zu sehen ist.",
-        visual: "machine-photo",
+        visual: "machine-money-photo",
         needsReason: true,
         options: [
           "Der Automat gibt Wechselgeld aus.",
@@ -1197,7 +1248,7 @@
         type: "single",
         text: "Welche Eingabe löst im Zustandsgraphen den Wechsel zwischen 'Licht aus' und 'Licht an' aus?",
         help: "Lies die Beschriftung an den Pfeilen genau.",
-        visual: "stategraph-photo",
+        visual: "stategraph-marked-photo",
         options: [
           "Münze einwerfen",
           "Taster gedrückt",
@@ -1212,7 +1263,7 @@
         type: "text",
         text: "Erkläre am Zustandsgraphen kurz, was dort ein Zustand und was dort eine Eingabe ist.",
         help: "Nenne die Kreise und die Pfeilbeschriftung in deiner Erklärung.",
-        visual: "stategraph-photo",
+        visual: "stategraph-marked-photo",
         sampleAnswer: "Die Zustände sind 'Licht an' und 'Licht aus'. Die Eingabe ist 'Taster gedrückt', weil sie an den Pfeilen steht und den Wechsel auslöst.",
         placeholder: "Im Zustandsgraphen sind die Zustände ..."
       },
@@ -1373,7 +1424,27 @@
     function ensureQuestionOrder() {
       const expectedLength = questionBank.length;
       if (Array.isArray(state.questionOrder) && state.questionOrder.length === expectedLength) return;
-      state.questionOrder = shuffleArray(Array.from({ length: expectedLength }, (_, index) => index));
+      const snackIds = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11", "q12", "q13"];
+      const machineIds = ["q14", "q15", "q16", "q17", "q18", "q19"];
+      const contrastIds = ["q20", "q21", "q22", "q23"];
+      const finalId = "q24";
+
+      const snack = shuffleArray(questionBank.filter((question) => snackIds.includes(question.id)).map((question) => questionBank.indexOf(question)));
+      const machines = shuffleArray(questionBank.filter((question) => machineIds.includes(question.id)).map((question) => questionBank.indexOf(question)));
+      const contrasts = shuffleArray(questionBank.filter((question) => contrastIds.includes(question.id)).map((question) => questionBank.indexOf(question)));
+      const finalIndex = questionBank.findIndex((question) => question.id === finalId);
+
+      const order = [];
+
+      while (snack.length || machines.length || contrasts.length) {
+        if (snack.length) order.push(snack.shift());
+        if (machines.length) order.push(machines.shift());
+        if (snack.length) order.push(snack.shift());
+        if (contrasts.length) order.push(contrasts.shift());
+      }
+
+      if (finalIndex >= 0) order.push(finalIndex);
+      state.questionOrder = order;
     }
 
     function rebuildQuestions() {
@@ -1609,6 +1680,22 @@
       timerInterval = setInterval(updateTimer, 1000);
     }
 
+    function buildMarkedMachineVisual(markers) {
+      return `
+        <div class="example-grid">
+          <div class="example-card photo-card machine-shot">
+            <div class="example-visual marked-visual">
+              <img class="machine-photo" src="assets/automat.png" alt="Snackautomat mit markierten Stellen" />
+              ${markers.map((marker) => `
+                <span class="marker" style="left:${marker.x}; top:${marker.y};">${marker.label}</span>
+                ${marker.note ? `<span class="marker-note" style="left:${marker.noteX}; top:${marker.noteY};">${marker.note}</span>` : ""}
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     function exampleVisual(kind) {
       const visuals = {
         "machine-photo": `
@@ -1620,6 +1707,19 @@
             </div>
           </div>
         `,
+        "machine-buttons-photo": buildMarkedMachineVisual([
+          { label: "1", x: "72%", y: "34%", note: "Tasten", noteX: "61%", noteY: "26%" }
+        ]),
+        "machine-inputs-photo": buildMarkedMachineVisual([
+          { label: "1", x: "72%", y: "34%", note: "Taste", noteX: "61%", noteY: "26%" },
+          { label: "2", x: "76%", y: "63%", note: "Münzen", noteX: "63%", noteY: "72%" }
+        ]),
+        "machine-output-photo": buildMarkedMachineVisual([
+          { label: "1", x: "17%", y: "82%", note: "Ausgabefach", noteX: "19%", noteY: "70%" }
+        ]),
+        "machine-money-photo": buildMarkedMachineVisual([
+          { label: "1", x: "77%", y: "68%", note: "Akzeptiert", noteX: "60%", noteY: "78%" }
+        ]),
         "ticket-photo": `
           <div class="example-grid">
             <div class="example-card photo-card wide-photo">
@@ -1649,16 +1749,29 @@
         `,
         "stategraph-photo": `
           <div class="example-grid">
-            <div class="example-card photo-card wide-photo">
+            <div class="example-card photo-card diagram-photo">
               <div class="example-visual">
                 <img class="machine-photo" src="assets/example-stategraph.jpeg" alt="Zustandsgraph mit den Zuständen Licht an und Licht aus" />
               </div>
             </div>
           </div>
         `,
+        "stategraph-marked-photo": `
+          <div class="example-grid">
+            <div class="example-card photo-card diagram-photo">
+              <div class="example-visual marked-visual">
+                <img class="machine-photo" src="assets/example-stategraph.jpeg" alt="Zustandsgraph mit markierten Zuständen und Eingabe" />
+                <span class="marker" style="left:14%; top:54%;">1</span>
+                <span class="marker-note" style="left:8%; top:68%;">Zustand</span>
+                <span class="marker" style="left:68%; top:6%;">2</span>
+                <span class="marker-note" style="left:61%; top:18%;">Eingabe</span>
+              </div>
+            </div>
+          </div>
+        `,
         "stone-photo": `
           <div class="example-grid">
-            <div class="example-card photo-card wide-photo">
+            <div class="example-card photo-card object-photo">
               <div class="example-visual">
                 <img class="machine-photo" src="assets/example-stone.jpeg" alt="Stein als Beispiel für einen Nicht-Automaten" />
               </div>
@@ -1667,7 +1780,7 @@
         `,
         "bike-photo": `
           <div class="example-grid">
-            <div class="example-card photo-card wide-photo">
+            <div class="example-card photo-card object-photo">
               <div class="example-visual">
                 <img class="machine-photo" src="assets/example-bike.jpeg" alt="Fahrrad als Beispiel für einen Nicht-Automaten" />
               </div>

@@ -6,20 +6,20 @@
   <title>Automatenlabor</title>
   <style>
     :root {
-      --bg: #f3f6fb;
-      --panel: rgba(255, 255, 255, 0.82);
-      --panel-strong: rgba(255, 255, 255, 0.97);
-      --text: #162338;
-      --muted: #738196;
-      --line: rgba(15, 23, 42, 0.08);
+      --bg: #f4f7fb;
+      --panel: rgba(255, 255, 255, 0.9);
+      --panel-strong: rgba(255, 255, 255, 0.98);
+      --text: #172538;
+      --muted: #6f7e93;
+      --line: rgba(15, 23, 42, 0.06);
       --accent: #007aff;
-      --accent-soft: rgba(0, 122, 255, 0.12);
+      --accent-soft: rgba(0, 122, 255, 0.1);
       --green: #1f9d55;
       --amber: #f59e0b;
       --danger: #e11d48;
-      --shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
+      --shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+      --radius-xl: 26px;
+      --radius-lg: 18px;
       --radius-md: 14px;
     }
 
@@ -31,9 +31,9 @@
       font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(0, 122, 255, 0.09), transparent 22%),
-        radial-gradient(circle at bottom right, rgba(0, 122, 255, 0.05), transparent 20%),
-        linear-gradient(180deg, #fbfcfe, #f1f5fa 58%, #e9eef5);
+        radial-gradient(circle at top left, rgba(0, 122, 255, 0.06), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(0, 122, 255, 0.04), transparent 18%),
+        linear-gradient(180deg, #fbfcfe, #f3f6fb 62%, #edf2f8);
     }
 
     button, input, textarea {
@@ -41,62 +41,62 @@
     }
 
     .shell {
-      width: min(920px, calc(100% - 28px));
-      margin: 14px auto;
-      padding: 10px;
-      border-radius: 30px;
-      background: rgba(255, 255, 255, 0.54);
-      border: 1px solid rgba(255, 255, 255, 0.72);
+      width: min(900px, calc(100% - 28px));
+      margin: 18px auto;
+      padding: 8px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.8);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(22px);
+      backdrop-filter: blur(18px);
     }
 
     .start-shell {
-      width: min(760px, calc(100% - 28px));
-      margin: 28px auto;
-      padding: 12px;
-      border-radius: 32px;
-      background: rgba(255, 255, 255, 0.58);
-      border: 1px solid rgba(255, 255, 255, 0.74);
+      width: min(720px, calc(100% - 28px));
+      margin: 30px auto;
+      padding: 10px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.82);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(24px);
+      backdrop-filter: blur(18px);
     }
 
     .start-card {
-      padding: 32px;
+      padding: 30px;
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(circle at top right, rgba(0, 122, 255, 0.18), transparent 30%),
-        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(245,249,255,0.92));
+        radial-gradient(circle at top right, rgba(0, 122, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,250,255,0.94));
     }
 
     .start-grid {
       display: grid;
-      gap: 24px;
+      gap: 20px;
       grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
       align-items: start;
     }
 
     .logo-panel {
       display: grid;
-      gap: 14px;
+      gap: 12px;
       justify-items: center;
-      padding: 18px;
-      border-radius: 24px;
-      background: rgba(248, 250, 252, 0.9);
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(248, 250, 252, 0.82);
       border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
     }
 
     .logo-frame {
-      width: 144px;
-      height: 144px;
+      width: 132px;
+      height: 132px;
       padding: 14px;
-      border-radius: 32px;
-      background: linear-gradient(180deg, #ffffff, #edf4ff);
+      border-radius: 30px;
+      background: linear-gradient(180deg, #ffffff, #f3f7fd);
       border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
       display: grid;
       place-items: center;
     }
@@ -128,8 +128,8 @@
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: var(--radius-xl);
-      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
-      backdrop-filter: blur(24px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+      backdrop-filter: blur(16px);
     }
 
     .hero {
@@ -138,45 +138,34 @@
 
     .hero-copy,
     .workspace {
-      padding: 28px;
+      padding: 22px;
     }
 
     .hero-copy {
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(circle at top right, rgba(0, 122, 255, 0.14), transparent 28%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 255, 0.86));
-    }
-
-    .hero-copy::after {
-      content: "";
-      position: absolute;
-      inset: auto -40px -40px auto;
-      width: 180px;
-      height: 180px;
-      border-radius: 999px;
-      background: radial-gradient(circle, rgba(31, 157, 85, 0.18), transparent 68%);
-      pointer-events: none;
+        radial-gradient(circle at top right, rgba(0, 122, 255, 0.08), transparent 24%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 255, 0.92));
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 12px;
+      padding: 7px 11px;
       border-radius: 999px;
       background: var(--accent-soft);
       color: var(--accent);
       font-weight: 700;
       font-size: 0.92rem;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     h1 {
       margin: 0 0 12px;
-      font-size: clamp(2.7rem, 5vw, 4.5rem);
-      line-height: 0.93;
+      font-size: clamp(2.4rem, 4.4vw, 3.9rem);
+      line-height: 0.95;
       letter-spacing: -0.05em;
       cursor: default;
       user-select: none;
@@ -191,23 +180,23 @@
       margin: 0;
       color: var(--muted);
       line-height: 1.6;
-      font-size: 1.04rem;
-      max-width: 48rem;
+      font-size: 1rem;
+      max-width: 42rem;
     }
 
     .mission-strip {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 22px;
+      gap: 10px;
+      margin-top: 18px;
     }
 
     .mission-card {
-      padding: 14px 16px;
-      border-radius: 18px;
-      background: rgba(248, 250, 252, 0.88);
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(248, 250, 252, 0.74);
       border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
     }
 
     .mission-card strong {
@@ -231,15 +220,7 @@
       margin-top: 14px;
       display: grid;
       gap: 18px;
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 255, 0.92)),
-        repeating-linear-gradient(
-          90deg,
-          rgba(0, 122, 255, 0.03) 0,
-          rgba(0, 122, 255, 0.03) 1px,
-          transparent 1px,
-          transparent 34px
-        );
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 251, 255, 0.94));
     }
 
     .toolbar {
@@ -248,7 +229,7 @@
       align-items: center;
       gap: 16px;
       flex-wrap: wrap;
-      padding-bottom: 4px;
+      padding-bottom: 2px;
     }
 
     .meta {
@@ -262,7 +243,7 @@
     .badge {
       display: inline-flex;
       align-items: center;
-      padding: 8px 12px;
+      padding: 7px 11px;
       border-radius: 999px;
       background: rgba(16, 35, 61, 0.05);
       font-weight: 600;
@@ -271,11 +252,11 @@
     .progress-box,
     .question-card,
     .finish-card {
-      padding: 24px;
+      padding: 20px;
       border-radius: var(--radius-lg);
       background: var(--panel-strong);
       border: 1px solid var(--line);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.035);
     }
 
     .progress {
@@ -307,21 +288,22 @@
       justify-content: space-between;
       gap: 14px;
       align-items: flex-start;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .question-tag {
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 999px;
       background: var(--accent-soft);
       color: var(--accent);
       font-weight: 700;
       white-space: nowrap;
+      font-size: 0.92rem;
     }
 
     .question-title {
       margin: 0 0 8px;
-      font-size: clamp(1.35rem, 2vw, 1.75rem);
+      font-size: clamp(1.28rem, 1.9vw, 1.62rem);
       line-height: 1.16;
     }
 
@@ -332,10 +314,10 @@
     }
 
     .question-visual {
-      margin-top: 18px;
-      padding: 10px;
-      border-radius: 20px;
-      background: rgba(0, 122, 255, 0.04);
+      margin-top: 16px;
+      padding: 8px;
+      border-radius: 18px;
+      background: rgba(0, 122, 255, 0.03);
       border: 1px solid rgba(15, 23, 42, 0.05);
     }
 
@@ -345,14 +327,14 @@
 
     .example-grid {
       display: grid;
-      gap: 12px;
+      gap: 10px;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     }
 
     .example-card {
-      padding: 14px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.92);
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.95);
       border: 1px solid rgba(15, 23, 42, 0.06);
     }
 
@@ -362,7 +344,7 @@
       background:
         radial-gradient(circle at top right, rgba(0, 122, 255, 0.14), transparent 34%),
         linear-gradient(180deg, rgba(235, 244, 255, 0.95), rgba(243, 247, 252, 0.95));
-      margin-bottom: 10px;
+      margin-bottom: 0;
       display: grid;
       place-items: center;
     }
@@ -374,25 +356,25 @@
     }
 
     .machine-photo {
-      width: min(100%, 280px);
+      width: min(100%, 270px);
       height: auto;
       display: block;
       border-radius: 14px;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
     }
 
     .answers {
       display: grid;
-      gap: 12px;
-      margin-top: 18px;
+      gap: 10px;
+      margin-top: 16px;
     }
 
     .answer {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: flex-start;
-      padding: 16px 18px;
-      border-radius: 18px;
+      padding: 15px 16px;
+      border-radius: 16px;
       background: rgba(248, 250, 252, 0.95);
       border: 1px solid rgba(15, 23, 42, 0.06);
       transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
@@ -413,8 +395,8 @@
       border: 1px solid rgba(16, 35, 61, 0.1);
       background: rgba(255, 255, 255, 0.88);
       color: var(--text);
-      border-radius: 16px;
-      padding: 14px 16px;
+      border-radius: 14px;
+      padding: 13px 15px;
       outline: none;
     }
 
@@ -432,8 +414,8 @@
 
     button {
       border: 0;
-      border-radius: 16px;
-      padding: 13px 18px;
+      border-radius: 14px;
+      padding: 12px 16px;
       cursor: pointer;
       font-weight: 700;
       letter-spacing: -0.01em;
@@ -446,7 +428,7 @@
     .primary {
       background: linear-gradient(180deg, #2490ff, #007aff);
       color: white;
-      box-shadow: 0 14px 28px rgba(0, 122, 255, 0.22);
+      box-shadow: 0 10px 20px rgba(0, 122, 255, 0.18);
     }
 
     .secondary {
@@ -489,9 +471,9 @@
     }
 
     .overlay-card {
-      width: min(760px, 100%);
-      padding: 24px;
-      border-radius: 28px;
+      width: min(680px, 100%);
+      padding: 20px;
+      border-radius: 24px;
       background: rgba(255, 255, 255, 0.92);
       border: 1px solid rgba(255, 255, 255, 0.72);
       box-shadow: var(--shadow);
@@ -1080,8 +1062,6 @@
               <div class="example-visual">
                 <img class="machine-photo" src="assets/automat.png" alt="Snackautomat mit Produkten, Tasten, Münzeinwurf und Ausgabefach" />
               </div>
-              <strong>Automat im Labor</strong>
-              <div class="muted">Nutze dieses Bild als Grundlage für deine Antwort.</div>
             </div>
           </div>
         `,

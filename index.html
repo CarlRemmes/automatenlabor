@@ -6,18 +6,18 @@
   <title>Automatenlabor</title>
   <style>
     :root {
-      --bg: #f6f2ea;
-      --panel: #fffdf9;
+      --bg: #eef2f7;
+      --panel: rgba(255, 255, 255, 0.94);
       --panel-strong: #ffffff;
       --text: #1f2a37;
-      --muted: #6f6a62;
-      --line: rgba(52, 46, 39, 0.1);
-      --accent: #c96b2c;
-      --accent-soft: rgba(201, 107, 44, 0.12);
+      --muted: #677281;
+      --line: rgba(31, 42, 55, 0.08);
+      --accent: #1677ff;
+      --accent-soft: rgba(22, 119, 255, 0.12);
       --green: #2e7d5a;
       --amber: #c5851d;
       --danger: #c74a3a;
-      --shadow: 0 18px 40px rgba(43, 35, 28, 0.08);
+      --shadow: 0 18px 40px rgba(31, 42, 55, 0.08);
       --radius-xl: 24px;
       --radius-lg: 16px;
       --radius-md: 12px;
@@ -31,9 +31,9 @@
       font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(201, 107, 44, 0.08), transparent 24%),
-        radial-gradient(circle at bottom right, rgba(46, 125, 90, 0.06), transparent 20%),
-        linear-gradient(180deg, #fcfaf5, #f6f2ea 65%, #efe8dd);
+        radial-gradient(circle at top left, rgba(22, 119, 255, 0.08), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(46, 125, 90, 0.05), transparent 20%),
+        linear-gradient(180deg, #f9fbfe, #f1f5fa 62%, #e9eef5);
     }
 
     button, input, textarea {
@@ -45,8 +45,8 @@
       margin: 18px auto;
       padding: 10px;
       border-radius: 26px;
-      background: rgba(255, 251, 245, 0.92);
-      border: 1px solid rgba(90, 74, 56, 0.08);
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(31, 42, 55, 0.06);
       box-shadow: var(--shadow);
     }
 
@@ -55,8 +55,8 @@
       margin: 34px auto;
       padding: 10px;
       border-radius: 28px;
-      background: rgba(255, 251, 245, 0.94);
-      border: 1px solid rgba(90, 74, 56, 0.08);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(31, 42, 55, 0.06);
       box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
     }
 
@@ -65,8 +65,8 @@
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(circle at top right, rgba(201, 107, 44, 0.08), transparent 34%),
-        linear-gradient(180deg, rgba(255,255,255,0.99), rgba(251,247,240,0.98));
+        radial-gradient(circle at top right, rgba(22, 119, 255, 0.08), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.99), rgba(246,249,253,0.98));
     }
 
     .start-grid {
@@ -84,17 +84,17 @@
     .start-preview {
       padding: 18px;
       border-radius: 26px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(247,241,233,0.98));
-      border: 1px solid rgba(52, 46, 39, 0.08);
-      box-shadow: 0 14px 32px rgba(43, 35, 28, 0.06);
+      background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(245,248,252,0.98));
+      border: 1px solid rgba(31, 42, 55, 0.08);
+      box-shadow: 0 14px 32px rgba(31, 42, 55, 0.06);
     }
 
     .start-preview-frame {
       border-radius: 22px;
       overflow: hidden;
       background:
-        linear-gradient(160deg, rgba(233, 221, 203, 0.96), rgba(249, 244, 236, 0.98));
-      border: 1px solid rgba(52, 46, 39, 0.1);
+        linear-gradient(160deg, rgba(232, 239, 248, 0.96), rgba(248, 251, 255, 0.98));
+      border: 1px solid rgba(31, 42, 55, 0.08);
       padding: 18px;
     }
 
@@ -113,7 +113,7 @@
       color: var(--text);
       font-size: 0.96rem;
       line-height: 1.5;
-      border-top: 1px solid rgba(52, 46, 39, 0.08);
+      border-top: 1px solid rgba(31, 42, 55, 0.08);
     }
 
     .start-copy {
@@ -150,7 +150,7 @@
       border-radius: 999px;
       display: grid;
       place-items: center;
-      background: rgba(201, 107, 44, 0.12);
+      background: rgba(22, 119, 255, 0.12);
       color: var(--accent);
       font-weight: 800;
       font-size: 0.86rem;
@@ -175,8 +175,8 @@
       margin-top: 8px;
       padding: 20px;
       border-radius: 24px;
-      background: rgba(249, 245, 237, 0.9);
-      border: 1px solid rgba(52, 46, 39, 0.09);
+      background: rgba(247, 250, 254, 0.92);
+      border: 1px solid rgba(31, 42, 55, 0.08);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
     }
 
@@ -255,7 +255,7 @@
       margin-top: 0;
       display: grid;
       gap: 18px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(252, 249, 244, 0.98));
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(246, 249, 253, 0.98));
     }
 
     .toolbar {
@@ -364,8 +364,8 @@
       margin-top: 16px;
       padding: 12px;
       border-radius: 20px;
-      background: linear-gradient(180deg, #f7efe3, #fcfaf6);
-      border: 1px solid rgba(52, 46, 39, 0.08);
+      background: linear-gradient(180deg, #f5f8fc, #fbfdff);
+      border: 1px solid rgba(31, 42, 55, 0.08);
     }
 
     .timer-box {
@@ -422,9 +422,9 @@
     }
 
     .example-visual {
-      height: 110px;
+      height: 120px;
       border-radius: 14px;
-      background: linear-gradient(180deg, #f7efe3, #fcfaf6);
+      background: linear-gradient(180deg, #f4f8fd, #fbfdff);
       margin-bottom: 0;
       display: grid;
       place-items: center;
@@ -432,8 +432,8 @@
 
     .photo-card .example-visual {
       height: auto;
-      min-height: 0;
-      padding: 10px;
+      min-height: 260px;
+      padding: 12px;
     }
 
     .machine-photo {
@@ -447,7 +447,7 @@
     .photo-card.wide-photo .machine-photo {
       width: 100%;
       max-width: 100%;
-      max-height: 360px;
+      max-height: 420px;
       object-fit: contain;
       border-radius: 18px;
     }
@@ -489,6 +489,21 @@
       margin-top: 16px;
     }
 
+    .match-stage {
+      position: relative;
+      display: grid;
+      align-items: start;
+    }
+
+    .match-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
     .match-head {
       display: grid;
       gap: 6px;
@@ -512,6 +527,8 @@
       display: grid;
       gap: 14px;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      position: relative;
+      z-index: 1;
     }
 
     .match-column {
@@ -524,8 +541,8 @@
       text-align: left;
       padding: 15px 16px;
       border-radius: 18px;
-      border: 1px solid rgba(52, 46, 39, 0.09);
-      background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(250,246,240,0.98));
+      border: 1px solid rgba(31, 42, 55, 0.09);
+      background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(247,250,254,0.98));
       color: var(--text);
       box-shadow: 0 6px 16px rgba(43, 35, 28, 0.04);
       display: flex;
@@ -539,8 +556,7 @@
     }
 
     .match-chip.connected {
-      border-color: rgba(201, 107, 44, 0.2);
-      background: rgba(249, 239, 226, 0.95);
+      background: rgba(245, 249, 255, 0.96);
     }
 
     .match-chip.color-a .match-token,
@@ -580,8 +596,8 @@
       gap: 8px;
       padding: 14px;
       border-radius: 16px;
-      background: #f8f4ed;
-      border: 1px solid rgba(52, 46, 39, 0.08);
+      background: #f6f9fd;
+      border: 1px solid rgba(31, 42, 55, 0.08);
     }
 
     .match-item {
@@ -751,6 +767,8 @@
       position: sticky;
       bottom: 10px;
       z-index: 5;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(14px);
     }
 
     .finish-form {
@@ -1443,6 +1461,28 @@
       return Boolean(question.needsReason);
     }
 
+    function renderReasonMount(question) {
+      const mount = document.getElementById("reasonMount");
+      if (!mount) return;
+
+      const hasAnswer = question.type === "single"
+        ? typeof state.answers[question.id] === "number"
+        : state.answers[question.id] === "ja" || state.answers[question.id] === "nein";
+
+      if (hasAnswer && questionNeedsReason(question)) {
+        mount.innerHTML = buildReasonField(question);
+        const reasonField = document.getElementById("reasonAnswer");
+        if (reasonField) {
+          reasonField.addEventListener("input", () => {
+            state.reasons[question.id] = reasonField.value;
+            queueSave();
+          });
+        }
+      } else {
+        mount.innerHTML = "";
+      }
+    }
+
     function isAnswerCorrect(question) {
       const answer = state.answers[question.id];
       if (question.type === "single") {
@@ -1898,23 +1938,17 @@
               </label>
             `).join("")}
           </div>
-          ${(typeof state.answers[question.id] === "number" && questionNeedsReason(question)) ? buildReasonField(question) : ""}
+          <div id="reasonMount"></div>
         `;
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
           input.addEventListener("change", (event) => {
             state.answers[question.id] = Number(event.target.value);
-            renderQuestion();
+            renderReasonMount(question);
             updateNextAvailability();
             queueSave();
           });
         });
-        const reasonField = document.getElementById("reasonAnswer");
-        if (reasonField) {
-          reasonField.addEventListener("input", () => {
-            state.reasons[question.id] = reasonField.value;
-            queueSave();
-          });
-        }
+        renderReasonMount(question);
       } else if (question.type === "yesno") {
         els.questionAnswer.innerHTML = `
           <div class="answers">
@@ -1927,23 +1961,17 @@
               <span>Nein, das ist kein Automat.</span>
             </label>
           </div>
-          ${((state.answers[question.id] === "ja" || state.answers[question.id] === "nein") && questionNeedsReason(question)) ? buildReasonField(question) : ""}
+          <div id="reasonMount"></div>
         `;
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
           input.addEventListener("change", (event) => {
             state.answers[question.id] = event.target.value;
-            renderQuestion();
+            renderReasonMount(question);
             updateNextAvailability();
             queueSave();
           });
         });
-        const reasonField = document.getElementById("reasonAnswer");
-        if (reasonField) {
-          reasonField.addEventListener("input", () => {
-            state.reasons[question.id] = reasonField.value;
-            queueSave();
-          });
-        }
+        renderReasonMount(question);
       } else if (question.type === "match") {
         const currentMatches = state.answers[question.id] && typeof state.answers[question.id] === "object"
           ? { ...state.answers[question.id] }
@@ -1970,22 +1998,25 @@
               <strong>Verbinde passende Karten</strong>
               <span>Tippe erst links auf eine Karte und dann rechts auf die passende Beschreibung.</span>
             </div>
-            <div class="match-grid">
-              <div class="match-column" id="matchLeftColumn">
+            <div class="match-stage" id="matchStage">
+              <svg class="match-lines" id="matchLines" aria-hidden="true"></svg>
+              <div class="match-grid">
+                <div class="match-column" id="matchLeftColumn">
                 ${question.leftItems.map((item, index) => `
-                  <button type="button" class="match-chip color-${String.fromCharCode(97 + index)} ${currentMatches[item.id] ? "connected" : ""}" data-side="left" data-id="${item.id}">
+                  <button type="button" class="match-chip color-${String.fromCharCode(97 + index)} ${currentMatches[item.id] ? "connected" : ""}" data-side="left" data-id="${item.id}" data-color="${String.fromCharCode(97 + index)}">
                     <span class="match-token">${String.fromCharCode(65 + index)}</span>
                     <span class="match-chip-text">${escapeHtml(item.label)}</span>
                   </button>
                 `).join("")}
-              </div>
-              <div class="match-column" id="matchRightColumn">
+                </div>
+                <div class="match-column" id="matchRightColumn">
                 ${question.rightItems.map((item, index) => `
-                  <button type="button" class="match-chip color-${String.fromCharCode(97 + index)}" data-side="right" data-id="${item.id}">
+                  <button type="button" class="match-chip color-${String.fromCharCode(97 + index)}" data-side="right" data-id="${item.id}" data-color="${String.fromCharCode(97 + index)}">
                     <span class="match-token">${index + 1}</span>
                     <span class="match-chip-text">${escapeHtml(item.label)}</span>
                   </button>
                 `).join("")}
+                </div>
               </div>
             </div>
             <div class="match-summary" id="matchSummary"></div>
@@ -2007,6 +2038,45 @@
             const connected = Object.values(currentMatches).includes(rightId);
             button.classList.toggle("connected", connected);
             button.classList.toggle("active", false);
+          });
+
+          updateMatchLines();
+        };
+
+        const updateMatchLines = () => {
+          const stage = document.getElementById("matchStage");
+          const svg = document.getElementById("matchLines");
+          if (!stage || !svg) return;
+
+          const stageRect = stage.getBoundingClientRect();
+          svg.setAttribute("viewBox", `0 0 ${stageRect.width} ${stageRect.height}`);
+          svg.innerHTML = "";
+
+          question.leftItems.forEach((item, index) => {
+            const rightId = currentMatches[item.id];
+            if (!rightId) return;
+
+            const leftButton = document.querySelector(`.match-chip[data-side="left"][data-id="${item.id}"]`);
+            const rightButton = document.querySelector(`.match-chip[data-side="right"][data-id="${rightId}"]`);
+            if (!leftButton || !rightButton) return;
+
+            const leftRect = leftButton.getBoundingClientRect();
+            const rightRect = rightButton.getBoundingClientRect();
+            const x1 = leftRect.right - stageRect.left;
+            const y1 = leftRect.top - stageRect.top + leftRect.height / 2;
+            const x2 = rightRect.left - stageRect.left;
+            const y2 = rightRect.top - stageRect.top + rightRect.height / 2;
+            const colorMap = ["#bb4343", "#2f6ed6", "#2e7d5a", "#a86c12"];
+            const stroke = colorMap[index % colorMap.length];
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", `M ${x1} ${y1} C ${x1 + 48} ${y1}, ${x2 - 48} ${y2}, ${x2} ${y2}`);
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke", stroke);
+            path.setAttribute("stroke-width", "4");
+            path.setAttribute("stroke-linecap", "round");
+            path.setAttribute("opacity", "0.9");
+            svg.appendChild(path);
           });
         };
 
@@ -2048,6 +2118,8 @@
 
         renderMatchSummary();
         refreshMatchButtons();
+        window.requestAnimationFrame(updateMatchLines);
+        window.addEventListener("resize", updateMatchLines, { once: true });
       } else {
         els.questionAnswer.innerHTML = `
           <div class="answers">

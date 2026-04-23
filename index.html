@@ -321,6 +321,36 @@
       border: 1px solid rgba(15, 23, 42, 0.05);
     }
 
+    .timer-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 248, 230, 0.9);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .timer-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #8f5a00;
+    }
+
+    .timer-track {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(143, 90, 0, 0.12);
+      overflow: hidden;
+    }
+
+    .timer-bar {
+      height: 100%;
+      width: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      transition: width 1s linear;
+    }
+
     #progressLabel {
       display: none;
     }
@@ -666,6 +696,10 @@
           <div class="question-tag" id="questionTag"></div>
         </div>
         <div class="question-visual" id="questionVisual"></div>
+        <div class="timer-box hidden" id="timerBox">
+          <span class="timer-label" id="timerLabel"></span>
+          <div class="timer-track"><div class="timer-bar" id="timerBar"></div></div>
+        </div>
         <div id="questionAnswer"></div>
       </section>
 
@@ -705,7 +739,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "automatenlabor_worksheet_v3";
+    const STORAGE_KEY = "automatenlabor_worksheet_v4";
     const HELPER_PIN_HASH = "a7fc7be25bddd2b0be5cbc208ea6d2ff868801513abe5ce03d4079bd66167180";
     const state = loadState();
     let saveTimer = null;
@@ -715,7 +749,6 @@
     const questionBank = [
       {
         id: "q1",
-        tag: "Bildfrage 1",
         type: "text",
         text: "Nenne die drei Produkte, die du im Automaten erkennen kannst.",
         help: "Schreibe die Produktnamen aus dem Bild auf.",
@@ -725,7 +758,6 @@
       },
       {
         id: "q2",
-        tag: "Bildfrage 2",
         type: "text",
         text: "Welche Geldstücke akzeptiert der Automat laut Beschriftung?",
         help: "Sieh dir den Bereich mit der Aufschrift 'Akzeptiert' genau an.",
@@ -735,7 +767,6 @@
       },
       {
         id: "q3",
-        tag: "Bildfrage 3",
         type: "single",
         text: "Welche Taste würdest du für einen Schokoriegel am ehesten drücken?",
         help: "Vergleiche Produktnamen und Buchstaben.",
@@ -745,7 +776,6 @@
       },
       {
         id: "q4",
-        tag: "Bildfrage 4",
         type: "single",
         text: "Welche Taste passt nicht direkt zu einem der drei Produktnamen?",
         help: "Vergleiche die Buchstaben mit Gummibärchen, Schokoriegel und Chips.",
@@ -754,7 +784,6 @@
       },
       {
         id: "q5",
-        tag: "Bildfrage 5",
         type: "text",
         text: "Nenne zwei Stellen am Automaten, an denen der Mensch etwas eingeben oder auslösen kann.",
         help: "Gesucht sind Bedienelemente oder Eingaben von außen.",
@@ -764,7 +793,6 @@
       },
       {
         id: "q6",
-        tag: "Bildfrage 6",
         type: "text",
         text: "Wo kommt das gekaufte Produkt wahrscheinlich heraus? Beschreibe die Stelle im Bild.",
         help: "Suche nach einem Fach oder einer Öffnung für die Ausgabe.",
@@ -774,7 +802,6 @@
       },
       {
         id: "q7",
-        tag: "Bildfrage 7",
         type: "text",
         text: "Welche Informationen über den Kauf findest du direkt auf dem Automaten? Nenne mindestens zwei.",
         help: "Denk an Produkte, Preise, Tasten oder akzeptierte Münzen.",
@@ -783,7 +810,6 @@
       },
       {
         id: "q8",
-        tag: "Bildfrage 8",
         type: "single",
         text: "Welche Aussage lässt sich sicher aus dem Bild ablesen?",
         help: "Wähle nur etwas aus, das wirklich im Bild steht oder zu sehen ist.",
@@ -798,7 +824,6 @@
       },
       {
         id: "q9",
-        tag: "Bildfrage 9",
         type: "text",
         text: "Formuliere einen sinnvollen Startzustand für diesen Automaten, bevor jemand etwas tut.",
         help: "Denke an den Zustand ganz am Anfang eines Kaufs.",
@@ -807,7 +832,6 @@
       },
       {
         id: "q10",
-        tag: "Bildfrage 10",
         type: "text",
         text: "Nenne zwei Eingaben, die den Zustand des Automaten verändern könnten.",
         help: "Es geht um Handlungen, die den Automaten beeinflussen.",
@@ -817,7 +841,6 @@
       },
       {
         id: "q11",
-        tag: "Bildfrage 11",
         type: "text",
         text: "Erkläre an diesem Automaten den Unterschied zwischen Eingabe und Ausgabe.",
         help: "Nutze jeweils ein Beispiel aus dem Bild.",
@@ -826,7 +849,6 @@
       },
       {
         id: "q12",
-        tag: "Bildfrage 12",
         type: "text",
         text: "Warum passt dieser Snackautomat gut zum Thema 'Automat'? Begründe mit mindestens zwei Beobachtungen aus dem Bild.",
         help: "Achte auf feste Eingaben, Zustände oder Ausgaben.",
@@ -836,7 +858,6 @@
       },
       {
         id: "q13",
-        tag: "Laborauftrag",
         type: "text",
         text: "Beschreibe einen möglichen Ablauf vom Start bis zur Ausgabe eines Produkts in drei bis vier Schritten.",
         help: "Nutze Wörter wie Start, Eingabe, Zustand und Ausgabe.",
@@ -845,7 +866,64 @@
       },
       {
         id: "q14",
-        tag: "Abschlussbericht",
+        type: "yesno",
+        text: "Würdest du den Fahrkartenautomaten auf dem Bild als Automaten bezeichnen?",
+        help: "Achte auf feste Eingaben, sichtbare Zustände und mögliche Ausgaben.",
+        visual: "ticket-photo",
+        correctAnswer: "ja"
+      },
+      {
+        id: "q15",
+        type: "text",
+        text: "Nenne zwei Eingaben, die ein Mensch an diesem Fahrkartenautomaten machen kann.",
+        help: "Suche im Bild nach Handlungen, die den Automaten beeinflussen.",
+        visual: "ticket-photo",
+        sampleAnswer: "Zum Beispiel ein Reiseziel eingeben, eine Schaltfläche antippen oder Geld bzw. Karte zum Bezahlen nutzen.",
+        placeholder: "Am Fahrkartenautomaten kann man ..."
+      },
+      {
+        id: "q16",
+        type: "text",
+        text: "Zeitaufgabe: Schreibe in 45 Sekunden auf, woran du bei der Poststation erkennst, dass sie als Automat funktionieren kann.",
+        help: "Nenne mindestens zwei Beobachtungen aus dem Bild.",
+        visual: "poststation-photo",
+        timerSeconds: 45,
+        sampleAnswer: "Zum Beispiel: Es gibt ein Bedienfeld mit Bildschirm, verschiedene Fächer und eine geregelte Ausgabe bzw. Annahme von Sendungen.",
+        placeholder: "Ich erkenne einen Automaten daran, dass ..."
+      },
+      {
+        id: "q17",
+        type: "text",
+        text: "Beschreibe eine mögliche Eingabe und eine mögliche Ausgabe an der Poststation.",
+        help: "Formuliere jeweils ein konkretes Beispiel.",
+        visual: "poststation-photo",
+        sampleAnswer: "Eine Eingabe kann das Scannen oder Eingeben von Daten am Bildschirm sein. Eine Ausgabe kann das Öffnen eines Fachs oder die Annahme einer Sendung sein.",
+        placeholder: "Eine Eingabe ist ... Eine Ausgabe ist ..."
+      },
+      {
+        id: "q18",
+        type: "yesno",
+        text: "Würdest du den Scheibenreiniger auf dem Bild als Automaten bezeichnen?",
+        help: "Überlege, ob es feste Eingaben, feste Abläufe und eine Ausgabe gibt.",
+        visual: "wiper-photo",
+        correctAnswer: "ja"
+      },
+      {
+        id: "q19",
+        type: "single",
+        text: "Welche Reihenfolge passt am besten zu der Beschriftung am Scheibenreiniger?",
+        help: "Lies die nummerierten Schritte im Bild genau.",
+        visual: "wiper-photo",
+        options: [
+          "Sprühpistole abnehmen, Münze einwerfen, nachfüllen, zurückhängen",
+          "Münze einwerfen, Sprühpistole abnehmen, nachfüllen, Sprühpistole zurückhängen",
+          "Nachfüllen, Münze einwerfen, zurückhängen, abnehmen",
+          "Münze einwerfen, zurückhängen, abnehmen, nachfüllen"
+        ],
+        correct: 1
+      },
+      {
+        id: "q20",
         type: "text",
         text: "Du schreibst den Abschlussbericht für das Automatenlabor. Erkläre in drei bis vier Sätzen, wie man an genau diesem Automaten Zustand, Eingabe, Folgezustand und Ausgabe erkennen kann.",
         help: "Beziehe dich sichtbar auf das Bild und nutze die Fachbegriffe.",
@@ -856,6 +934,7 @@
     ];
 
     let questions = [];
+    let timerInterval = null;
 
     const els = {
       startScreen: document.getElementById("startScreen"),
@@ -875,6 +954,9 @@
       questionHelp: document.getElementById("questionHelp"),
       questionTag: document.getElementById("questionTag"),
       questionVisual: document.getElementById("questionVisual"),
+      timerBox: document.getElementById("timerBox"),
+      timerLabel: document.getElementById("timerLabel"),
+      timerBar: document.getElementById("timerBar"),
       questionAnswer: document.getElementById("questionAnswer"),
       finishCard: document.getElementById("finishCard"),
       finishForm: document.getElementById("finishForm"),
@@ -903,7 +985,8 @@
         className: "",
         started: false,
         savedLocally: false,
-        questionOrder: []
+        questionOrder: [],
+        timerStarts: {}
       };
     }
 
@@ -949,11 +1032,7 @@
     function ensureQuestionOrder() {
       const expectedLength = questionBank.length;
       if (Array.isArray(state.questionOrder) && state.questionOrder.length === expectedLength) return;
-      const fixedCount = 2;
-      const randomizedLength = Math.max(0, expectedLength - fixedCount);
-      const randomizedPart = shuffleArray(Array.from({ length: randomizedLength }, (_, index) => index));
-      const fixedPart = Array.from({ length: fixedCount }, (_, index) => index + randomizedLength);
-      state.questionOrder = [...randomizedPart, ...fixedPart];
+      state.questionOrder = shuffleArray(Array.from({ length: expectedLength }, (_, index) => index));
     }
 
     function rebuildQuestions() {
@@ -999,13 +1078,7 @@
         return question.options[question.correct];
       }
       if (question.type === "yesno") {
-        const answerMap = {
-          q8: "ja",
-          q9: "nein",
-          q10: "ja",
-          q11: "ja"
-        };
-        return answerMap[question.id] || "";
+        return question.correctAnswer || "";
       }
       if (question.type === "text") {
         return question.sampleAnswer || "";
@@ -1054,6 +1127,45 @@
       return `${prefix}-${String(index + 1).padStart(2, "0")}`;
     }
 
+    function stopTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      els.timerBox.classList.add("hidden");
+      els.timerLabel.textContent = "";
+      els.timerBar.style.width = "100%";
+    }
+
+    function startTimer(question) {
+      stopTimer();
+      if (!question.timerSeconds) return;
+
+      if (!state.timerStarts[question.id]) {
+        state.timerStarts[question.id] = Date.now();
+        saveLocalState();
+      }
+
+      els.timerBox.classList.remove("hidden");
+
+      const updateTimer = () => {
+        const startedAt = state.timerStarts[question.id];
+        const elapsedSeconds = Math.floor((Date.now() - startedAt) / 1000);
+        const remainingSeconds = Math.max(0, question.timerSeconds - elapsedSeconds);
+        const ratio = Math.max(0, remainingSeconds / question.timerSeconds);
+        els.timerBar.style.width = `${ratio * 100}%`;
+
+        if (remainingSeconds > 0) {
+          els.timerLabel.textContent = `Zeitaufgabe: noch ${remainingSeconds} Sekunden`;
+        } else {
+          els.timerLabel.textContent = "Zeit abgelaufen. Beantworte die Aufgabe jetzt zu Ende.";
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+      };
+
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+
     function exampleVisual(kind) {
       const visuals = {
         "machine-photo": `
@@ -1061,6 +1173,33 @@
             <div class="example-card photo-card">
               <div class="example-visual">
                 <img class="machine-photo" src="assets/automat.png" alt="Snackautomat mit Produkten, Tasten, Münzeinwurf und Ausgabefach" />
+              </div>
+            </div>
+          </div>
+        `,
+        "ticket-photo": `
+          <div class="example-grid">
+            <div class="example-card photo-card">
+              <div class="example-visual">
+                <img class="machine-photo" src="assets/example-ticket.jpeg" alt="Fahrkartenautomat mit Bildschirm und Eingabefeld" />
+              </div>
+            </div>
+          </div>
+        `,
+        "poststation-photo": `
+          <div class="example-grid">
+            <div class="example-card photo-card">
+              <div class="example-visual">
+                <img class="machine-photo" src="assets/example-poststation.jpeg" alt="Poststation mit Fächern und Bedienterminal" />
+              </div>
+            </div>
+          </div>
+        `,
+        "wiper-photo": `
+          <div class="example-grid">
+            <div class="example-card photo-card">
+              <div class="example-visual">
+                <img class="machine-photo" src="assets/example-wiper.jpeg" alt="Scheibenreiniger-Automat mit Münzeinwurf und Sprühpistole" />
               </div>
             </div>
           </div>
@@ -1357,6 +1496,7 @@
       els.questionTag.textContent = getQuestionCode(state.currentIndex);
       els.questionVisual.classList.toggle("hidden", !question.visual);
       els.questionVisual.innerHTML = question.visual ? exampleVisual(question.visual) : "";
+      startTimer(question);
       els.backBtn.disabled = state.currentIndex === 0;
       els.nextBtn.textContent = state.currentIndex === questions.length - 1 ? "Zum Abschluss" : "Weiter";
 
@@ -1416,6 +1556,7 @@
     }
 
     function renderFinish() {
+      stopTimer();
       els.questionCard.classList.add("hidden");
       els.finishCard.classList.remove("hidden");
       els.backBtn.classList.add("hidden");
@@ -1439,6 +1580,7 @@
 
     function render() {
       if (!state.started) {
+        stopTimer();
         els.startScreen.classList.remove("hidden");
         els.appShell.classList.add("hidden");
         return;

@@ -732,7 +732,7 @@
       }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/js-sha256@0.11.1/src/sha256.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
@@ -844,14 +844,14 @@
       <section class="finish-card hidden" id="finishCard">
         <div class="finish-form" id="finishForm">
           <div class="eyebrow">Fertig</div>
-          <h2>Speichern</h2>
+          <h2 id="finishTitle">Mission beenden</h2>
           <p class="sub" style="max-width: none;">
-            Prüfe noch einmal deine Angaben und speichere danach die Auswertung auf diesem Gerät.
+            <span id="finishIntro">Beende jetzt deine Mission. Deine Ergebnisse werden im Hintergrund gesichert.</span>
           </p>
           <div class="feedback-note" id="finishFeedback"></div>
           <div class="skip-summary" id="skipSummary"></div>
           <div class="row" style="margin-top: 18px;">
-            <button class="primary" id="downloadBtn">Speichern</button>
+            <button class="primary" id="downloadBtn">Mission beenden</button>
             <button class="secondary" id="restartBtn">Neu starten</button>
           </div>
           <div class="status-line" id="downloadMessage"></div>
@@ -878,12 +878,19 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "automatenlabor_worksheet_v6";
-    const HELPER_PIN_HASH = "a7fc7be25bddd2b0be5cbc208ea6d2ff868801513abe5ce03d4079bd66167180";
+    const SUPABASE_URL = "https://ksuqarrjolkhpwojrjav.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj";
+    const REPORTS_BUCKET = "automatenlabor-reports";
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { storageKey: "automatenlabor-student-auth-v1" }
+    });
+
+    const STORAGE_KEY = "automatenlabor_worksheet_v7";
     const state = loadState();
     let saveTimer = null;
     let titleTapCount = 0;
     let titleTapTimer = null;
+    let authUser = null;
 
     const questionBank = [
       {
@@ -1138,6 +1145,8 @@
       questionAnswer: document.getElementById("questionAnswer"),
       finishCard: document.getElementById("finishCard"),
       finishForm: document.getElementById("finishForm"),
+      finishTitle: document.getElementById("finishTitle"),
+      finishIntro: document.getElementById("finishIntro"),
       finishFeedback: document.getElementById("finishFeedback"),
       finishName: document.getElementById("finishName"),
       finishClass: document.getElementById("finishClass"),
@@ -1164,7 +1173,8 @@
         studentName: "",
         className: "",
         started: false,
-        savedLocally: false,
+        submittedAt: null,
+        reportPath: "",
         questionOrder: [],
         timerStarts: {}
       };
@@ -1182,6 +1192,46 @@
     function saveLocalState() {
       const persistableState = { ...state, helperUnlocked: false };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(persistableState));
+    }
+
+    async function ensureAuthSession() {
+      const { data, error } = await client.auth.getSession();
+      if (error) throw error;
+
+      if (!data.session) {
+        const { error: anonError } = await client.auth.signInAnonymously();
+        if (anonError) throw anonError;
+      }
+
+      const { data: userData, error: userError } = await client.auth.getUser();
+      if (userError) throw userError;
+      authUser = userData.user;
+    }
+
+    async function loadAttempt() {
+      if (!authUser) return;
+
+      const { data, error } = await client
+        .from("worksheet_attempts")
+        .select("*")
+        .eq("user_id", authUser.id)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) return;
+
+      state.currentIndex = data.current_index || 0;
+      state.answers = data.answers || {};
+      state.reasons = data.reasons || {};
+      state.skipped = data.skipped || [];
+      state.studentName = data.student_name || "";
+      state.className = data.class_name || "";
+      state.started = Boolean(data.started_at || state.started);
+      state.submittedAt = data.submitted_at || null;
+      state.reportPath = data.report_path || "";
+      state.questionOrder = Array.isArray(data.question_order) ? data.question_order : state.questionOrder;
+      state.timerStarts = data.timer_starts || {};
+      saveLocalState();
     }
 
     function escapeHtml(value) {
@@ -1341,19 +1391,27 @@
         .join("");
     }
 
+    function getStudentFeedback() {
+      const { points, maxPoints } = scoreResult();
+      const ratio = maxPoints ? points / maxPoints : 0;
+
+      if (ratio >= 0.8) {
+        return "Herr Remmes und Herr Bachen sind zufrieden. Du hast viele Muster sicher erkannt und deine Antworten gut begründet.";
+      }
+
+      if (ratio >= 0.5) {
+        return "Herr Remmes und Herr Bachen sind zufrieden. Du hast schon viele Zusammenhänge erkannt und an einigen Stellen lohnt sich ein zweiter Blick.";
+      }
+
+      return "Herr Remmes und Herr Bachen sind zufrieden, dass du drangeblieben bist. Du hast erste wichtige Ideen gesammelt und kannst beim nächsten Mal noch sicherer werden.";
+    }
+
     function getFinishFeedback() {
-      const skippedCount = state.skipped.length;
-      const answeredCount = questions.filter((question) => currentAnswerExistsForQuestion(question)).length;
-
-      if (skippedCount === 0 && answeredCount === questions.length) {
-        return "Du hast alle Stationen des Automatenlabors bearbeitet. Speichere jetzt dein PDF, um deine Ergebnisse festzuhalten.";
+      if (state.submittedAt) {
+        return getStudentFeedback();
       }
 
-      if (skippedCount <= 2) {
-        return "Du hast das Automatenlabor fast vollstandig bearbeitet. Speichere jetzt dein PDF, damit deine Antworten gesichert sind.";
-      }
-
-      return "Du hast das Automatenlabor bearbeitet und eigene Losungen ausprobiert. Speichere jetzt dein PDF, um deinen Arbeitsstand mitzunehmen.";
+      return "Deine Antworten werden jetzt im Hintergrund gesichert. Danach siehst du nur noch eine kurze Rückmeldung und kannst wieder von vorne starten.";
     }
 
     function currentAnswerExistsForQuestion(question) {
@@ -1931,14 +1989,16 @@
       els.finishCard.classList.remove("hidden");
       els.backBtn.classList.add("hidden");
       els.nextBtn.classList.add("hidden");
-      els.downloadBtn.textContent = state.savedLocally ? "Gespeichert" : "Speichern";
-      els.downloadBtn.disabled = state.savedLocally;
+      els.finishTitle.textContent = state.submittedAt ? "Mission beendet" : "Mission beenden";
+      els.finishIntro.textContent = state.submittedAt
+        ? "Deine Mission ist abgeschlossen. Unten kannst du direkt wieder von vorne starten."
+        : "Beende jetzt deine Mission. Deine Ergebnisse werden im Hintergrund gesichert.";
       els.finishFeedback.textContent = getFinishFeedback();
       els.finishName.textContent = `Vorname: ${state.studentName || "-"}`;
       els.finishClass.textContent = `Klasse: ${state.className || "-"}`;
-      if (state.savedLocally) {
-        els.downloadMessage.textContent = "Gespeichert.";
-      }
+      els.downloadBtn.textContent = state.submittedAt ? "Mission abgeschlossen" : "Mission beenden";
+      els.downloadBtn.disabled = Boolean(state.submittedAt);
+      els.downloadMessage.textContent = state.submittedAt ? "Die Ergebnisse wurden gespeichert." : "";
 
       if (!state.skipped.length) {
         els.skipSummary.innerHTML = `<div class="skip-item">Es wurde keine Aufgabe übersprungen.</div>`;
@@ -2023,14 +2083,24 @@
       goNext();
     }
 
-    function verifyHelperPin() {
+    async function verifyHelperPin() {
       const pin = els.helperPin.value.trim();
       if (!pin) {
         els.helperMessage.textContent = "Bitte gib zuerst die PIN ein.";
         return false;
       }
 
-      if (window.sha256(pin) !== HELPER_PIN_HASH) {
+      const { data, error } = await client.rpc("verify_helper_pin", {
+        input_pin: pin
+      });
+
+      if (error) {
+        console.error(error);
+        els.helperMessage.textContent = "Die PIN konnte gerade nicht geprüft werden.";
+        return false;
+      }
+
+      if (!data) {
         els.helperMessage.textContent = "Die PIN ist nicht korrekt.";
         return false;
       }
@@ -2052,8 +2122,10 @@
       state.studentName = firstName;
       state.className = className;
       state.started = true;
+      state.submittedAt = null;
+      state.reportPath = "";
       els.startMessage.textContent = "";
-      saveLocalState();
+      queueSave();
       render();
     }
 
@@ -2263,7 +2335,7 @@
       return doc.output("blob");
     }
 
-    async function saveWorksheet() {
+    async function submitMission() {
       const name = state.studentName.trim();
       const className = state.className.trim();
       if (!name) {
@@ -2275,60 +2347,84 @@
         return;
       }
 
+      await ensureAuthSession();
       els.downloadBtn.disabled = true;
-      els.downloadBtn.textContent = "Speichert ...";
+      els.downloadBtn.textContent = "Beendet ...";
       const pdfBlob = await buildReportPdfBlob(name, className);
       const safeName = slugify(name) || "schueler";
       const safeClass = slugify(className) || "klasse";
-      const fileName = `automatenlabor-auswertung-${safeClass}-${safeName}.pdf`;
+      const nowIso = new Date().toISOString();
+      const fileName = `${authUser.id}/automatenlabor-${safeClass}-${safeName}-${Date.now()}.pdf`;
 
-      try {
-        if ("showSaveFilePicker" in window) {
-          const handle = await window.showSaveFilePicker({
-            suggestedName: fileName,
-            types: [{
-              description: "PDF-Datei",
-              accept: { "application/pdf": [".pdf"] }
-            }]
-          });
-          const writable = await handle.createWritable();
-          await writable.write(pdfBlob);
-          await writable.close();
-          els.downloadMessage.textContent = "Gespeichert.";
-        } else {
-          const url = URL.createObjectURL(pdfBlob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = fileName;
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-          URL.revokeObjectURL(url);
-          els.downloadMessage.textContent = "Gespeichert. Falls Safari keinen Speicherort fragt, liegt die Datei im Download-Ordner.";
-        }
-      } catch (error) {
+      const { error: uploadError } = await client
+        .storage
+        .from(REPORTS_BUCKET)
+        .upload(fileName, pdfBlob, {
+          contentType: "application/pdf",
+          upsert: true
+        });
+
+      if (uploadError) {
+        console.error(uploadError);
         els.downloadBtn.disabled = false;
-        els.downloadBtn.textContent = "Speichern";
-        els.downloadMessage.textContent = "Speichern abgebrochen.";
+        els.downloadBtn.textContent = "Mission beenden";
+        els.downloadMessage.textContent = "Die Ergebnisse konnten gerade nicht gesichert werden.";
         return;
       }
 
-      state.savedLocally = true;
+      state.submittedAt = nowIso;
+      state.reportPath = fileName;
+      const { error: saveError } = await client
+        .from("worksheet_attempts")
+        .upsert({
+          user_id: authUser.id,
+          student_key: authUser.id,
+          student_name: name,
+          class_name: className,
+          current_index: questions.length,
+          answers: state.answers,
+          reasons: state.reasons,
+          skipped: state.skipped,
+          helper_enabled: false,
+          question_order: state.questionOrder,
+          timer_starts: state.timerStarts,
+          started_at: nowIso,
+          finished_at: nowIso,
+          submitted_at: nowIso,
+          report_path: fileName,
+          report_uploaded_at: nowIso,
+          updated_at: nowIso
+        }, { onConflict: "user_id" });
+
+      if (saveError) {
+        console.error(saveError);
+        els.downloadBtn.disabled = false;
+        els.downloadBtn.textContent = "Mission beenden";
+        els.downloadMessage.textContent = "Die Abgabe wurde noch nicht vollständig gespeichert.";
+        return;
+      }
+
       saveLocalState();
       render();
     }
 
-    function restart() {
+    async function restart() {
       localStorage.removeItem(STORAGE_KEY);
       Object.assign(state, createDefaultState());
-      rebuildQuestions();
+      questions = [];
+      authUser = null;
       els.downloadMessage.textContent = "";
       els.startMessage.textContent = "";
       els.startName.value = "";
       els.startClass.value = "";
       els.downloadBtn.disabled = false;
-      els.downloadBtn.textContent = "Speichern";
-      render();
+      els.downloadBtn.textContent = "Mission beenden";
+      try {
+        await client.auth.signOut();
+      } catch (error) {
+        console.error(error);
+      }
+      await initializeApp();
     }
 
     function handleTitleTap() {
@@ -2345,6 +2441,36 @@
 
     async function saveAttempt() {
       saveLocalState();
+      if (!authUser) return;
+
+      const nowIso = new Date().toISOString();
+      const payload = {
+        user_id: authUser.id,
+        student_key: authUser.id,
+        student_name: state.studentName || "",
+        class_name: state.className || "",
+        current_index: state.currentIndex,
+        answers: state.answers,
+        reasons: state.reasons,
+        skipped: state.skipped,
+        helper_enabled: false,
+        question_order: state.questionOrder,
+        timer_starts: state.timerStarts,
+        started_at: state.started ? nowIso : null,
+        finished_at: state.currentIndex >= questions.length ? nowIso : null,
+        submitted_at: state.submittedAt,
+        report_path: state.reportPath || "",
+        report_uploaded_at: state.submittedAt,
+        updated_at: nowIso
+      };
+
+      const { error } = await client
+        .from("worksheet_attempts")
+        .upsert(payload, { onConflict: "user_id" });
+
+      if (error) {
+        console.error(error);
+      }
     }
 
     function queueSave() {
@@ -2355,14 +2481,29 @@
       saveLocalState();
     }
 
+    async function initializeApp() {
+      try {
+        await ensureAuthSession();
+        await loadAttempt();
+      } catch (error) {
+        console.error(error);
+      }
+
+      rebuildQuestions();
+
+      if (state.studentName) els.startName.value = state.studentName;
+      if (state.className) els.startClass.value = state.className;
+      render();
+    }
+
     async function unlockHelperMenu() {
-      if (!verifyHelperPin()) return;
+      if (!await verifyHelperPin()) return;
       els.solutionOverview.classList.add("hidden");
       skipCurrentQuestion();
     }
 
-    function showSolutions() {
-      if (!verifyHelperPin()) return;
+    async function showSolutions() {
+      if (!await verifyHelperPin()) return;
       els.helperMessage.textContent = "Lösungsübersicht";
       els.solutionOverview.innerHTML = buildSolutionsOverviewHtml();
       els.solutionOverview.classList.remove("hidden");
@@ -2370,8 +2511,8 @@
 
     els.nextBtn.addEventListener("click", goNext);
     els.backBtn.addEventListener("click", goBack);
-    els.downloadBtn.addEventListener("click", () => saveWorksheet().catch(console.error));
-    els.restartBtn.addEventListener("click", restart);
+    els.downloadBtn.addEventListener("click", () => submitMission().catch(console.error));
+    els.restartBtn.addEventListener("click", () => restart().catch(console.error));
     els.startBtn.addEventListener("click", startMission);
     els.startName.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
@@ -2387,7 +2528,7 @@
     });
     els.heroTitle.addEventListener("click", handleTitleTap);
     els.unlockHelperBtn.addEventListener("click", () => unlockHelperMenu().catch(console.error));
-    els.showSolutionsBtn.addEventListener("click", showSolutions);
+    els.showSolutionsBtn.addEventListener("click", () => showSolutions().catch(console.error));
     els.helperPin.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -2401,8 +2542,7 @@
       els.helperMessage.textContent = "";
       els.solutionOverview.classList.add("hidden");
     });
-    rebuildQuestions();
-    render();
+    initializeApp().catch(console.error);
   </script>
 </body>
 </html>

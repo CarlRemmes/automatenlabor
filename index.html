@@ -579,6 +579,22 @@
       margin-top: 8px;
     }
 
+    .explanation-box {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(236, 244, 255, 0.88);
+      border: 1px solid rgba(0, 122, 255, 0.12);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .explanation-box strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.94rem;
+    }
+
     .feedback-note {
       padding: 14px 16px;
       border-radius: 16px;
@@ -783,7 +799,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "automatenlabor_worksheet_v5";
+    const STORAGE_KEY = "automatenlabor_worksheet_v6";
     const HELPER_PIN_HASH = "a7fc7be25bddd2b0be5cbc208ea6d2ff868801513abe5ce03d4079bd66167180";
     const state = loadState();
     let saveTimer = null;
@@ -816,7 +832,8 @@
         help: "Vergleiche Produktnamen und Buchstaben.",
         visual: "machine-photo",
         options: ["G", "S", "C", "R"],
-        correct: 1
+        correct: 1,
+        explanation: "Die Taste S passt zum Schokoriegel, weil der Anfangsbuchstabe mit dem Produktnamen auf dem Automaten zusammenpasst."
       },
       {
         id: "q4",
@@ -825,7 +842,8 @@
         help: "Vergleiche die Buchstaben mit Gummibärchen, Schokoriegel und Chips.",
         visual: "machine-photo",
         options: ["G", "S", "C", "R"],
-        correct: 3
+        correct: 3,
+        explanation: "G, S und C lassen sich direkt den drei Produktnamen zuordnen. R bleibt als zusätzlicher Buchstabe übrig."
       },
       {
         id: "q5",
@@ -866,7 +884,8 @@
           "Jedes Produkt kostet unterschiedlich viel.",
           "Der Automat funktioniert nur mit Karte."
         ],
-        correct: 1
+        correct: 1,
+        explanation: "Nur die akzeptierten Münzen sind wirklich auf dem Automaten ablesbar. Die anderen Aussagen stehen dort nicht."
       },
       {
         id: "q9",
@@ -889,7 +908,8 @@
           "Den Automaten anschauen",
           "Am Regal vorbeigehen"
         ],
-        correct: 1
+        correct: 1,
+        explanation: "Durch das Einwerfen einer Münze ändert sich der Geldzustand des Automaten unmittelbar."
       },
       {
         id: "q11",
@@ -912,7 +932,8 @@
           "Der Automat ist grau und schwarz.",
           "Die Produkte liegen auf drei Ebenen."
         ],
-        correct: 1
+        correct: 1,
+        explanation: "Die Beschriftung der akzeptierten Münzen zeigt, dass nicht jede beliebige Eingabe erlaubt ist."
       },
       {
         id: "q13",
@@ -929,7 +950,8 @@
         text: "Würdest du den Fahrkartenautomaten auf dem Bild als Automaten bezeichnen?",
         help: "Achte auf feste Eingaben, sichtbare Zustände und mögliche Ausgaben.",
         visual: "ticket-photo",
-        correctAnswer: "ja"
+        correctAnswer: "ja",
+        explanation: "Der Fahrkartenautomat verarbeitet Eingaben am Bildschirm, führt feste Abläufe aus und gibt am Ende ein Ergebnis aus."
       },
       {
         id: "q15",
@@ -981,7 +1003,8 @@
         text: "Würdest du den Scheibenreiniger auf dem Bild als Automaten bezeichnen?",
         help: "Überlege, ob es feste Eingaben, feste Abläufe und eine Ausgabe gibt.",
         visual: "wiper-photo",
-        correctAnswer: "ja"
+        correctAnswer: "ja",
+        explanation: "Auch hier gibt es eine feste Eingabe, einen geregelten Ablauf und am Ende eine klar erkennbare Ausgabe."
       },
       {
         id: "q19",
@@ -995,7 +1018,8 @@
           "Nachfüllen, Münze einwerfen, zurückhängen, abnehmen",
           "Münze einwerfen, zurückhängen, abnehmen, nachfüllen"
         ],
-        correct: 1
+        correct: 1,
+        explanation: "Die richtige Reihenfolge entspricht genau der nummerierten Anleitung auf dem Automaten."
       },
       {
         id: "q20",
@@ -1055,6 +1079,7 @@
       return {
         currentIndex: 0,
         answers: {},
+        reasons: {},
         skipped: [],
         helperUnlocked: false,
         studentName: "",
@@ -1189,6 +1214,23 @@
           .join(" | ");
       }
       return String(answer || "[nicht beantwortet]");
+    }
+
+    function buildReasonField(question) {
+      const currentReason = state.reasons[question.id] || "";
+      const explanationHtml = question.explanation ? `
+        <div class="explanation-box">
+          <strong>Hinweis</strong>
+          ${escapeHtml(question.explanation)}
+        </div>
+      ` : "";
+
+      return `
+        <div class="answers">
+          <textarea id="reasonAnswer" placeholder="Begründe kurz deine Entscheidung.">${escapeHtml(currentReason)}</textarea>
+        </div>
+        ${explanationHtml}
+      `;
     }
 
     function isAnswerCorrect(question) {
@@ -1637,14 +1679,23 @@
               </label>
             `).join("")}
           </div>
+          ${typeof state.answers[question.id] === "number" ? buildReasonField(question) : ""}
         `;
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
           input.addEventListener("change", (event) => {
             state.answers[question.id] = Number(event.target.value);
+            renderQuestion();
             updateNextAvailability();
             queueSave();
           });
         });
+        const reasonField = document.getElementById("reasonAnswer");
+        if (reasonField) {
+          reasonField.addEventListener("input", () => {
+            state.reasons[question.id] = reasonField.value;
+            queueSave();
+          });
+        }
       } else if (question.type === "yesno") {
         els.questionAnswer.innerHTML = `
           <div class="answers">
@@ -1657,14 +1708,23 @@
               <span>Nein, das ist kein Automat.</span>
             </label>
           </div>
+          ${(state.answers[question.id] === "ja" || state.answers[question.id] === "nein") ? buildReasonField(question) : ""}
         `;
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
           input.addEventListener("change", (event) => {
             state.answers[question.id] = event.target.value;
+            renderQuestion();
             updateNextAvailability();
             queueSave();
           });
         });
+        const reasonField = document.getElementById("reasonAnswer");
+        if (reasonField) {
+          reasonField.addEventListener("input", () => {
+            state.reasons[question.id] = reasonField.value;
+            queueSave();
+          });
+        }
       } else if (question.type === "match") {
         const currentMatches = state.answers[question.id] && typeof state.answers[question.id] === "object"
           ? { ...state.answers[question.id] }
@@ -1929,6 +1989,7 @@
       questions.forEach((question, index) => {
         const skipped = getSkippedEntry(question);
         const answer = state.answers[question.id];
+        const reason = state.reasons[question.id];
         let answerText = "";
 
         if (skipped) {
@@ -1943,6 +2004,9 @@
 
         lines.push(`${index + 1}. ${question.text}`);
         lines.push(`   Antwort: ${answerText}`);
+        if (reason && String(reason).trim()) {
+          lines.push(`   Begründung: ${String(reason).trim()}`);
+        }
       });
 
       if (state.skipped.length) {
@@ -2014,6 +2078,7 @@
       questions.forEach((question, index) => {
         const skipped = getSkippedEntry(question);
         const answer = state.answers[question.id];
+        const reason = state.reasons[question.id];
         const answerText = skipped ? "[übersprungen über Hilfemenü]" : getAnswerLabel(question, answer);
         const correctAnswer = getCorrectAnswer(question);
         const correct = !skipped && question.type !== "text" && isAnswerCorrect(question);
@@ -2041,6 +2106,16 @@
           doc.text(line, margin + 18, y);
           y += 16;
         });
+
+        if (reason && String(reason).trim()) {
+          doc.setTextColor(...neutralColor);
+          const reasonLines = doc.splitTextToSize(`Begründung: ${String(reason).trim()}`, maxWidth - 18);
+          reasonLines.forEach((line) => {
+            ensureSpace(16);
+            doc.text(line, margin + 18, y);
+            y += 16;
+          });
+        }
 
         if (question.type !== "text") {
           doc.setTextColor(...positiveColor);
@@ -2090,6 +2165,7 @@
         machineLines.push(`code_${index + 1}=${getQuestionCode(index)}`);
         machineLines.push(`id_${index + 1}=${question.id}`);
         machineLines.push(`antwort_${index + 1}=${getAnswerLabel(question, state.answers[question.id]).replaceAll("\n", " ")}`);
+        machineLines.push(`begruendung_${index + 1}=${String(state.reasons[question.id] || "").replaceAll("\n", " ")}`);
         machineLines.push(`loesung_${index + 1}=${getCorrectAnswer(question).replaceAll("\n", " ")}`);
       });
       machineLines.push("END-DATEN");

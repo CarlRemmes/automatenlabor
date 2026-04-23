@@ -478,32 +478,16 @@
       justify-content: center;
     }
 
-    .marker {
+    .hotspot {
       position: absolute;
-      width: 30px;
-      height: 30px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      font-size: 0.83rem;
-      font-weight: 800;
-      color: #ffffff;
-      background: rgba(22, 119, 255, 0.92);
-      box-shadow: 0 8px 18px rgba(22, 119, 255, 0.24);
-      border: 2px solid rgba(255,255,255,0.92);
+      border-radius: 18px;
+      border: 2px solid rgba(22, 119, 255, 0.9);
+      background: rgba(22, 119, 255, 0.09);
+      box-shadow: 0 0 0 6px rgba(22, 119, 255, 0.07);
     }
 
-    .marker-note {
-      position: absolute;
-      padding: 7px 10px;
+    .hotspot.circle {
       border-radius: 999px;
-      background: rgba(255,255,255,0.94);
-      border: 1px solid rgba(31, 42, 55, 0.08);
-      color: var(--text);
-      font-size: 0.82rem;
-      font-weight: 700;
-      box-shadow: 0 8px 18px rgba(31, 42, 55, 0.08);
-      white-space: nowrap;
     }
 
     .answers {
@@ -631,6 +615,17 @@
       color: var(--accent);
       font-weight: 800;
       font-size: 0.92rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .match-token.handle {
+      cursor: grab;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.9), 0 4px 12px rgba(31, 42, 55, 0.08);
+    }
+
+    .match-token.handle:active {
+      cursor: grabbing;
     }
 
     .match-chip-text {
@@ -1000,7 +995,7 @@
       auth: { storageKey: "automatenlabor-student-auth-v1" }
     });
 
-    const STORAGE_KEY = "automatenlabor_worksheet_v8";
+    const STORAGE_KEY = "automatenlabor_worksheet_v9";
     const state = loadState();
     let saveTimer = null;
     let titleTapCount = 0;
@@ -1067,11 +1062,11 @@
       {
         id: "q7",
         type: "text",
-        text: "Welche Informationen über den Kauf findest du direkt auf dem Automaten? Nenne mindestens zwei.",
-        help: "Denk an Produkte, Preise, Tasten oder akzeptierte Münzen.",
+        text: "Welche zwei Informationen brauchst du am Automaten, bevor du ein Produkt auswählen kannst?",
+        help: "Denke daran, was du vor dem Tastendruck wissen musst.",
         visual: "machine-photo",
-        sampleAnswer: "Zum Beispiel Produktnamen, Preis, Tasten und akzeptierte Münzen.",
-        placeholder: "Auf dem Automaten steht ..."
+        sampleAnswer: "Zum Beispiel den Produktnamen und den Preis oder welche Taste dazu gehört.",
+        placeholder: "Vor dem Auswählen muss ich wissen ..."
       },
       {
         id: "q8",
@@ -1125,7 +1120,7 @@
       {
         id: "q12",
         type: "single",
-        text: "Welche Beobachtung zeigt am besten, dass der Snackautomat nur bestimmte Eingaben akzeptiert?",
+        text: "Welche Beobachtung zeigt am besten, dass der Snackautomat Eingaben begrenzt?",
         help: "Achte darauf, welche Eingaben ausdrücklich genannt sind.",
         visual: "machine-photo",
         options: [
@@ -1140,11 +1135,11 @@
       {
         id: "q13",
         type: "text",
-        text: "Formuliere eine klare Regel für den Snackautomaten: Wann darf ein Produkt ausgegeben werden?",
-        help: "Beschreibe die Regel so, dass jemand den Automaten danach verstehen kann.",
+        text: "Welche zwei Schritte müssen beim Snackautomaten in der richtigen Reihenfolge passieren, damit ein Produkt herauskommen kann?",
+        help: "Beschreibe den Ablauf knapp und in der richtigen Reihenfolge.",
         visual: "machine-photo",
-        sampleAnswer: "Ein Produkt darf erst ausgegeben werden, wenn genug Geld eingeworfen wurde und danach die passende Taste gedrückt wird.",
-        placeholder: "Ein Produkt darf nur dann ausgegeben werden, wenn ..."
+        sampleAnswer: "Zuerst muss genug Geld eingeworfen werden. Danach muss die passende Taste gedrückt werden.",
+        placeholder: "Zuerst ... Danach ..."
       },
       {
         id: "q14",
@@ -1687,8 +1682,7 @@
             <div class="example-visual marked-visual">
               <img class="machine-photo" src="assets/automat.png" alt="Snackautomat mit markierten Stellen" />
               ${markers.map((marker) => `
-                <span class="marker" style="left:${marker.x}; top:${marker.y};">${marker.label}</span>
-                ${marker.note ? `<span class="marker-note" style="left:${marker.noteX}; top:${marker.noteY};">${marker.note}</span>` : ""}
+                <span class="hotspot ${marker.kind || ""}" style="left:${marker.x}; top:${marker.y}; width:${marker.w}; height:${marker.h};"></span>
               `).join("")}
             </div>
           </div>
@@ -1708,17 +1702,17 @@
           </div>
         `,
         "machine-buttons-photo": buildMarkedMachineVisual([
-          { label: "1", x: "72%", y: "34%", note: "Tasten", noteX: "61%", noteY: "26%" }
+          { x: "69%", y: "30%", w: "16%", h: "19%" }
         ]),
         "machine-inputs-photo": buildMarkedMachineVisual([
-          { label: "1", x: "72%", y: "34%", note: "Taste", noteX: "61%", noteY: "26%" },
-          { label: "2", x: "76%", y: "63%", note: "Münzen", noteX: "63%", noteY: "72%" }
+          { x: "69%", y: "30%", w: "16%", h: "19%" },
+          { x: "74%", y: "63%", w: "11%", h: "15%", kind: "circle" }
         ]),
         "machine-output-photo": buildMarkedMachineVisual([
-          { label: "1", x: "17%", y: "82%", note: "Ausgabefach", noteX: "19%", noteY: "70%" }
+          { x: "10%", y: "74%", w: "34%", h: "12%" }
         ]),
         "machine-money-photo": buildMarkedMachineVisual([
-          { label: "1", x: "77%", y: "68%", note: "Akzeptiert", noteX: "60%", noteY: "78%" }
+          { x: "73%", y: "58%", w: "15%", h: "18%" }
         ]),
         "ticket-photo": `
           <div class="example-grid">
@@ -1761,10 +1755,8 @@
             <div class="example-card photo-card diagram-photo">
               <div class="example-visual marked-visual">
                 <img class="machine-photo" src="assets/example-stategraph.jpeg" alt="Zustandsgraph mit markierten Zuständen und Eingabe" />
-                <span class="marker" style="left:14%; top:54%;">1</span>
-                <span class="marker-note" style="left:8%; top:68%;">Zustand</span>
-                <span class="marker" style="left:68%; top:6%;">2</span>
-                <span class="marker-note" style="left:61%; top:18%;">Eingabe</span>
+                <span class="hotspot circle" style="left:7%; top:32%; width:22%; height:34%;"></span>
+                <span class="hotspot" style="left:39%; top:6%; width:28%; height:12%;"></span>
               </div>
             </div>
           </div>
@@ -2146,7 +2138,7 @@
                 <div class="match-column" id="matchLeftColumn">
                 ${question.leftItems.map((item, index) => `
                   <button type="button" class="match-chip color-${String.fromCharCode(97 + index)} ${currentMatches[item.id] ? "connected" : ""}" data-side="left" data-id="${item.id}" data-color="${String.fromCharCode(97 + index)}">
-                    <span class="match-token">${String.fromCharCode(65 + index)}</span>
+                    <span class="match-token handle">${String.fromCharCode(65 + index)}</span>
                     <span class="match-chip-text">${escapeHtml(item.label)}</span>
                   </button>
                 `).join("")}
@@ -2167,6 +2159,8 @@
           </div>
         `;
 
+        let dragState = null;
+
         const refreshMatchButtons = () => {
           document.querySelectorAll('.match-chip[data-side="left"]').forEach((button) => {
             const id = button.dataset.id;
@@ -2184,7 +2178,7 @@
           updateMatchLines();
         };
 
-        const updateMatchLines = () => {
+        const updateMatchLines = (pointer = null) => {
           const stage = document.getElementById("matchStage");
           const svg = document.getElementById("matchLines");
           if (!stage || !svg) return;
@@ -2219,6 +2213,60 @@
             path.setAttribute("opacity", "0.9");
             svg.appendChild(path);
           });
+
+          if (dragState && pointer) {
+            const leftButton = document.querySelector(`.match-chip[data-side="left"][data-id="${dragState.leftId}"]`);
+            if (!leftButton) return;
+            const leftToken = leftButton.querySelector(".match-token");
+            const leftRect = leftToken.getBoundingClientRect();
+            const x1 = leftRect.left - stageRect.left + leftRect.width / 2;
+            const y1 = leftRect.top - stageRect.top + leftRect.height / 2;
+            const x2 = pointer.x - stageRect.left;
+            const y2 = pointer.y - stageRect.top;
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", `M ${x1} ${y1} C ${x1 + 42} ${y1}, ${x2 - 42} ${y2}, ${x2} ${y2}`);
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke", "#1677ff");
+            path.setAttribute("stroke-width", "4");
+            path.setAttribute("stroke-linecap", "round");
+            path.setAttribute("opacity", "0.55");
+            path.setAttribute("stroke-dasharray", "8 7");
+            svg.appendChild(path);
+          }
+        };
+
+        const connectMatch = (leftId, rightId) => {
+          Object.keys(currentMatches).forEach((existingLeftId) => {
+            if (currentMatches[existingLeftId] === rightId) delete currentMatches[existingLeftId];
+          });
+
+          currentMatches[leftId] = rightId;
+          state.answers[question.id] = { ...currentMatches };
+          activeLeftId = null;
+          refreshMatchButtons();
+          updateNextAvailability();
+          queueSave();
+        };
+
+        const stopDrag = () => {
+          dragState = null;
+          updateMatchLines();
+          window.removeEventListener("pointermove", onPointerMove);
+          window.removeEventListener("pointerup", onPointerUp);
+        };
+
+        const onPointerMove = (event) => {
+          if (!dragState) return;
+          updateMatchLines({ x: event.clientX, y: event.clientY });
+        };
+
+        const onPointerUp = (event) => {
+          if (!dragState) return;
+          const target = document.elementFromPoint(event.clientX, event.clientY)?.closest('.match-chip[data-side="right"]');
+          const leftId = dragState.leftId;
+          stopDrag();
+          if (!target) return;
+          connectMatch(leftId, target.dataset.id);
         };
 
         document.querySelectorAll('.match-chip[data-side="left"]').forEach((button) => {
@@ -2226,23 +2274,22 @@
             activeLeftId = button.dataset.id;
             refreshMatchButtons();
           });
+
+          const handle = button.querySelector(".match-token.handle");
+          handle?.addEventListener("pointerdown", (event) => {
+            event.preventDefault();
+            dragState = { leftId: button.dataset.id };
+            activeLeftId = button.dataset.id;
+            updateMatchLines({ x: event.clientX, y: event.clientY });
+            window.addEventListener("pointermove", onPointerMove);
+            window.addEventListener("pointerup", onPointerUp);
+          });
         });
 
         document.querySelectorAll('.match-chip[data-side="right"]').forEach((button) => {
           button.addEventListener("click", () => {
             if (!activeLeftId) return;
-            const rightId = button.dataset.id;
-
-            Object.keys(currentMatches).forEach((leftId) => {
-              if (currentMatches[leftId] === rightId) delete currentMatches[leftId];
-            });
-
-            currentMatches[activeLeftId] = rightId;
-            state.answers[question.id] = { ...currentMatches };
-            activeLeftId = null;
-            refreshMatchButtons();
-            updateNextAvailability();
-            queueSave();
+            connectMatch(activeLeftId, button.dataset.id);
           });
         });
 

@@ -73,40 +73,35 @@
 
     .start-grid {
       display: grid;
-      gap: 20px;
-      grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+      gap: 18px;
+      grid-template-columns: minmax(0, 1.1fr) minmax(240px, 0.9fr);
       align-items: start;
     }
 
-    .logo-panel {
+    .start-side {
       display: grid;
       gap: 12px;
-      justify-items: center;
+    }
+
+    .start-side-card {
       padding: 16px;
-      border-radius: 22px;
-      background: rgba(248, 250, 252, 0.82);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(244,248,255,0.92));
       border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
     }
 
-    .logo-frame {
-      width: 132px;
-      height: 132px;
-      padding: 14px;
-      border-radius: 30px;
-      background: linear-gradient(180deg, #ffffff, #f3f7fd);
-      border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
-      display: grid;
-      place-items: center;
-    }
-
-    .school-logo {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      border-radius: 22px;
+    .start-side-card strong {
       display: block;
+      margin-bottom: 6px;
+      font-size: 0.96rem;
+    }
+
+    .start-side-card span {
+      display: block;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.94rem;
     }
 
     .start-form {
@@ -132,21 +127,8 @@
       backdrop-filter: blur(16px);
     }
 
-    .hero {
-      display: block;
-    }
-
-    .hero-copy,
     .workspace {
       padding: 22px;
-    }
-
-    .hero-copy {
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at top right, rgba(0, 122, 255, 0.08), transparent 24%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 255, 0.92));
     }
 
     .eyebrow {
@@ -217,10 +199,12 @@
     }
 
     .workspace {
-      margin-top: 14px;
+      margin-top: 0;
       display: grid;
       gap: 18px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 251, 255, 0.94));
+      background:
+        radial-gradient(circle at top right, rgba(0, 122, 255, 0.06), transparent 24%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 250, 255, 0.96));
     }
 
     .toolbar {
@@ -240,6 +224,12 @@
       color: var(--muted);
     }
 
+    .lab-kicker {
+      font-size: 0.95rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
     .badge {
       display: inline-flex;
       align-items: center;
@@ -257,6 +247,11 @@
       background: var(--panel-strong);
       border: 1px solid var(--line);
       box-shadow: 0 6px 18px rgba(15, 23, 42, 0.035);
+    }
+
+    .progress-box {
+      padding-top: 16px;
+      padding-bottom: 16px;
     }
 
     .progress {
@@ -317,7 +312,7 @@
       margin-top: 16px;
       padding: 8px;
       border-radius: 18px;
-      background: rgba(0, 122, 255, 0.03);
+      background: linear-gradient(180deg, rgba(242, 247, 255, 0.88), rgba(248, 250, 254, 0.92));
       border: 1px solid rgba(15, 23, 42, 0.05);
     }
 
@@ -418,6 +413,58 @@
     .answer:has(input:checked) {
       background: rgba(0, 122, 255, 0.09);
       border-color: rgba(0, 122, 255, 0.24);
+    }
+
+    .match-board {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .match-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .match-column {
+      display: grid;
+      gap: 10px;
+    }
+
+    .match-chip {
+      width: 100%;
+      text-align: left;
+      padding: 14px 15px;
+      border-radius: 16px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      background: rgba(248, 250, 252, 0.96);
+      color: var(--text);
+      box-shadow: none;
+    }
+
+    .match-chip.active {
+      border-color: rgba(0, 122, 255, 0.28);
+      background: rgba(0, 122, 255, 0.1);
+    }
+
+    .match-chip.connected {
+      border-color: rgba(31, 157, 85, 0.24);
+      background: rgba(31, 157, 85, 0.1);
+    }
+
+    .match-summary {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(248, 250, 252, 0.92);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+    }
+
+    .match-item {
+      font-size: 0.95rem;
+      color: var(--muted);
     }
 
     textarea, input[type="text"], input[type="password"], select {
@@ -565,9 +612,12 @@
       }
 
       .start-card,
-      .hero-copy,
       .workspace {
         padding: 18px;
+      }
+
+      .match-grid {
+        grid-template-columns: 1fr;
       }
 
       .mission-strip {
@@ -594,28 +644,36 @@
           <div class="eyebrow">Start</div>
           <h1>Automaten<br />labor</h1>
           <p class="sub">
-            Gib zuerst deinen Vornamen und deine Klasse an. Danach startet dein Arbeitsauftrag mit dem Snackautomaten.
+            Gib zuerst deinen Vornamen und deine Klasse an. Danach startest du in eine kleine Labor-Mission mit verschiedenen Automaten.
           </p>
           <div class="mission-strip">
             <div class="mission-card">
               <strong>Beobachten</strong>
-              <span>Den Automaten genau lesen.</span>
+              <span>Bilder genau lesen.</span>
             </div>
             <div class="mission-card">
               <strong>Erklären</strong>
-              <span>Mit Fachbegriffen antworten.</span>
+              <span>Mit Fachbegriffen begründen.</span>
             </div>
             <div class="mission-card">
-              <strong>Dokumentieren</strong>
-              <span>Am Ende das PDF speichern.</span>
+              <strong>Knobeln</strong>
+              <span>Aufgaben lösen und Verbindungen finden.</span>
             </div>
           </div>
         </div>
-        <div class="logo-panel">
-          <div class="logo-frame">
-            <img class="school-logo" src="assets/school-logo.jpeg" alt="Schullogo" />
+        <div class="start-side">
+          <div class="start-side-card">
+            <strong>Laborstation 1</strong>
+            <span>Den Snackautomaten untersuchen.</span>
           </div>
-          <div class="muted" style="text-align:center;">Maschinen lesen, Zustände verstehen, Antworten begründen.</div>
+          <div class="start-side-card">
+            <strong>Laborstation 2</strong>
+            <span>Ungewöhnliche Automaten erkennen.</span>
+          </div>
+          <div class="start-side-card">
+            <strong>Laborstation 3</strong>
+            <span>Am Ende die Auswertung als PDF sichern.</span>
+          </div>
         </div>
       </div>
       <div class="start-form">
@@ -644,34 +702,10 @@
   </div>
 
   <div class="shell hidden" id="appShell">
-    <section class="hero">
-      <section class="hero-copy glass">
-        <div class="eyebrow">Automatenlabor</div>
-        <h1 id="heroTitle">Automaten<br />verstehen</h1>
-        <p class="sub">
-          Du arbeitest heute im Automatenlabor mit einem Snackautomaten. Lies das Bild genau, beschreibe deine Beobachtungen und erkläre die Fachbegriffe an diesem Automaten.
-        </p>
-        <div class="mission-strip">
-          <div class="mission-card">
-            <strong>Station 1</strong>
-            <span>Den Automaten genau untersuchen.</span>
-          </div>
-          <div class="mission-card">
-            <strong>Station 2</strong>
-            <span>Eingaben, Zustände und Ausgaben erklären.</span>
-          </div>
-          <div class="mission-card">
-            <strong>Station 3</strong>
-            <span>Am Ende einen kurzen Bericht schreiben.</span>
-          </div>
-        </div>
-      </section>
-    </section>
-
     <main class="workspace glass">
       <div class="toolbar">
         <div>
-          <div class="eyebrow">Arbeitsbereich</div>
+          <div class="lab-kicker" id="heroTitle">Automatenlabor</div>
           <div class="meta">
             <span class="badge hidden" id="saveBadge">Speicherstand wird vorbereitet</span>
           </div>
@@ -739,7 +773,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "automatenlabor_worksheet_v4";
+    const STORAGE_KEY = "automatenlabor_worksheet_v5";
     const HELPER_PIN_HASH = "a7fc7be25bddd2b0be5cbc208ea6d2ff868801513abe5ce03d4079bd66167180";
     const state = loadState();
     let saveTimer = null;
@@ -835,12 +869,17 @@
       },
       {
         id: "q10",
-        type: "text",
-        text: "Nenne zwei Eingaben, die den Zustand des Automaten verändern könnten.",
-        help: "Es geht um Handlungen, die den Automaten beeinflussen.",
+        type: "single",
+        text: "Welche Handlung verändert den Zustand des Snackautomaten am klarsten?",
+        help: "Wähle die Handlung aus, die direkt zu einem neuen Zustand führen kann.",
         visual: "machine-photo",
-        sampleAnswer: "Zum Beispiel Geld einwerfen, eine Produkttaste drücken oder die Rückgabe auslösen.",
-        placeholder: "Der Zustand kann sich ändern, wenn ..."
+        options: [
+          "Nur vor dem Automaten stehen",
+          "Eine Münze einwerfen",
+          "Den Automaten anschauen",
+          "Am Regal vorbeigehen"
+        ],
+        correct: 1
       },
       {
         id: "q11",
@@ -853,21 +892,26 @@
       },
       {
         id: "q12",
-        type: "text",
-        text: "Warum passt dieser Snackautomat gut zum Thema 'Automat'? Begründe mit mindestens zwei Beobachtungen aus dem Bild.",
-        help: "Achte auf feste Eingaben, Zustände oder Ausgaben.",
+        type: "single",
+        text: "Welche Beobachtung zeigt am besten, dass der Snackautomat nur bestimmte Eingaben akzeptiert?",
+        help: "Achte darauf, welche Eingaben ausdrücklich genannt sind.",
         visual: "machine-photo",
-        sampleAnswer: "Zum Beispiel: Der Automat hat feste Tasten, akzeptiert bestimmte Münzen und gibt Produkte über ein Ausgabefach aus.",
-        placeholder: "Dieser Automat passt gut, weil ..."
+        options: [
+          "Es gibt drei Produkte im Regal.",
+          "Es steht am Automaten, welche Münzen akzeptiert werden.",
+          "Der Automat ist grau und schwarz.",
+          "Die Produkte liegen auf drei Ebenen."
+        ],
+        correct: 1
       },
       {
         id: "q13",
         type: "text",
-        text: "Beschreibe einen möglichen Ablauf vom Start bis zur Ausgabe eines Produkts in drei bis vier Schritten.",
-        help: "Nutze Wörter wie Start, Eingabe, Zustand und Ausgabe.",
+        text: "Formuliere eine klare Regel für den Snackautomaten: Wann darf ein Produkt ausgegeben werden?",
+        help: "Beschreibe die Regel so, dass jemand den Automaten danach verstehen kann.",
         visual: "machine-photo",
-        sampleAnswer: "Zum Beispiel: Startzustand ohne Geld, Münze einwerfen, passende Taste drücken, Produkt wird ausgegeben.",
-        placeholder: "1. ... 2. ... 3. ..."
+        sampleAnswer: "Ein Produkt darf erst ausgegeben werden, wenn genug Geld eingeworfen wurde und danach die passende Taste gedrückt wird.",
+        placeholder: "Ein Produkt darf nur dann ausgegeben werden, wenn ..."
       },
       {
         id: "q14",
@@ -888,22 +932,38 @@
       },
       {
         id: "q16",
-        type: "text",
-        text: "Zeitaufgabe: Schreibe in 45 Sekunden auf, woran du bei der Poststation erkennst, dass sie als Automat funktionieren kann.",
-        help: "Nenne mindestens zwei Beobachtungen aus dem Bild.",
+        type: "match",
+        text: "Zeitaufgabe: Verbinde innerhalb von 3 Minuten die passenden Aussagen zur Poststation.",
+        help: "Ordne jede Aussage genau einer passenden Beschreibung zu.",
         visual: "poststation-photo",
-        timerSeconds: 45,
-        sampleAnswer: "Zum Beispiel: Es gibt ein Bedienfeld mit Bildschirm, verschiedene Fächer und eine geregelte Ausgabe bzw. Annahme von Sendungen.",
-        placeholder: "Ich erkenne einen Automaten daran, dass ..."
+        timerSeconds: 180,
+        leftItems: [
+          { id: "l1", label: "Bildschirm und Bedienfeld" },
+          { id: "l2", label: "Viele einzelne Fächer" },
+          { id: "l3", label: "Feste Größe der Fächer" },
+          { id: "l4", label: "Poststation als Automat" }
+        ],
+        rightItems: [
+          { id: "r1", label: "Zeigt, dass es geregelte Ausgabestellen gibt." },
+          { id: "r2", label: "Hilft bei der Eingabe und Steuerung." },
+          { id: "r3", label: "Zeigt, dass nicht jede Sendung überall hineinpasst." },
+          { id: "r4", label: "Hat feste Eingaben, feste Abläufe und feste Ergebnisse." }
+        ],
+        correctMatches: {
+          l1: "r2",
+          l2: "r1",
+          l3: "r3",
+          l4: "r4"
+        }
       },
       {
         id: "q17",
         type: "text",
-        text: "Beschreibe eine mögliche Eingabe und eine mögliche Ausgabe an der Poststation.",
-        help: "Formuliere jeweils ein konkretes Beispiel.",
+        text: "Was verraten die Bezeichnungen XL, L, S und M über die Poststation?",
+        help: "Erkläre, welche Rolle diese Angaben für die Nutzung spielen.",
         visual: "poststation-photo",
-        sampleAnswer: "Eine Eingabe kann das Scannen oder Eingeben von Daten am Bildschirm sein. Eine Ausgabe kann das Öffnen eines Fachs oder die Annahme einer Sendung sein.",
-        placeholder: "Eine Eingabe ist ... Eine Ausgabe ist ..."
+        sampleAnswer: "Sie zeigen verschiedene Fachgrößen oder Paketgrößen an. Dadurch wird geregelt, welche Sendung in welches Fach passt.",
+        placeholder: "Die Bezeichnungen zeigen, dass ..."
       },
       {
         id: "q18",
@@ -1070,7 +1130,7 @@
       let points = 0;
       let maxPoints = 0;
       questions.forEach((question) => {
-        if (question.type === "single" || question.type === "yesno") {
+        if (question.type === "single" || question.type === "yesno" || question.type === "match") {
           maxPoints += 1;
           if (isAnswerCorrect(question)) points += 1;
         }
@@ -1085,6 +1145,15 @@
       if (question.type === "yesno") {
         return question.correctAnswer || "";
       }
+      if (question.type === "match") {
+        return question.leftItems
+          .map((item) => {
+            const rightId = question.correctMatches[item.id];
+            const rightItem = question.rightItems.find((entry) => entry.id === rightId);
+            return `${item.label} -> ${rightItem ? rightItem.label : ""}`;
+          })
+          .join(" | ");
+      }
       if (question.type === "text") {
         return question.sampleAnswer || "";
       }
@@ -1098,6 +1167,16 @@
       if (question.type === "yesno") {
         return answer || "[nicht beantwortet]";
       }
+      if (question.type === "match") {
+        if (!answer || typeof answer !== "object") return "[nicht beantwortet]";
+        return question.leftItems
+          .map((item) => {
+            const rightId = answer[item.id];
+            const rightItem = question.rightItems.find((entry) => entry.id === rightId);
+            return `${item.label} -> ${rightItem ? rightItem.label : "[offen]"}`;
+          })
+          .join(" | ");
+      }
       return String(answer || "[nicht beantwortet]");
     }
 
@@ -1108,6 +1187,10 @@
       }
       if (question.type === "yesno") {
         return answer === getCorrectAnswer(question);
+      }
+      if (question.type === "match") {
+        if (!answer || typeof answer !== "object") return false;
+        return question.leftItems.every((item) => answer[item.id] === question.correctMatches[item.id]);
       }
       return false;
     }
@@ -1543,6 +1626,104 @@
             queueSave();
           });
         });
+      } else if (question.type === "match") {
+        const currentMatches = state.answers[question.id] && typeof state.answers[question.id] === "object"
+          ? { ...state.answers[question.id] }
+          : {};
+        let activeLeftId = null;
+
+        const renderMatchSummary = () => {
+          const summary = question.leftItems.map((item) => {
+            const rightId = currentMatches[item.id];
+            const rightItem = question.rightItems.find((entry) => entry.id === rightId);
+            return `
+              <div class="match-item">
+                <strong>${escapeHtml(item.label)}</strong> -> ${escapeHtml(rightItem ? rightItem.label : "noch offen")}
+              </div>
+            `;
+          }).join("");
+          const summaryEl = document.getElementById("matchSummary");
+          if (summaryEl) summaryEl.innerHTML = summary;
+        };
+
+        els.questionAnswer.innerHTML = `
+          <div class="match-board">
+            <div class="match-grid">
+              <div class="match-column" id="matchLeftColumn">
+                ${question.leftItems.map((item) => `
+                  <button type="button" class="match-chip ${currentMatches[item.id] ? "connected" : ""}" data-side="left" data-id="${item.id}">
+                    ${escapeHtml(item.label)}
+                  </button>
+                `).join("")}
+              </div>
+              <div class="match-column" id="matchRightColumn">
+                ${question.rightItems.map((item) => `
+                  <button type="button" class="match-chip" data-side="right" data-id="${item.id}">
+                    ${escapeHtml(item.label)}
+                  </button>
+                `).join("")}
+              </div>
+            </div>
+            <div class="match-summary" id="matchSummary"></div>
+            <div class="row">
+              <button type="button" class="secondary" id="clearMatchesBtn">Verbindungen löschen</button>
+            </div>
+          </div>
+        `;
+
+        const refreshMatchButtons = () => {
+          document.querySelectorAll('.match-chip[data-side="left"]').forEach((button) => {
+            const id = button.dataset.id;
+            button.classList.toggle("active", activeLeftId === id);
+            button.classList.toggle("connected", Boolean(currentMatches[id]));
+          });
+
+          document.querySelectorAll('.match-chip[data-side="right"]').forEach((button) => {
+            const rightId = button.dataset.id;
+            const connected = Object.values(currentMatches).includes(rightId);
+            button.classList.toggle("connected", connected);
+            button.classList.toggle("active", false);
+          });
+        };
+
+        document.querySelectorAll('.match-chip[data-side="left"]').forEach((button) => {
+          button.addEventListener("click", () => {
+            activeLeftId = button.dataset.id;
+            refreshMatchButtons();
+          });
+        });
+
+        document.querySelectorAll('.match-chip[data-side="right"]').forEach((button) => {
+          button.addEventListener("click", () => {
+            if (!activeLeftId) return;
+            const rightId = button.dataset.id;
+
+            Object.keys(currentMatches).forEach((leftId) => {
+              if (currentMatches[leftId] === rightId) delete currentMatches[leftId];
+            });
+
+            currentMatches[activeLeftId] = rightId;
+            state.answers[question.id] = { ...currentMatches };
+            activeLeftId = null;
+            renderMatchSummary();
+            refreshMatchButtons();
+            updateNextAvailability();
+            queueSave();
+          });
+        });
+
+        document.getElementById("clearMatchesBtn").addEventListener("click", () => {
+          activeLeftId = null;
+          state.answers[question.id] = {};
+          Object.keys(currentMatches).forEach((key) => delete currentMatches[key]);
+          renderMatchSummary();
+          refreshMatchButtons();
+          updateNextAvailability();
+          queueSave();
+        });
+
+        renderMatchSummary();
+        refreshMatchButtons();
       } else {
         els.questionAnswer.innerHTML = `
           <div class="answers">
@@ -1613,6 +1794,11 @@
       const answer = state.answers[question.id];
       if (question.type === "single") return typeof answer === "number";
       if (question.type === "yesno") return answer === "ja" || answer === "nein";
+      if (question.type === "match") {
+        return Boolean(answer)
+          && typeof answer === "object"
+          && question.leftItems.every((item) => Boolean(answer[item.id]));
+      }
       return typeof answer === "string" && answer.trim().length > 0;
     }
 
@@ -1776,23 +1962,14 @@
         });
       };
 
-      try {
-        const logoData = await loadImageDataUrl("assets/school-logo.jpeg");
-        doc.setFillColor(244, 248, 255);
-        doc.roundedRect(margin - 4, y - 6, 74, 74, 18, 18, "F");
-        doc.addImage(logoData, "JPEG", margin + 6, y + 4, 54, 54);
-      } catch (error) {
-        console.error("Logo konnte nicht geladen werden.", error);
-      }
-
       doc.setFont("helvetica", "bold");
       doc.setTextColor(...neutralColor);
       doc.setFontSize(22);
-      doc.text("Automatenlabor", margin + 70, y + 18);
+      doc.text("Automatenlabor", margin, y + 18);
       doc.setFontSize(13);
       doc.setFont("helvetica", "normal");
-      doc.text("Auswertung", margin + 70, y + 40);
-      y += 78;
+      doc.text("Auswertung", margin, y + 40);
+      y += 56;
 
       addWrappedText(`Vorname: ${name}`);
       addWrappedText(`Klasse: ${className}`);

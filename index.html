@@ -454,6 +454,25 @@
       margin-top: 16px;
     }
 
+    .match-head {
+      display: grid;
+      gap: 6px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(244, 248, 255, 0.95), rgba(250, 252, 255, 0.96));
+      border: 1px solid rgba(15, 23, 42, 0.06);
+    }
+
+    .match-head strong {
+      font-size: 0.98rem;
+    }
+
+    .match-head span {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.93rem;
+    }
+
     .match-grid {
       display: grid;
       gap: 14px;
@@ -468,12 +487,15 @@
     .match-chip {
       width: 100%;
       text-align: left;
-      padding: 14px 15px;
-      border-radius: 16px;
+      padding: 15px 16px;
+      border-radius: 18px;
       border: 1px solid rgba(15, 23, 42, 0.08);
-      background: rgba(248, 250, 252, 0.96);
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(246,249,253,0.96));
       color: var(--text);
-      box-shadow: none;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .match-chip.active {
@@ -482,8 +504,26 @@
     }
 
     .match-chip.connected {
-      border-color: rgba(31, 157, 85, 0.24);
-      background: rgba(31, 157, 85, 0.1);
+      border-color: rgba(0, 122, 255, 0.2);
+      background: rgba(231, 242, 255, 0.92);
+    }
+
+    .match-token {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 34px;
+      background: rgba(0, 122, 255, 0.1);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.92rem;
+    }
+
+    .match-chip-text {
+      display: block;
+      line-height: 1.42;
     }
 
     .match-summary {
@@ -1788,18 +1828,24 @@
 
         els.questionAnswer.innerHTML = `
           <div class="match-board">
+            <div class="match-head">
+              <strong>Verbinde passende Karten</strong>
+              <span>Tippe erst links auf eine Karte und dann rechts auf die passende Beschreibung.</span>
+            </div>
             <div class="match-grid">
               <div class="match-column" id="matchLeftColumn">
-                ${question.leftItems.map((item) => `
+                ${question.leftItems.map((item, index) => `
                   <button type="button" class="match-chip ${currentMatches[item.id] ? "connected" : ""}" data-side="left" data-id="${item.id}">
-                    ${escapeHtml(item.label)}
+                    <span class="match-token">${String.fromCharCode(65 + index)}</span>
+                    <span class="match-chip-text">${escapeHtml(item.label)}</span>
                   </button>
                 `).join("")}
               </div>
               <div class="match-column" id="matchRightColumn">
-                ${question.rightItems.map((item) => `
+                ${question.rightItems.map((item, index) => `
                   <button type="button" class="match-chip" data-side="right" data-id="${item.id}">
-                    ${escapeHtml(item.label)}
+                    <span class="match-token">${index + 1}</span>
+                    <span class="match-chip-text">${escapeHtml(item.label)}</span>
                   </button>
                 `).join("")}
               </div>

@@ -19,6 +19,8 @@ create table if not exists public.worksheet_attempts (
   submitted_at timestamptz,
   report_path text,
   report_uploaded_at timestamptz,
+  email_sent_at timestamptz,
+  email_error text not null default '',
   created_at timestamptz not null default timezone('utc', now()),
   updated_at timestamptz not null default timezone('utc', now())
 );
@@ -32,7 +34,9 @@ add column if not exists timer_starts jsonb not null default '{}'::jsonb,
 add column if not exists started_at timestamptz,
 add column if not exists submitted_at timestamptz,
 add column if not exists report_path text,
-add column if not exists report_uploaded_at timestamptz;
+add column if not exists report_uploaded_at timestamptz,
+add column if not exists email_sent_at timestamptz,
+add column if not exists email_error text not null default '';
 
 alter table public.worksheet_attempts enable row level security;
 

@@ -20,6 +20,7 @@ Die Schuelerinnen und Schueler starten mit Vorname, Nachname und Klasse, bearbei
 4. Freundliche Abschlussseite fuer die SuS
 5. Hintergrundspeicherung der Ergebnisse in Supabase
 6. PDF-Auswertung wird automatisch zentral im Storage abgelegt
+7. Optional: automatischer Mailversand der PDF an die Lehrkraft
 
 ## Inhaltlich
 
@@ -51,6 +52,7 @@ Ziel ist nicht Benotung, sondern eine verdeckte Lernstandserhebung:
 - [index.html](/Users/carlremmes/Documents/Codex/2026-04-21-github-plugin-github-openai-curated-inspect/automatenlabor/index.html)
 - [supabase_central_results.sql](/Users/carlremmes/Documents/Codex/2026-04-21-github-plugin-github-openai-curated-inspect/automatenlabor/supabase_central_results.sql)
 - [SUPABASE_SETUP.md](/Users/carlremmes/Documents/Codex/2026-04-21-github-plugin-github-openai-curated-inspect/automatenlabor/SUPABASE_SETUP.md)
+- [SUPABASE_EMAIL_SETUP.md](/Users/carlremmes/Documents/Codex/2026-04-21-github-plugin-github-openai-curated-inspect/automatenlabor/SUPABASE_EMAIL_SETUP.md)
 
 ## Supabase
 
@@ -74,3 +76,4 @@ Er legt an:
 - Die PDF-Auswertung ist fuer Lehrkraefte gedacht.
 - Uebersprungene Aufgaben werden in der Auswertung markiert.
 - Der Arbeitsstand wird waehrend der Bearbeitung laufend gespeichert.
+- Fuer automatischen Mailversand wird eine Supabase Edge Function mit Mailanbieter benoetigt.

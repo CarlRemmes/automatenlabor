@@ -2741,7 +2741,39 @@
         return;
       }
 
+      let mailStatusMessage = "";
+      const { error: mailError } = await client.functions.invoke("send-report-email", {
+        body: {
+          reportPath: fileName,
+          studentName: name,
+          lastName,
+          className
+        }
+      });
+
+      if (mailError) {
+        console.error(mailError);
+        mailStatusMessage = " Die Mail konnte gerade nicht automatisch versendet werden.";
+        await client
+          .from("worksheet_attempts")
+          .update({
+            email_error: String(mailError.message || "mail_failed"),
+            updated_at: new Date().toISOString()
+          })
+          .eq("user_id", authUser.id);
+      } else {
+        await client
+          .from("worksheet_attempts")
+          .update({
+            email_sent_at: new Date().toISOString(),
+            email_error: "",
+            updated_at: new Date().toISOString()
+          })
+          .eq("user_id", authUser.id);
+      }
+
       saveLocalState();
+      els.downloadMessage.textContent = `Die Ergebnisse wurden gespeichert.${mailStatusMessage}`;
       render();
     }
 

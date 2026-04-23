@@ -80,7 +80,40 @@
 
     .start-side {
       display: grid;
-      gap: 12px;
+      gap: 14px;
+    }
+
+    .start-preview {
+      padding: 14px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(244,248,255,0.94));
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .start-preview-frame {
+      border-radius: 18px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #eef4fc, #f8fbff);
+      border: 1px solid rgba(15, 23, 42, 0.05);
+      padding: 10px;
+    }
+
+    .start-machine {
+      width: 100%;
+      display: block;
+      border-radius: 14px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .start-preview-note {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(0, 122, 255, 0.07);
+      color: var(--text);
+      font-size: 0.94rem;
+      line-height: 1.5;
     }
 
     .start-side-card {
@@ -687,6 +720,14 @@
           </div>
         </div>
         <div class="start-side">
+          <div class="start-preview">
+            <div class="start-preview-frame">
+              <img class="start-machine" src="assets/automat.png" alt="Snackautomat im Automatenlabor" />
+            </div>
+            <div class="start-preview-note">
+              Heute untersuchst du nicht nur diesen Snackautomaten. Du triffst auch auf andere Maschinen, die man nicht sofort als Automat erkennt.
+            </div>
+          </div>
           <div class="start-side-card">
             <strong>Laborstation 1</strong>
             <span>Den Snackautomaten untersuchen.</span>

@@ -122,37 +122,16 @@
       align-content: start;
     }
 
-    .brand-lockup {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .brand-mark {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(31, 42, 55, 0.08);
-      box-shadow: 0 6px 16px rgba(31, 42, 55, 0.05);
-    }
-
-    .brand-mark svg {
-      width: 24px;
-      height: 24px;
-    }
-
+    .brand-lockup,
     .brand-meta {
       display: grid;
       gap: 2px;
     }
 
     .brand-name {
-      font-size: 1.02rem;
+      font-size: 1.04rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.04em;
     }
 
     .brand-sub {
@@ -263,21 +242,11 @@
       color: var(--muted);
     }
 
-    .app-brand .brand-mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-    }
-
-    .app-brand .brand-mark svg {
-      width: 20px;
-      height: 20px;
-    }
-
     .lab-kicker {
-      font-size: 1rem;
+      font-size: 1.04rem;
       color: var(--text);
       font-weight: 700;
+      letter-spacing: -0.04em;
     }
 
     .badge {
@@ -473,21 +442,50 @@
     }
 
     .marked-visual {
+      display: grid;
+      place-items: center;
+    }
+
+    .image-stage {
       position: relative;
-      display: flex;
-      justify-content: center;
+      display: inline-block;
+      line-height: 0;
+      max-width: 100%;
     }
 
     .hotspot {
       position: absolute;
-      border-radius: 18px;
-      border: 2px solid rgba(22, 119, 255, 0.9);
-      background: rgba(22, 119, 255, 0.09);
-      box-shadow: 0 0 0 6px rgba(22, 119, 255, 0.07);
+      pointer-events: none;
     }
 
-    .hotspot.circle {
+    .hotspot.dot {
+      width: 18px;
+      height: 18px;
       border-radius: 999px;
+      transform: translate(-50%, -50%);
+      background: #3f88ff;
+      border: 3px solid rgba(255, 255, 255, 0.98);
+      box-shadow: 0 0 0 5px rgba(63, 136, 255, 0.18), 0 6px 14px rgba(28, 56, 102, 0.16);
+    }
+
+    .hotspot.frame {
+      border-radius: 16px;
+      border: 2px solid rgba(63, 136, 255, 0.8);
+      background: rgba(63, 136, 255, 0.06);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+    }
+
+    .hotspot.ring {
+      border-radius: 999px;
+      border: 2px solid rgba(63, 136, 255, 0.82);
+      background: rgba(63, 136, 255, 0.05);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+    }
+
+    .hotspot.underline {
+      border-radius: 999px;
+      border: 2px solid rgba(63, 136, 255, 0.72);
+      background: rgba(63, 136, 255, 0.08);
     }
 
     .answers {
@@ -852,14 +850,6 @@
       <div class="start-grid">
         <div class="start-copy">
           <div class="brand-lockup">
-            <div class="brand-mark" aria-hidden="true">
-              <svg viewBox="0 0 32 32" fill="none">
-                <rect x="8" y="4.5" width="16" height="23" rx="6.5" stroke="#1f2a37" stroke-width="2"></rect>
-                <path d="M12 10h8" stroke="#1f2a37" stroke-width="2" stroke-linecap="round"></path>
-                <path d="M12 15h8" stroke="#1f2a37" stroke-width="2" stroke-linecap="round" opacity="0.45"></path>
-                <circle cx="16" cy="22" r="2.5" fill="#1f2a37"></circle>
-              </svg>
-            </div>
             <div class="brand-meta">
               <div class="brand-name">Automatenlabor</div>
               <div class="brand-sub">Labor-Mission</div>
@@ -915,14 +905,6 @@
       <div class="toolbar">
         <div>
           <div class="brand-lockup app-brand" id="heroTitle">
-            <div class="brand-mark" aria-hidden="true">
-              <svg viewBox="0 0 32 32" fill="none">
-                <rect x="8" y="4.5" width="16" height="23" rx="6.5" stroke="#1f2a37" stroke-width="2"></rect>
-                <path d="M12 10h8" stroke="#1f2a37" stroke-width="2" stroke-linecap="round"></path>
-                <path d="M12 15h8" stroke="#1f2a37" stroke-width="2" stroke-linecap="round" opacity="0.45"></path>
-                <circle cx="16" cy="22" r="2.5" fill="#1f2a37"></circle>
-              </svg>
-            </div>
             <div class="brand-meta">
               <div class="lab-kicker">Automatenlabor</div>
             </div>
@@ -1680,10 +1662,12 @@
         <div class="example-grid">
           <div class="example-card photo-card machine-shot">
             <div class="example-visual marked-visual">
-              <img class="machine-photo" src="assets/automat.png" alt="Snackautomat mit markierten Stellen" />
+              <div class="image-stage">
+                <img class="machine-photo" src="assets/automat.png" alt="Snackautomat mit markierten Stellen" />
               ${markers.map((marker) => `
-                <span class="hotspot ${marker.kind || ""}" style="left:${marker.x}; top:${marker.y}; width:${marker.w}; height:${marker.h};"></span>
+                <span class="hotspot ${marker.kind || ""}" style="${marker.style || `left:${marker.x}; top:${marker.y}; width:${marker.w}; height:${marker.h};`}"></span>
               `).join("")}
+              </div>
             </div>
           </div>
         </div>
@@ -1702,17 +1686,17 @@
           </div>
         `,
         "machine-buttons-photo": buildMarkedMachineVisual([
-          { x: "69%", y: "30%", w: "16%", h: "19%" }
+          { kind: "dot", style: "left:78%; top:40%;" }
         ]),
         "machine-inputs-photo": buildMarkedMachineVisual([
-          { x: "69%", y: "30%", w: "16%", h: "19%" },
-          { x: "74%", y: "63%", w: "11%", h: "15%", kind: "circle" }
+          { kind: "dot", style: "left:78%; top:40%;" },
+          { kind: "dot", style: "left:78%; top:67%;" }
         ]),
         "machine-output-photo": buildMarkedMachineVisual([
-          { x: "10%", y: "74%", w: "34%", h: "12%" }
+          { kind: "frame", style: "left:6%; top:77%; width:33%; height:12%;" }
         ]),
         "machine-money-photo": buildMarkedMachineVisual([
-          { x: "73%", y: "58%", w: "15%", h: "18%" }
+          { kind: "frame", style: "left:68%; top:60%; width:22%; height:20%;" }
         ]),
         "ticket-photo": `
           <div class="example-grid">
@@ -1754,9 +1738,11 @@
           <div class="example-grid">
             <div class="example-card photo-card diagram-photo">
               <div class="example-visual marked-visual">
-                <img class="machine-photo" src="assets/example-stategraph.jpeg" alt="Zustandsgraph mit markierten Zuständen und Eingabe" />
-                <span class="hotspot circle" style="left:7%; top:32%; width:22%; height:34%;"></span>
-                <span class="hotspot" style="left:39%; top:6%; width:28%; height:12%;"></span>
+                <div class="image-stage">
+                  <img class="machine-photo" src="assets/example-stategraph.jpeg" alt="Zustandsgraph mit markierten Zuständen und Eingabe" />
+                  <span class="hotspot ring" style="left:8%; top:34%; width:21%; height:35%;"></span>
+                  <span class="hotspot underline" style="left:37%; top:4%; width:31%; height:13%;"></span>
+                </div>
               </div>
             </div>
           </div>

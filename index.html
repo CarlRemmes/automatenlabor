@@ -579,6 +579,15 @@
       margin-top: 8px;
     }
 
+    .feedback-note {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(236, 244, 255, 0.9), rgba(247, 250, 255, 0.95));
+      border: 1px solid rgba(0, 122, 255, 0.12);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
     .summary-item {
       padding: 12px 14px;
       border-radius: 14px;
@@ -744,6 +753,7 @@
           <p class="sub" style="max-width: none;">
             Prüfe noch einmal deine Angaben und speichere danach die Auswertung auf diesem Gerät.
           </p>
+          <div class="feedback-note" id="finishFeedback"></div>
           <div class="skip-summary" id="skipSummary"></div>
           <div class="row" style="margin-top: 18px;">
             <button class="primary" id="downloadBtn">Speichern</button>
@@ -1025,6 +1035,7 @@
       questionAnswer: document.getElementById("questionAnswer"),
       finishCard: document.getElementById("finishCard"),
       finishForm: document.getElementById("finishForm"),
+      finishFeedback: document.getElementById("finishFeedback"),
       finishName: document.getElementById("finishName"),
       finishClass: document.getElementById("finishClass"),
       downloadBtn: document.getElementById("downloadBtn"),
@@ -1207,6 +1218,34 @@
           </div>
         `)
         .join("");
+    }
+
+    function getFinishFeedback() {
+      const skippedCount = state.skipped.length;
+      const answeredCount = questions.filter((question) => currentAnswerExistsForQuestion(question)).length;
+
+      if (skippedCount === 0 && answeredCount === questions.length) {
+        return "Du hast alle Stationen des Automatenlabors bearbeitet. Speichere jetzt dein PDF, um deine Ergebnisse festzuhalten.";
+      }
+
+      if (skippedCount <= 2) {
+        return "Du hast das Automatenlabor fast vollstandig bearbeitet. Speichere jetzt dein PDF, damit deine Antworten gesichert sind.";
+      }
+
+      return "Du hast das Automatenlabor bearbeitet und eigene Losungen ausprobiert. Speichere jetzt dein PDF, um deinen Arbeitsstand mitzunehmen.";
+    }
+
+    function currentAnswerExistsForQuestion(question) {
+      if (getSkippedEntry(question)) return true;
+      const answer = state.answers[question.id];
+      if (question.type === "single") return typeof answer === "number";
+      if (question.type === "yesno") return answer === "ja" || answer === "nein";
+      if (question.type === "match") {
+        return Boolean(answer)
+          && typeof answer === "object"
+          && question.leftItems.every((item) => Boolean(answer[item.id]));
+      }
+      return typeof answer === "string" && answer.trim().length > 0;
     }
 
     function getQuestionCode(index) {
@@ -1749,6 +1788,7 @@
       els.nextBtn.classList.add("hidden");
       els.downloadBtn.textContent = state.savedLocally ? "Gespeichert" : "Speichern";
       els.downloadBtn.disabled = state.savedLocally;
+      els.finishFeedback.textContent = getFinishFeedback();
       els.finishName.textContent = `Vorname: ${state.studentName || "-"}`;
       els.finishClass.textContent = `Klasse: ${state.className || "-"}`;
       if (state.savedLocally) {
@@ -1790,16 +1830,7 @@
     function currentQuestionHasAnswer() {
       const question = questions[state.currentIndex];
       if (!question) return false;
-      if (getSkippedEntry(question)) return true;
-      const answer = state.answers[question.id];
-      if (question.type === "single") return typeof answer === "number";
-      if (question.type === "yesno") return answer === "ja" || answer === "nein";
-      if (question.type === "match") {
-        return Boolean(answer)
-          && typeof answer === "object"
-          && question.leftItems.every((item) => Boolean(answer[item.id]));
-      }
-      return typeof answer === "string" && answer.trim().length > 0;
+      return currentAnswerExistsForQuestion(question);
     }
 
     function updateNextAvailability() {

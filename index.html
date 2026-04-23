@@ -6,21 +6,21 @@
   <title>Automatenlabor</title>
   <style>
     :root {
-      --bg: #f4f7fb;
-      --panel: rgba(255, 255, 255, 0.9);
-      --panel-strong: rgba(255, 255, 255, 0.98);
-      --text: #172538;
-      --muted: #6f7e93;
-      --line: rgba(15, 23, 42, 0.06);
-      --accent: #007aff;
-      --accent-soft: rgba(0, 122, 255, 0.1);
-      --green: #1f9d55;
-      --amber: #f59e0b;
-      --danger: #e11d48;
-      --shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
-      --radius-xl: 26px;
-      --radius-lg: 18px;
-      --radius-md: 14px;
+      --bg: #f6f2ea;
+      --panel: #fffdf9;
+      --panel-strong: #ffffff;
+      --text: #1f2a37;
+      --muted: #6f6a62;
+      --line: rgba(52, 46, 39, 0.1);
+      --accent: #c96b2c;
+      --accent-soft: rgba(201, 107, 44, 0.12);
+      --green: #2e7d5a;
+      --amber: #c5851d;
+      --danger: #c74a3a;
+      --shadow: 0 18px 40px rgba(43, 35, 28, 0.08);
+      --radius-xl: 24px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
     }
 
     * { box-sizing: border-box; }
@@ -31,9 +31,9 @@
       font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(0, 122, 255, 0.06), transparent 22%),
-        radial-gradient(circle at bottom right, rgba(0, 122, 255, 0.04), transparent 18%),
-        linear-gradient(180deg, #fbfcfe, #f3f6fb 62%, #edf2f8);
+        radial-gradient(circle at top left, rgba(201, 107, 44, 0.08), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(46, 125, 90, 0.06), transparent 20%),
+        linear-gradient(180deg, #fcfaf5, #f6f2ea 65%, #efe8dd);
     }
 
     button, input, textarea {
@@ -43,107 +43,141 @@
     .shell {
       width: min(900px, calc(100% - 28px));
       margin: 18px auto;
-      padding: 8px;
-      border-radius: 28px;
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 26px;
+      background: rgba(255, 251, 245, 0.92);
+      border: 1px solid rgba(90, 74, 56, 0.08);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
     }
 
     .start-shell {
       width: min(980px, calc(100% - 28px));
       margin: 34px auto;
       padding: 10px;
-      border-radius: 32px;
-      background: rgba(255, 255, 255, 0.74);
-      border: 1px solid rgba(255, 255, 255, 0.84);
+      border-radius: 28px;
+      background: rgba(255, 251, 245, 0.94);
+      border: 1px solid rgba(90, 74, 56, 0.08);
       box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
-      backdrop-filter: blur(18px);
     }
 
     .start-card {
-      padding: 34px;
+      padding: 24px;
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(circle at top right, rgba(0, 122, 255, 0.1), transparent 30%),
-        radial-gradient(circle at bottom left, rgba(31, 157, 85, 0.06), transparent 24%),
-        linear-gradient(180deg, rgba(255,255,255,0.99), rgba(247,250,255,0.95));
+        radial-gradient(circle at top right, rgba(201, 107, 44, 0.08), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.99), rgba(251,247,240,0.98));
     }
 
     .start-grid {
       display: grid;
-      gap: 24px;
-      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
-      align-items: stretch;
+      gap: 18px;
+      grid-template-columns: minmax(0, 1.04fr) minmax(300px, 0.96fr);
+      align-items: start;
     }
 
     .start-side {
       display: grid;
-      gap: 16px;
+      gap: 14px;
     }
 
     .start-preview {
-      padding: 16px;
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(242,247,255,0.94));
-      border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+      padding: 18px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(247,241,233,0.98));
+      border: 1px solid rgba(52, 46, 39, 0.08);
+      box-shadow: 0 14px 32px rgba(43, 35, 28, 0.06);
     }
 
     .start-preview-frame {
-      border-radius: 20px;
+      border-radius: 22px;
       overflow: hidden;
-      background: linear-gradient(180deg, #eef4fc, #f8fbff);
-      border: 1px solid rgba(15, 23, 42, 0.05);
-      padding: 12px;
+      background:
+        linear-gradient(160deg, rgba(233, 221, 203, 0.96), rgba(249, 244, 236, 0.98));
+      border: 1px solid rgba(52, 46, 39, 0.1);
+      padding: 18px;
     }
 
     .start-machine {
       width: 100%;
       display: block;
-      border-radius: 16px;
-      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.1);
+      border-radius: 18px;
+      box-shadow: 0 16px 30px rgba(43, 35, 28, 0.12);
     }
 
     .start-preview-note {
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-radius: 18px;
-      background: rgba(0, 122, 255, 0.06);
+      margin-top: 16px;
+      padding: 12px 0 0;
+      border-radius: 0;
+      background: transparent;
       color: var(--text);
-      font-size: 0.94rem;
+      font-size: 0.96rem;
       line-height: 1.5;
+      border-top: 1px solid rgba(52, 46, 39, 0.08);
     }
 
-    .start-labline {
-      padding: 16px 18px;
-      border-radius: 20px;
-      background: rgba(248, 250, 252, 0.88);
-      border: 1px solid rgba(15, 23, 42, 0.06);
+    .start-copy {
       display: grid;
-      gap: 8px;
+      gap: 18px;
     }
 
-    .start-labline strong {
+    .start-caption {
+      max-width: 32rem;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    .start-points {
+      display: grid;
+      gap: 10px;
+      margin: 4px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .start-points li {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 12px;
+      align-items: start;
+      color: var(--text);
+    }
+
+    .start-points span {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(201, 107, 44, 0.12);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.86rem;
+    }
+
+    .start-points strong {
+      display: block;
+      margin-bottom: 2px;
       font-size: 0.98rem;
     }
 
-    .start-labline span {
+    .start-points small {
+      display: block;
       color: var(--muted);
-      line-height: 1.45;
       font-size: 0.94rem;
+      line-height: 1.5;
     }
 
     .start-form {
       display: grid;
       gap: 14px;
-      margin-top: 24px;
-      padding: 18px;
-      border-radius: 22px;
-      background: rgba(248, 250, 252, 0.82);
-      border: 1px solid rgba(15, 23, 42, 0.06);
+      margin-top: 8px;
+      padding: 20px;
+      border-radius: 24px;
+      background: rgba(249, 245, 237, 0.9);
+      border: 1px solid rgba(52, 46, 39, 0.09);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
     }
 
     .field {
@@ -159,8 +193,7 @@
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: var(--radius-xl);
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
-      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 24px rgba(43, 35, 28, 0.04);
     }
 
     .workspace {
@@ -182,8 +215,8 @@
 
     h1 {
       margin: 0 0 12px;
-      font-size: clamp(2.8rem, 5vw, 4.6rem);
-      line-height: 0.9;
+      font-size: clamp(2.7rem, 4.6vw, 4.2rem);
+      line-height: 0.92;
       letter-spacing: -0.05em;
       cursor: default;
       user-select: none;
@@ -202,33 +235,6 @@
       max-width: 42rem;
     }
 
-    .mission-strip {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 22px;
-    }
-
-    .mission-card {
-      padding: 14px 15px;
-      border-radius: 18px;
-      background: rgba(248, 250, 252, 0.82);
-      border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
-    }
-
-    .mission-card strong {
-      display: block;
-      font-size: 0.92rem;
-      margin-bottom: 6px;
-    }
-
-    .mission-card span {
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.4;
-    }
-
     .art {
       width: 100%;
       height: 100%;
@@ -238,9 +244,7 @@
       margin-top: 0;
       display: grid;
       gap: 18px;
-      background:
-        radial-gradient(circle at top right, rgba(0, 122, 255, 0.06), transparent 24%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 250, 255, 0.96));
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(252, 249, 244, 0.98));
     }
 
     .toolbar {
@@ -271,7 +275,7 @@
       align-items: center;
       padding: 7px 11px;
       border-radius: 999px;
-      background: rgba(16, 35, 61, 0.05);
+      background: rgba(52, 46, 39, 0.06);
       font-weight: 600;
     }
 
@@ -282,7 +286,7 @@
       border-radius: var(--radius-lg);
       background: var(--panel-strong);
       border: 1px solid var(--line);
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.035);
+      box-shadow: 0 6px 18px rgba(43, 35, 28, 0.035);
     }
 
     .progress-box {
@@ -302,7 +306,7 @@
       height: 100%;
       width: 0;
       border-radius: inherit;
-      background: linear-gradient(90deg, #79b8ff, #007aff 45%, #1f9d55);
+      background: linear-gradient(90deg, #d18c39, #c96b2c 45%, #2e7d5a);
       transition: width 0.25s ease;
     }
 
@@ -348,8 +352,8 @@
       margin-top: 16px;
       padding: 8px;
       border-radius: 18px;
-      background: linear-gradient(180deg, rgba(242, 247, 255, 0.88), rgba(248, 250, 254, 0.92));
-      border: 1px solid rgba(15, 23, 42, 0.05);
+      background: #f6efe5;
+      border: 1px solid rgba(52, 46, 39, 0.08);
     }
 
     .timer-box {
@@ -395,16 +399,14 @@
     .example-card {
       padding: 12px;
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.95);
-      border: 1px solid rgba(15, 23, 42, 0.06);
+      background: rgba(255, 255, 255, 0.98);
+      border: 1px solid rgba(52, 46, 39, 0.08);
     }
 
     .example-visual {
       height: 82px;
       border-radius: 14px;
-      background:
-        radial-gradient(circle at top right, rgba(0, 122, 255, 0.14), transparent 34%),
-        linear-gradient(180deg, rgba(235, 244, 255, 0.95), rgba(243, 247, 252, 0.95));
+      background: linear-gradient(180deg, #f7efe3, #fcfaf6);
       margin-bottom: 0;
       display: grid;
       place-items: center;
@@ -436,19 +438,19 @@
       align-items: flex-start;
       padding: 15px 16px;
       border-radius: 16px;
-      background: rgba(248, 250, 252, 0.95);
-      border: 1px solid rgba(15, 23, 42, 0.06);
+      background: #fcfaf6;
+      border: 1px solid rgba(52, 46, 39, 0.08);
       transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
     }
 
     .answer:hover {
       transform: translateY(-1px);
-      border-color: rgba(0, 122, 255, 0.16);
+      border-color: rgba(201, 107, 44, 0.22);
     }
 
     .answer:has(input:checked) {
-      background: rgba(0, 122, 255, 0.09);
-      border-color: rgba(0, 122, 255, 0.24);
+      background: rgba(201, 107, 44, 0.09);
+      border-color: rgba(201, 107, 44, 0.24);
     }
 
     .match-board {
@@ -462,8 +464,8 @@
       gap: 6px;
       padding: 12px 14px;
       border-radius: 16px;
-      background: linear-gradient(180deg, rgba(244, 248, 255, 0.95), rgba(250, 252, 255, 0.96));
-      border: 1px solid rgba(15, 23, 42, 0.06);
+      background: #f8f2e8;
+      border: 1px solid rgba(52, 46, 39, 0.08);
     }
 
     .match-head strong {
@@ -492,23 +494,23 @@
       text-align: left;
       padding: 15px 16px;
       border-radius: 18px;
-      border: 1px solid rgba(15, 23, 42, 0.08);
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(246,249,253,0.96));
+      border: 1px solid rgba(52, 46, 39, 0.09);
+      background: linear-gradient(180deg, rgba(255,255,255,0.99), rgba(250,246,240,0.98));
       color: var(--text);
-      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+      box-shadow: 0 6px 16px rgba(43, 35, 28, 0.04);
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
     .match-chip.active {
-      border-color: rgba(0, 122, 255, 0.28);
-      background: rgba(0, 122, 255, 0.1);
+      border-color: rgba(201, 107, 44, 0.28);
+      background: rgba(201, 107, 44, 0.1);
     }
 
     .match-chip.connected {
-      border-color: rgba(0, 122, 255, 0.2);
-      background: rgba(231, 242, 255, 0.92);
+      border-color: rgba(201, 107, 44, 0.2);
+      background: rgba(249, 239, 226, 0.95);
     }
 
     .match-token {
@@ -518,7 +520,7 @@
       display: grid;
       place-items: center;
       flex: 0 0 34px;
-      background: rgba(0, 122, 255, 0.1);
+      background: rgba(201, 107, 44, 0.12);
       color: var(--accent);
       font-weight: 800;
       font-size: 0.92rem;
@@ -534,8 +536,8 @@
       gap: 8px;
       padding: 14px;
       border-radius: 16px;
-      background: rgba(248, 250, 252, 0.92);
-      border: 1px solid rgba(15, 23, 42, 0.06);
+      background: #f8f4ed;
+      border: 1px solid rgba(52, 46, 39, 0.08);
     }
 
     .match-item {
@@ -545,8 +547,8 @@
 
     textarea, input[type="text"], input[type="password"], select {
       width: 100%;
-      border: 1px solid rgba(16, 35, 61, 0.1);
-      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(52, 46, 39, 0.12);
+      background: rgba(255, 255, 255, 0.92);
       color: var(--text);
       border-radius: 14px;
       padding: 13px 15px;
@@ -579,13 +581,13 @@
     button:disabled { opacity: 0.55; cursor: not-allowed; }
 
     .primary {
-      background: linear-gradient(180deg, #2490ff, #007aff);
+      background: linear-gradient(180deg, #d47a35, #c96b2c);
       color: white;
-      box-shadow: 0 10px 20px rgba(0, 122, 255, 0.18);
+      box-shadow: 0 10px 20px rgba(201, 107, 44, 0.18);
     }
 
     .secondary {
-      background: rgba(16, 35, 61, 0.07);
+      background: rgba(52, 46, 39, 0.08);
       color: var(--text);
     }
 
@@ -607,7 +609,7 @@
     .skip-item {
       padding: 10px 12px;
       border-radius: 14px;
-      background: rgba(16, 35, 61, 0.05);
+      background: rgba(52, 46, 39, 0.05);
       font-size: 0.95rem;
     }
 
@@ -627,8 +629,8 @@
       width: min(680px, 100%);
       padding: 20px;
       border-radius: 24px;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(255, 255, 255, 0.72);
+      background: rgba(255, 252, 247, 0.97);
+      border: 1px solid rgba(52, 46, 39, 0.1);
       box-shadow: var(--shadow);
     }
 
@@ -643,8 +645,8 @@
     .solution-item {
       padding: 12px 14px;
       border-radius: 14px;
-      background: rgba(16, 35, 61, 0.05);
-      border: 1px solid rgba(15, 23, 42, 0.05);
+      background: rgba(52, 46, 39, 0.05);
+      border: 1px solid rgba(52, 46, 39, 0.08);
       font-size: 0.96rem;
       line-height: 1.45;
     }
@@ -659,8 +661,8 @@
       margin-top: 12px;
       padding: 12px 14px;
       border-radius: 16px;
-      background: rgba(236, 244, 255, 0.88);
-      border: 1px solid rgba(0, 122, 255, 0.12);
+      background: rgba(248, 242, 232, 0.95);
+      border: 1px solid rgba(201, 107, 44, 0.16);
       color: var(--text);
       line-height: 1.5;
     }
@@ -674,8 +676,8 @@
     .feedback-note {
       padding: 14px 16px;
       border-radius: 16px;
-      background: linear-gradient(180deg, rgba(236, 244, 255, 0.9), rgba(247, 250, 255, 0.95));
-      border: 1px solid rgba(0, 122, 255, 0.12);
+      background: linear-gradient(180deg, rgba(248, 242, 232, 0.94), rgba(253, 250, 244, 0.98));
+      border: 1px solid rgba(201, 107, 44, 0.16);
       color: var(--text);
       line-height: 1.55;
     }
@@ -683,8 +685,8 @@
     .summary-item {
       padding: 12px 14px;
       border-radius: 14px;
-      background: rgba(16, 35, 61, 0.05);
-      border: 1px solid rgba(15, 23, 42, 0.05);
+      background: rgba(52, 46, 39, 0.05);
+      border: 1px solid rgba(52, 46, 39, 0.08);
       font-size: 0.96rem;
     }
 
@@ -721,10 +723,6 @@
         grid-template-columns: 1fr;
       }
 
-      .mission-strip {
-        grid-template-columns: 1fr;
-      }
-
       .question-head {
         flex-direction: column;
       }
@@ -741,26 +739,35 @@
   <div class="start-shell" id="startScreen">
     <section class="start-card glass">
       <div class="start-grid">
-        <div>
-          <div class="eyebrow">Start</div>
+        <div class="start-copy">
+          <div class="eyebrow">Laborstart</div>
           <h1>Automatenlabor</h1>
-          <p class="sub">
-            Starte deine Labor-Mission. Du untersuchst Automaten, erkennst Muster und erklärst, wie Eingaben, Zustände und Ausgaben zusammenhängen.
+          <p class="start-caption">
+            Du startest gleich in eine kleine Labor-Mission. Dabei untersuchst du den Snackautomaten, erkennst Muster und findest heraus, wie Eingaben, Zustände und Ausgaben zusammenhängen.
           </p>
-          <div class="mission-strip">
-            <div class="mission-card">
-              <strong>Beobachten</strong>
-              <span>Grafiken und Geräte genau lesen.</span>
-            </div>
-            <div class="mission-card">
-              <strong>Erklären</strong>
-              <span>Antworten kurz begründen.</span>
-            </div>
-            <div class="mission-card">
-              <strong>Knobeln</strong>
-              <span>Rätsel, Zuordnungen und Bildfragen lösen.</span>
-            </div>
-          </div>
+          <ul class="start-points">
+            <li>
+              <span>1</span>
+              <div>
+                <strong>Beobachten</strong>
+                <small>Lies Bilder und Geräte genau und achte auf kleine Hinweise.</small>
+              </div>
+            </li>
+            <li>
+              <span>2</span>
+              <div>
+                <strong>Erklären</strong>
+                <small>Begründe kurz, warum du eine Antwort auswählst.</small>
+              </div>
+            </li>
+            <li>
+              <span>3</span>
+              <div>
+                <strong>Knobeln</strong>
+                <small>Es gibt auch schwierigere Aufgaben mit Zuordnungen und ungewöhnlichen Automaten.</small>
+              </div>
+            </li>
+          </ul>
           <div class="start-form">
             <div class="field">
               <label for="startName">Vorname</label>
@@ -790,12 +797,8 @@
               <img class="start-machine" src="assets/automat.png" alt="Snackautomat im Automatenlabor" />
             </div>
             <div class="start-preview-note">
-              Du untersuchst nicht nur diesen Snackautomaten. Später triffst du auch auf Maschinen, die man nicht sofort als Automaten erkennt.
+              Heute startest du mit diesem Snackautomaten. Später triffst du auch auf Geräte, die man nicht sofort als Automaten erkennt.
             </div>
-          </div>
-          <div class="start-labline">
-            <strong>Heute im Labor</strong>
-            <span>Snackautomat untersuchen, ungewöhnliche Automaten erkennen und am Ende die PDF-Auswertung speichern.</span>
           </div>
         </div>
       </div>

@@ -2723,6 +2723,40 @@
       const nowIso = new Date().toISOString();
       const fileName = `${authUser.id}/automatenlabor-${safeClass}-${safeLastName}-${safeName}-${Date.now()}.pdf`;
 
+      state.submittedAt = nowIso;
+      state.reportPath = "";
+
+      const { error: saveBeforeUploadError } = await client
+        .from("worksheet_attempts")
+        .upsert({
+          user_id: authUser.id,
+          student_key: authUser.id,
+          student_name: name,
+          last_name: lastName,
+          class_name: className,
+          current_index: questions.length,
+          answers: state.answers,
+          reasons: state.reasons,
+          skipped: state.skipped,
+          helper_enabled: false,
+          question_order: state.questionOrder,
+          timer_starts: state.timerStarts,
+          started_at: nowIso,
+          finished_at: nowIso,
+          submitted_at: nowIso,
+          report_path: "",
+          report_uploaded_at: null,
+          updated_at: nowIso
+        }, { onConflict: "user_id" });
+
+      if (saveBeforeUploadError) {
+        console.error(saveBeforeUploadError);
+        els.downloadBtn.disabled = false;
+        els.downloadBtn.textContent = "Mission beenden";
+        els.downloadMessage.textContent = `Die Tabellen-Speicherung ist fehlgeschlagen: ${saveBeforeUploadError.message}`;
+        return;
+      }
+
       const { error: uploadError } = await client
         .storage
         .from(REPORTS_BUCKET)
@@ -2735,11 +2769,10 @@
         console.error(uploadError);
         els.downloadBtn.disabled = false;
         els.downloadBtn.textContent = "Mission beenden";
-        els.downloadMessage.textContent = "Die Ergebnisse konnten gerade nicht gesichert werden.";
+        els.downloadMessage.textContent = `Der PDF-Upload ist fehlgeschlagen: ${uploadError.message}`;
         return;
       }
 
-      state.submittedAt = nowIso;
       state.reportPath = fileName;
       const { error: saveError } = await client
         .from("worksheet_attempts")
@@ -2768,7 +2801,7 @@
         console.error(saveError);
         els.downloadBtn.disabled = false;
         els.downloadBtn.textContent = "Mission beenden";
-        els.downloadMessage.textContent = "Die Abgabe wurde noch nicht vollständig gespeichert.";
+        els.downloadMessage.textContent = `Die PDF wurde hochgeladen, aber der Datenbankeintrag konnte nicht aktualisiert werden: ${saveError.message}`;
         return;
       }
 

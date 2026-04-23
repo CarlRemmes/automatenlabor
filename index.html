@@ -52,86 +52,85 @@
     }
 
     .start-shell {
-      width: min(720px, calc(100% - 28px));
-      margin: 30px auto;
+      width: min(980px, calc(100% - 28px));
+      margin: 34px auto;
       padding: 10px;
-      border-radius: 30px;
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid rgba(255, 255, 255, 0.82);
-      box-shadow: var(--shadow);
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
       backdrop-filter: blur(18px);
     }
 
     .start-card {
-      padding: 30px;
+      padding: 34px;
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(circle at top right, rgba(0, 122, 255, 0.12), transparent 28%),
-        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,250,255,0.94));
+        radial-gradient(circle at top right, rgba(0, 122, 255, 0.1), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(31, 157, 85, 0.06), transparent 24%),
+        linear-gradient(180deg, rgba(255,255,255,0.99), rgba(247,250,255,0.95));
     }
 
     .start-grid {
       display: grid;
-      gap: 18px;
-      grid-template-columns: minmax(0, 1.1fr) minmax(240px, 0.9fr);
-      align-items: start;
+      gap: 24px;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      align-items: stretch;
     }
 
     .start-side {
       display: grid;
-      gap: 14px;
+      gap: 16px;
     }
 
     .start-preview {
-      padding: 14px;
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(244,248,255,0.94));
+      padding: 16px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(242,247,255,0.94));
       border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
     }
 
     .start-preview-frame {
-      border-radius: 18px;
+      border-radius: 20px;
       overflow: hidden;
       background: linear-gradient(180deg, #eef4fc, #f8fbff);
       border: 1px solid rgba(15, 23, 42, 0.05);
-      padding: 10px;
+      padding: 12px;
     }
 
     .start-machine {
       width: 100%;
       display: block;
-      border-radius: 14px;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      border-radius: 16px;
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.1);
     }
 
     .start-preview-note {
-      margin-top: 12px;
-      padding: 10px 12px;
-      border-radius: 16px;
-      background: rgba(0, 122, 255, 0.07);
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(0, 122, 255, 0.06);
       color: var(--text);
       font-size: 0.94rem;
       line-height: 1.5;
     }
 
-    .start-side-card {
-      padding: 16px;
+    .start-labline {
+      padding: 16px 18px;
       border-radius: 20px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(244,248,255,0.92));
+      background: rgba(248, 250, 252, 0.88);
       border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+      display: grid;
+      gap: 8px;
     }
 
-    .start-side-card strong {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 0.96rem;
+    .start-labline strong {
+      font-size: 0.98rem;
     }
 
-    .start-side-card span {
-      display: block;
+    .start-labline span {
       color: var(--muted);
       line-height: 1.45;
       font-size: 0.94rem;
@@ -139,8 +138,12 @@
 
     .start-form {
       display: grid;
-      gap: 16px;
-      margin-top: 20px;
+      gap: 14px;
+      margin-top: 24px;
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(248, 250, 252, 0.82);
+      border: 1px solid rgba(15, 23, 42, 0.06);
     }
 
     .field {
@@ -179,8 +182,8 @@
 
     h1 {
       margin: 0 0 12px;
-      font-size: clamp(2.4rem, 4.4vw, 3.9rem);
-      line-height: 0.95;
+      font-size: clamp(2.8rem, 5vw, 4.6rem);
+      line-height: 0.9;
       letter-spacing: -0.05em;
       cursor: default;
       user-select: none;
@@ -202,14 +205,14 @@
     .mission-strip {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 18px;
+      gap: 12px;
+      margin-top: 22px;
     }
 
     .mission-card {
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(248, 250, 252, 0.74);
+      padding: 14px 15px;
+      border-radius: 18px;
+      background: rgba(248, 250, 252, 0.82);
       border: 1px solid rgba(15, 23, 42, 0.06);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
     }
@@ -703,7 +706,7 @@
       }
 
       .start-shell {
-        width: min(100% - 12px, 760px);
+        width: min(100% - 12px, 980px);
         margin: 10px auto;
         padding: 8px;
         border-radius: 26px;
@@ -740,23 +743,45 @@
       <div class="start-grid">
         <div>
           <div class="eyebrow">Start</div>
-          <h1>Automaten<br />labor</h1>
+          <h1>Automatenlabor</h1>
           <p class="sub">
-            Gib zuerst deinen Vornamen und deine Klasse an. Danach startest du in eine kleine Labor-Mission mit verschiedenen Automaten.
+            Starte deine Labor-Mission. Du untersuchst Automaten, erkennst Muster und erklärst, wie Eingaben, Zustände und Ausgaben zusammenhängen.
           </p>
           <div class="mission-strip">
             <div class="mission-card">
               <strong>Beobachten</strong>
-              <span>Bilder genau lesen.</span>
+              <span>Grafiken und Geräte genau lesen.</span>
             </div>
             <div class="mission-card">
               <strong>Erklären</strong>
-              <span>Mit Fachbegriffen begründen.</span>
+              <span>Antworten kurz begründen.</span>
             </div>
             <div class="mission-card">
               <strong>Knobeln</strong>
-              <span>Aufgaben lösen und Verbindungen finden.</span>
+              <span>Rätsel, Zuordnungen und Bildfragen lösen.</span>
             </div>
+          </div>
+          <div class="start-form">
+            <div class="field">
+              <label for="startName">Vorname</label>
+              <input id="startName" type="text" placeholder="Vorname" />
+            </div>
+            <div class="field">
+              <label for="startClass">Klasse</label>
+              <select id="startClass">
+                <option value="">Klasse auswählen</option>
+                <option value="6a">6a</option>
+                <option value="6b">6b</option>
+                <option value="6c">6c</option>
+                <option value="6d">6d</option>
+                <option value="6e">6e</option>
+                <option value="andere">andere</option>
+              </select>
+            </div>
+            <div class="row">
+              <button class="primary" id="startBtn">Mission starten</button>
+            </div>
+            <div class="status-line" id="startMessage"></div>
           </div>
         </div>
         <div class="start-side">
@@ -765,44 +790,14 @@
               <img class="start-machine" src="assets/automat.png" alt="Snackautomat im Automatenlabor" />
             </div>
             <div class="start-preview-note">
-              Heute untersuchst du nicht nur diesen Snackautomaten. Du triffst auch auf andere Maschinen, die man nicht sofort als Automat erkennt.
+              Du untersuchst nicht nur diesen Snackautomaten. Später triffst du auch auf Maschinen, die man nicht sofort als Automaten erkennt.
             </div>
           </div>
-          <div class="start-side-card">
-            <strong>Laborstation 1</strong>
-            <span>Den Snackautomaten untersuchen.</span>
-          </div>
-          <div class="start-side-card">
-            <strong>Laborstation 2</strong>
-            <span>Ungewöhnliche Automaten erkennen.</span>
-          </div>
-          <div class="start-side-card">
-            <strong>Laborstation 3</strong>
-            <span>Am Ende die Auswertung als PDF sichern.</span>
+          <div class="start-labline">
+            <strong>Heute im Labor</strong>
+            <span>Snackautomat untersuchen, ungewöhnliche Automaten erkennen und am Ende die PDF-Auswertung speichern.</span>
           </div>
         </div>
-      </div>
-      <div class="start-form">
-        <div class="field">
-          <label for="startName">Vorname</label>
-          <input id="startName" type="text" placeholder="Vorname" />
-        </div>
-        <div class="field">
-          <label for="startClass">Klasse</label>
-          <select id="startClass">
-            <option value="">Klasse auswählen</option>
-            <option value="6a">6a</option>
-            <option value="6b">6b</option>
-            <option value="6c">6c</option>
-            <option value="6d">6d</option>
-            <option value="6e">6e</option>
-            <option value="andere">andere</option>
-          </select>
-        </div>
-        <div class="row">
-          <button class="primary" id="startBtn">Starten</button>
-        </div>
-        <div class="status-line" id="startMessage"></div>
       </div>
     </section>
   </div>

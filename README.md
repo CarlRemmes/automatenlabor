@@ -20,7 +20,7 @@ Die Schuelerinnen und Schueler starten mit Vorname, Nachname und Klasse, bearbei
 4. Freundliche Abschlussseite fuer die SuS
 5. Hintergrundspeicherung der Ergebnisse in Supabase
 6. PDF-Auswertung wird automatisch zentral im Storage abgelegt
-7. Optional: automatischer Mailversand der PDF an die Lehrkraft
+7. Lehrkraft kann die PDFs ueber eine versteckte Cloud-Ansicht abrufen
 
 ## Inhaltlich
 
@@ -76,4 +76,5 @@ Er legt an:
 - Die PDF-Auswertung ist fuer Lehrkraefte gedacht.
 - Uebersprungene Aufgaben werden in der Auswertung markiert.
 - Der Arbeitsstand wird waehrend der Bearbeitung laufend gespeichert.
-- Fuer automatischen Mailversand wird eine Supabase Edge Function mit Mailanbieter benoetigt.
+- Mit 5 Klicks auf den Titel oeffnet sich das versteckte Lehrkraft-Menue.
+- Dort koennen ueber `Abgaben` die zentral gespeicherten PDFs aus der Cloud geoeffnet werden.

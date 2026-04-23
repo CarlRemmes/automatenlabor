@@ -709,6 +709,33 @@
       gap: 10px;
     }
 
+    .reports-overview {
+      margin-top: 14px;
+      max-height: 52vh;
+      overflow: auto;
+      display: grid;
+      gap: 10px;
+    }
+
+    .report-item {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(52, 46, 39, 0.05);
+      border: 1px solid rgba(52, 46, 39, 0.08);
+    }
+
+    .report-item strong {
+      font-size: 1rem;
+    }
+
+    .report-meta {
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.45;
+    }
+
     .solution-item {
       padding: 12px 14px;
       border-radius: 14px;
@@ -939,10 +966,12 @@
       <div class="row" style="margin-top: 14px;">
         <button class="primary" id="unlockHelperBtn">Überspringen</button>
         <button class="secondary" id="showSolutionsBtn">Lösungen</button>
+        <button class="secondary" id="showReportsBtn">Abgaben</button>
         <button class="secondary" id="closeHelperOverlayBtn">Schließen</button>
       </div>
       <div class="status-line" id="helperMessage"></div>
       <div class="solution-overview hidden" id="solutionOverview"></div>
+      <div class="reports-overview hidden" id="reportsOverview"></div>
     </div>
   </div>
 
@@ -1273,7 +1302,9 @@
       helperMessage: document.getElementById("helperMessage"),
       unlockHelperBtn: document.getElementById("unlockHelperBtn"),
       showSolutionsBtn: document.getElementById("showSolutionsBtn"),
+      showReportsBtn: document.getElementById("showReportsBtn"),
       solutionOverview: document.getElementById("solutionOverview"),
+      reportsOverview: document.getElementById("reportsOverview"),
       closeHelperOverlayBtn: document.getElementById("closeHelperOverlayBtn")
     };
 
@@ -2741,39 +2772,8 @@
         return;
       }
 
-      let mailStatusMessage = "";
-      const { error: mailError } = await client.functions.invoke("send-report-email", {
-        body: {
-          reportPath: fileName,
-          studentName: name,
-          lastName,
-          className
-        }
-      });
-
-      if (mailError) {
-        console.error(mailError);
-        mailStatusMessage = " Die Mail konnte gerade nicht automatisch versendet werden.";
-        await client
-          .from("worksheet_attempts")
-          .update({
-            email_error: String(mailError.message || "mail_failed"),
-            updated_at: new Date().toISOString()
-          })
-          .eq("user_id", authUser.id);
-      } else {
-        await client
-          .from("worksheet_attempts")
-          .update({
-            email_sent_at: new Date().toISOString(),
-            email_error: "",
-            updated_at: new Date().toISOString()
-          })
-          .eq("user_id", authUser.id);
-      }
-
       saveLocalState();
-      els.downloadMessage.textContent = `Die Ergebnisse wurden gespeichert.${mailStatusMessage}`;
+      els.downloadMessage.textContent = "Die Ergebnisse wurden gespeichert.";
       render();
     }
 
@@ -2876,9 +2876,53 @@
 
     async function showSolutions() {
       if (!await verifyHelperPin()) return;
+      els.reportsOverview.classList.add("hidden");
       els.helperMessage.textContent = "Lösungsübersicht";
       els.solutionOverview.innerHTML = buildSolutionsOverviewHtml();
       els.solutionOverview.classList.remove("hidden");
+    }
+
+    async function showReports() {
+      if (!await verifyHelperPin()) return;
+
+      els.solutionOverview.classList.add("hidden");
+      els.reportsOverview.classList.add("hidden");
+      els.helperMessage.textContent = "Abgaben werden geladen ...";
+
+      const { data, error } = await client.functions.invoke("list-reports", {
+        body: {
+          input_pin: els.helperPin.value.trim()
+        }
+      });
+
+      if (error) {
+        console.error(error);
+        els.helperMessage.textContent = "Die Abgaben konnten gerade nicht geladen werden.";
+        return;
+      }
+
+      const reports = Array.isArray(data?.reports) ? data.reports : [];
+      if (!reports.length) {
+        els.helperMessage.textContent = "Noch keine Abgaben vorhanden.";
+        els.reportsOverview.innerHTML = "";
+        els.reportsOverview.classList.remove("hidden");
+        return;
+      }
+
+      els.helperMessage.textContent = `${reports.length} Abgaben gefunden`;
+      els.reportsOverview.innerHTML = reports.map((report) => `
+        <div class="report-item">
+          <strong>${escapeHtml([report.student_name, report.last_name].filter(Boolean).join(" ").trim() || "Ohne Namen")}</strong>
+          <div class="report-meta">
+            Klasse: ${escapeHtml(report.class_name || "-")}<br />
+            Abgegeben: ${escapeHtml(report.submitted_at_label || "-")}
+          </div>
+          <div class="row">
+            <a class="primary" href="${escapeHtml(report.signed_url || "#")}" target="_blank" rel="noopener noreferrer">PDF öffnen</a>
+          </div>
+        </div>
+      `).join("");
+      els.reportsOverview.classList.remove("hidden");
     }
 
     els.nextBtn.addEventListener("click", goNext);
@@ -2907,6 +2951,7 @@
     els.heroTitle.addEventListener("click", handleTitleTap);
     els.unlockHelperBtn.addEventListener("click", () => unlockHelperMenu().catch(console.error));
     els.showSolutionsBtn.addEventListener("click", () => showSolutions().catch(console.error));
+    els.showReportsBtn.addEventListener("click", () => showReports().catch(console.error));
     els.helperPin.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -2919,6 +2964,7 @@
       els.helperOverlay.classList.add("hidden");
       els.helperMessage.textContent = "";
       els.solutionOverview.classList.add("hidden");
+      els.reportsOverview.classList.add("hidden");
     });
     initializeApp().catch(console.error);
   </script>

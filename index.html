@@ -294,6 +294,20 @@
       place-items: center;
     }
 
+    .photo-card .example-visual {
+      height: auto;
+      min-height: 0;
+      padding: 8px;
+    }
+
+    .machine-photo {
+      width: min(100%, 280px);
+      height: auto;
+      display: block;
+      border-radius: 14px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
+    }
+
     .answers {
       display: grid;
       gap: 12px;
@@ -468,16 +482,16 @@
         <div class="eyebrow">Automatenlabor</div>
         <h1 id="heroTitle">Automaten<br />verstehen</h1>
         <p class="sub">
-          Du arbeitest heute im Automatenlabor. Zuerst prüfst du bekanntes Wissen, danach löst du kleine Laboraufträge und wendest dein Wissen auf neue Situationen an.
+          Du arbeitest heute im Automatenlabor mit einem Snackautomaten. Lies das Bild genau, beschreibe deine Beobachtungen und erkläre die Fachbegriffe an diesem Automaten.
         </p>
         <div class="mission-strip">
           <div class="mission-card">
             <strong>Station 1</strong>
-            <span>Bekanntes Wissen sicher anwenden.</span>
+            <span>Den Automaten genau untersuchen.</span>
           </div>
           <div class="mission-card">
             <strong>Station 2</strong>
-            <span>Neue Automaten im Labor untersuchen.</span>
+            <span>Eingaben, Zustände und Ausgaben erklären.</span>
           </div>
           <div class="mission-card">
             <strong>Station 3</strong>
@@ -554,7 +568,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "automatenlabor_worksheet_v2";
+    const STORAGE_KEY = "automatenlabor_worksheet_v3";
     const HELPER_PIN_HASH = "a7fc7be25bddd2b0be5cbc208ea6d2ff868801513abe5ce03d4079bd66167180";
     const state = loadState();
     let saveTimer = null;
@@ -564,223 +578,148 @@
     const questionBank = [
       {
         id: "q1",
-        tag: "Frage 1",
-        type: "single",
-        text: "Welcher Zustand ist der Startzustand eines Snackautomaten ohne eingeworfenes Geld?",
-        help: "Überlege, in welchem Zustand der Automat ganz am Anfang ist.",
-        visual: "snack-start",
-        options: ["0 Euro", "50 Cent", "1 Euro", "2 Euro"],
-        correct: 0
+        tag: "Bildfrage 1",
+        type: "text",
+        text: "Nenne die drei Produkte, die du im Automaten erkennen kannst.",
+        help: "Schreibe die Produktnamen aus dem Bild auf.",
+        visual: "machine-photo",
+        sampleAnswer: "Schokoriegel, Chips und Gummibärchen.",
+        placeholder: "Ich erkenne ..."
       },
       {
         id: "q2",
-        tag: "Frage 2",
-        type: "single",
-        text: "Welche Eingaben akzeptiert der Automat?",
-        help: "Achte auf die zugelassenen Münzen.",
-        visual: "coins",
-        options: ["10 Cent, 20 Cent und 50 Cent", "50 Cent, 1 Euro und 2 Euro", "Nur 1 Euro und 2 Euro", "Beliebige Münzen"],
-        correct: 1
+        tag: "Bildfrage 2",
+        type: "text",
+        text: "Welche Geldstücke akzeptiert der Automat laut Beschriftung?",
+        help: "Sieh dir den Bereich mit der Aufschrift 'Akzeptiert' genau an.",
+        visual: "machine-photo",
+        sampleAnswer: "1 Euro, 2 Euro und 50 Cent.",
+        placeholder: "Der Automat akzeptiert ..."
       },
       {
         id: "q3",
-        tag: "Frage 3",
+        tag: "Bildfrage 3",
         type: "single",
-        text: "Was passiert im Zustand 0 Euro, wenn die Taste für Gummibärchen gedrückt wird?",
-        help: "Prüfe, ob bereits genug Geld vorhanden ist.",
-        visual: "snack-button",
-        options: ["Die Gummibärchen werden ausgegeben", "Der Zustand bleibt bei 0 Euro", "Der Zustand springt auf 1 Euro", "Es wird Rückgeld ausgegeben"],
+        text: "Welche Taste würdest du für einen Schokoriegel am ehesten drücken?",
+        help: "Vergleiche Produktnamen und Buchstaben.",
+        visual: "machine-photo",
+        options: ["G", "S", "C", "R"],
         correct: 1
       },
       {
         id: "q4",
-        tag: "Frage 4",
+        tag: "Bildfrage 4",
         type: "single",
-        text: "Welche Beschreibung passt am besten zur Rückgabe-Taste?",
-        help: "Denke daran, was mit dem Zustand und dem Geld passiert.",
-        visual: "refund",
-        options: [
-          "Sie erhöht den Geldbetrag im Automaten",
-          "Sie setzt den Automaten je nach Zustand zurück und gibt Geld zurück",
-          "Sie gibt immer Chips aus",
-          "Sie wechselt das Produkt"
-        ],
-        correct: 1
+        text: "Welche Taste passt nicht direkt zu einem der drei Produktnamen?",
+        help: "Vergleiche die Buchstaben mit Gummibärchen, Schokoriegel und Chips.",
+        visual: "machine-photo",
+        options: ["G", "S", "C", "R"],
+        correct: 3
       },
       {
         id: "q5",
-        tag: "Frage 5",
-        type: "single",
-        text: "Warum kann der Automat kein Wechselgeld ausgeben?",
-        help: "Die Antwort steckt im Aufbau des Modells.",
-        visual: "no-change",
-        options: [
-          "Weil nur Zustände für eingeworfene Beträge genutzt werden und keine Restgeld-Regel vorgesehen ist",
-          "Weil 2-Euro-Münzen verboten sind",
-          "Weil Webseiten keine Zahlen speichern können",
-          "Weil alle Produkte kostenlos sind"
-        ],
-        correct: 0
+        tag: "Bildfrage 5",
+        type: "text",
+        text: "Nenne zwei Stellen am Automaten, an denen der Mensch etwas eingeben oder auslösen kann.",
+        help: "Gesucht sind Bedienelemente oder Eingaben von außen.",
+        visual: "machine-photo",
+        sampleAnswer: "Zum Beispiel Münzen einwerfen und eine Taste drücken.",
+        placeholder: "Man kann ..."
       },
       {
         id: "q6",
-        tag: "Frage 6",
-        type: "single",
-        text: "Welche Zustandsfolge ist möglich, wenn zuerst 50 Cent und danach 1 Euro eingeworfen werden?",
-        help: "Beobachte die Reihenfolge der Beträge.",
-        visual: "state-path",
-        options: [
-          "0 Euro → 1 Euro → 2 Euro",
-          "0 Euro → 50 Cent → 1,50 Euro",
-          "0 Euro → 2 Euro → 50 Cent",
-          "0 Euro → 50 Cent → 2 Euro"
-        ],
-        correct: 1
+        tag: "Bildfrage 6",
+        type: "text",
+        text: "Wo kommt das gekaufte Produkt wahrscheinlich heraus? Beschreibe die Stelle im Bild.",
+        help: "Suche nach einem Fach oder einer Öffnung für die Ausgabe.",
+        visual: "machine-photo",
+        sampleAnswer: "Unten links im großen Ausgabefach.",
+        placeholder: "Das Produkt kommt wahrscheinlich ..."
       },
       {
         id: "q7",
-        tag: "Frage 7",
-        type: "single",
-        text: "Wann gibt ein Automat eine Ausgabe aus?",
-        help: "Achte darauf, wann eine passende Eingabe oder ein passender Zustand erreicht ist.",
-        visual: "output",
-        options: [
-          "Immer nach jeder Eingabe",
-          "Wenn die passende Bedingung erfüllt ist",
-          "Nur beim Einschalten",
-          "Nur bei einem Fehler"
-        ],
-        correct: 1
+        tag: "Bildfrage 7",
+        type: "text",
+        text: "Welche Informationen über den Kauf findest du direkt auf dem Automaten? Nenne mindestens zwei.",
+        help: "Denk an Produkte, Preise, Tasten oder akzeptierte Münzen.",
+        visual: "machine-photo",
+        sampleAnswer: "Zum Beispiel Produktnamen, Preis, Tasten und akzeptierte Münzen.",
+        placeholder: "Auf dem Automaten steht ..."
       },
       {
         id: "q8",
-        tag: "Frage 8",
-        type: "yesno",
-        text: "Ist eine Ampel ein Automat?",
-        help: "Überlege, ob sie feste Zustände und geregelte Wechsel hat.",
-        visual: "traffic"
+        tag: "Bildfrage 8",
+        type: "single",
+        text: "Welche Aussage lässt sich sicher aus dem Bild ablesen?",
+        help: "Wähle nur etwas aus, das wirklich im Bild steht oder zu sehen ist.",
+        visual: "machine-photo",
+        options: [
+          "Der Automat gibt Wechselgeld aus.",
+          "Der Automat akzeptiert 1 Euro, 2 Euro und 50 Cent.",
+          "Jedes Produkt kostet unterschiedlich viel.",
+          "Der Automat funktioniert nur mit Karte."
+        ],
+        correct: 1
       },
       {
         id: "q9",
-        tag: "Frage 9",
-        type: "yesno",
-        text: "Ist ein Stein auf dem Schulhof ein Automat?",
-        help: "Frage dich, ob es Eingaben, Zustände und Ausgaben gibt.",
-        visual: "rock"
+        tag: "Bildfrage 9",
+        type: "text",
+        text: "Formuliere einen sinnvollen Startzustand für diesen Automaten, bevor jemand etwas tut.",
+        help: "Denke an den Zustand ganz am Anfang eines Kaufs.",
+        visual: "machine-photo",
+        sampleAnswer: "Zum Beispiel: Es wurde noch kein Geld eingeworfen und der Automat wartet auf eine Eingabe.",
+        placeholder: "Ein möglicher Startzustand ist ..."
       },
       {
         id: "q10",
-        tag: "Frage 10",
-        type: "yesno",
-        text: "Ist eine Waschmaschine ein Automat?",
-        help: "Denke an Programme, Start, Stopp und feste Abläufe.",
-        visual: "washer"
+        tag: "Bildfrage 10",
+        type: "text",
+        text: "Nenne zwei Eingaben, die den Zustand des Automaten verändern könnten.",
+        help: "Es geht um Handlungen, die den Automaten beeinflussen.",
+        visual: "machine-photo",
+        sampleAnswer: "Zum Beispiel Geld einwerfen, eine Produkttaste drücken oder die Rückgabe auslösen.",
+        placeholder: "Der Zustand kann sich ändern, wenn ..."
       },
       {
         id: "q11",
-        tag: "Frage 11",
-        type: "yesno",
-        text: "Ist ein Fahrkartenautomat ein Automat?",
-        help: "Achte auf Auswahl, Eingaben und Ausgabe.",
-        visual: "ticket"
+        tag: "Bildfrage 11",
+        type: "text",
+        text: "Erkläre an diesem Automaten den Unterschied zwischen Eingabe und Ausgabe.",
+        help: "Nutze jeweils ein Beispiel aus dem Bild.",
+        visual: "machine-photo",
+        sampleAnswer: "Eine Eingabe ist zum Beispiel das Einwerfen einer Münze oder das Drücken einer Taste. Eine Ausgabe ist zum Beispiel ein Produkt oder zurückgegebenes Geld.",
+        placeholder: "Eine Eingabe ist ... Eine Ausgabe ist ..."
       },
       {
         id: "q12",
-        tag: "Frage 12",
-        type: "single",
-        text: "Welche Information steht in einem Zustandsdiagramm meistens an einem Pfeil?",
-        help: "Denke an das, was zwischen zwei Zuständen passiert.",
-        visual: "arrow-label",
-        options: [
-          "Die Farbe eines Zustands",
-          "Die Eingabe oder Aktion, die den Übergang auslöst",
-          "Der Name der Lehrkraft",
-          "Die Nummer der Aufgabe"
-        ],
-        correct: 1
+        tag: "Bildfrage 12",
+        type: "text",
+        text: "Warum passt dieser Snackautomat gut zum Thema 'Automat'? Begründe mit mindestens zwei Beobachtungen aus dem Bild.",
+        help: "Achte auf feste Eingaben, Zustände oder Ausgaben.",
+        visual: "machine-photo",
+        sampleAnswer: "Zum Beispiel: Der Automat hat feste Tasten, akzeptiert bestimmte Münzen und gibt Produkte über ein Ausgabefach aus.",
+        placeholder: "Dieser Automat passt gut, weil ..."
       },
       {
         id: "q13",
-        tag: "Frage 13",
-        type: "single",
-        text: "Was ist ein Folgezustand?",
-        help: "Überlege, welcher Zustand nach einer Eingabe erreicht wird.",
-        visual: "follow-state",
-        options: [
-          "Der Zustand vor dem Start",
-          "Der Zustand nach einer Eingabe oder Aktion",
-          "Ein Zustand ohne Namen",
-          "Die Ausgabe des Automaten"
-        ],
-        correct: 1
+        tag: "Laborauftrag",
+        type: "text",
+        text: "Beschreibe einen möglichen Ablauf vom Start bis zur Ausgabe eines Produkts in drei bis vier Schritten.",
+        help: "Nutze Wörter wie Start, Eingabe, Zustand und Ausgabe.",
+        visual: "machine-photo",
+        sampleAnswer: "Zum Beispiel: Startzustand ohne Geld, Münze einwerfen, passende Taste drücken, Produkt wird ausgegeben.",
+        placeholder: "1. ... 2. ... 3. ..."
       },
       {
         id: "q14",
-        tag: "Laborauftrag 1",
-        type: "single",
-        text: "Im Automatenlabor testest du einen Getränkeautomaten. Nach dem Einwerfen von 1 Euro zeigt er 1 Euro an. Welche Information fehlt dir noch, um sicher sagen zu können, ob ein Saft ausgegeben wird?",
-        help: "Überlege, welche Bedingung noch fehlen könnte.",
-        visual: "lab-drink",
-        options: [
-          "Der Name der Schule",
-          "Der Preis des Safts oder die Regel für die Ausgabe",
-          "Die Farbe des Automaten",
-          "Die Uhrzeit im Klassenraum"
-        ],
-        correct: 1
-      },
-      {
-        id: "q15",
-        tag: "Laborauftrag 2",
-        type: "single",
-        text: "Ein Testautomat hat die Zustände Start, Karte geprüft und Tür offen. Welche Reihenfolge passt zu einem sinnvollen Ablauf?",
-        help: "Denke an einen geordneten Übergang.",
-        visual: "door-sequence",
-        options: [
-          "Tür offen → Start → Karte geprüft",
-          "Start → Karte geprüft → Tür offen",
-          "Karte geprüft → Tür offen → Start",
-          "Start → Tür offen → Karte geprüft"
-        ],
-        correct: 1
-      },
-      {
-        id: "q16",
-        tag: "Laborauftrag 3",
-        type: "single",
-        text: "Ein Automat bleibt nach jeder Eingabe immer im gleichen Zustand und gibt nie etwas aus. Was beschreibt das am besten?",
-        help: "Frage dich, was für ein Verhalten dem Automaten fehlt.",
-        visual: "stuck-state",
-        options: [
-          "Er hat keine sinnvollen Übergänge oder Ausgaben",
-          "Er hat zu viele Produkte",
-          "Er ist besonders schnell",
-          "Er ist automatisch richtig"
-        ],
-        correct: 0
-      },
-      {
-        id: "q17",
-        tag: "Laborauftrag 4",
-        type: "single",
-        text: "Du sollst für das Automatenlabor einen einfachen Tierfutterautomaten planen. Welche Angabe gehört am besten an einen Pfeil im Zustandsdiagramm?",
-        help: "Gesucht ist die Information, die den Übergang auslöst.",
-        visual: "pet-food",
-        options: [
-          "Hund glücklich",
-          "2 Euro eingeworfen",
-          "Automat ist grau",
-          "Leckerli schmeckt gut"
-        ],
-        correct: 1
-      },
-      {
-        id: "q18",
-        tag: "Abschluss",
+        tag: "Abschlussbericht",
         type: "text",
-        text: "Du schreibst den Abschlussbericht für das Automatenlabor. Erkläre in zwei bis drei Sätzen, woran man in einem Zustandsdiagramm Zustand, Eingabe, Folgezustand und Ausgabe erkennt.",
-        help: "Schreibe in deinen eigenen Worten und nutze möglichst die Fachbegriffe.",
-        placeholder: "Ein Zustand ist ... Die Eingabe erkennt man an ... Der Folgezustand ist ... Die Ausgabe ist ..."
+        text: "Du schreibst den Abschlussbericht für das Automatenlabor. Erkläre in drei bis vier Sätzen, wie man an genau diesem Automaten Zustand, Eingabe, Folgezustand und Ausgabe erkennen kann.",
+        help: "Beziehe dich sichtbar auf das Bild und nutze die Fachbegriffe.",
+        visual: "machine-photo",
+        sampleAnswer: "Ein Zustand beschreibt zum Beispiel, wie viel Geld schon eingeworfen wurde. Eine Eingabe ist das Einwerfen einer Münze oder das Drücken einer Taste. Der Folgezustand ist der neue Zustand nach dieser Eingabe. Die Ausgabe ist das Produkt oder eventuell zurückgegebenes Geld.",
+        placeholder: "An diesem Automaten erkennt man ..."
       }
     ];
 
@@ -869,8 +808,10 @@
     function ensureQuestionOrder() {
       const expectedLength = questionBank.length;
       if (Array.isArray(state.questionOrder) && state.questionOrder.length === expectedLength) return;
-      const randomizedPart = shuffleArray(Array.from({ length: 13 }, (_, index) => index));
-      const fixedPart = Array.from({ length: expectedLength - 13 }, (_, index) => index + 13);
+      const fixedCount = 2;
+      const randomizedLength = Math.max(0, expectedLength - fixedCount);
+      const randomizedPart = shuffleArray(Array.from({ length: randomizedLength }, (_, index) => index));
+      const fixedPart = Array.from({ length: fixedCount }, (_, index) => index + randomizedLength);
       state.questionOrder = [...randomizedPart, ...fixedPart];
     }
 
@@ -925,6 +866,9 @@
         };
         return answerMap[question.id] || "";
       }
+      if (question.type === "text") {
+        return question.sampleAnswer || "";
+      }
       return "";
     }
 
@@ -953,12 +897,11 @@
 
     function buildSolutionsOverviewHtml() {
       return questions
-        .filter((question) => question.type !== "text")
         .map((question) => `
           <div class="solution-item">
             <strong>${escapeHtml(question.tag)}</strong><br />
             ${escapeHtml(question.text)}<br />
-            <span class="muted">Richtige Antwort: ${escapeHtml(getCorrectAnswer(question))}</span>
+            <span class="muted">${question.type === "text" ? "Musterantwort" : "Richtige Antwort"}: ${escapeHtml(getCorrectAnswer(question))}</span>
           </div>
         `)
         .join("");
@@ -966,6 +909,17 @@
 
     function exampleVisual(kind) {
       const visuals = {
+        "machine-photo": `
+          <div class="example-grid">
+            <div class="example-card photo-card">
+              <div class="example-visual">
+                <img class="machine-photo" src="assets/automat.png" alt="Snackautomat mit Produkten, Tasten, Münzeinwurf und Ausgabefach" />
+              </div>
+              <strong>Automat im Labor</strong>
+              <div class="muted">Nutze dieses Bild als Grundlage für deine Antwort.</div>
+            </div>
+          </div>
+        `,
         traffic: `
           <div class="example-grid">
             <div class="example-card">
@@ -1573,6 +1527,14 @@
             doc.text(correct ? "Richtig" : "Falsch", margin + 18, y);
             y += 18;
           }
+        } else if (correctAnswer) {
+          doc.setTextColor(...neutralColor);
+          const solutionLines = doc.splitTextToSize(`Musterantwort: ${correctAnswer}`, maxWidth - 18);
+          solutionLines.forEach((line) => {
+            ensureSpace(16);
+            doc.text(line, margin + 18, y);
+            y += 16;
+          });
         }
 
         y += 14;

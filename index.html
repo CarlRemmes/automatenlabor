@@ -213,13 +213,24 @@
       margin-bottom: 14px;
     }
 
-    h1 {
+    .hero-title {
       margin: 0 0 12px;
-      font-size: clamp(2.7rem, 4.6vw, 4.2rem);
-      line-height: 0.92;
+      display: grid;
+      gap: 4px;
+      font-size: clamp(2.65rem, 4.5vw, 4rem);
+      line-height: 0.9;
       letter-spacing: -0.05em;
       cursor: default;
       user-select: none;
+    }
+
+    .hero-title span {
+      font-size: 0.92rem;
+      line-height: 1;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
     }
 
     h2, h3 {
@@ -281,6 +292,7 @@
 
     .progress-box,
     .question-card,
+    .nav-bar,
     .finish-card {
       padding: 20px;
       border-radius: var(--radius-lg);
@@ -290,14 +302,14 @@
     }
 
     .progress-box {
-      padding-top: 16px;
-      padding-bottom: 16px;
+      padding: 14px 16px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(245,248,253,0.98));
     }
 
     .progress {
-      height: 12px;
+      height: 14px;
       border-radius: 999px;
-      background: rgba(16, 35, 61, 0.08);
+      background: rgba(94, 121, 158, 0.16);
       overflow: hidden;
       position: relative;
     }
@@ -306,7 +318,7 @@
       height: 100%;
       width: 0;
       border-radius: inherit;
-      background: linear-gradient(90deg, #d18c39, #c96b2c 45%, #2e7d5a);
+      background: linear-gradient(90deg, #83b4ff, #3f88ff 45%, #2e7d5a);
       transition: width 0.25s ease;
     }
 
@@ -350,9 +362,9 @@
 
     .question-visual {
       margin-top: 16px;
-      padding: 8px;
-      border-radius: 18px;
-      background: #f6efe5;
+      padding: 12px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #f7efe3, #fcfaf6);
       border: 1px solid rgba(52, 46, 39, 0.08);
     }
 
@@ -387,13 +399,19 @@
     }
 
     #progressLabel {
-      display: none;
+      display: block;
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     .example-grid {
       display: grid;
       gap: 10px;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: 1fr;
     }
 
     .example-card {
@@ -404,7 +422,7 @@
     }
 
     .example-visual {
-      height: 82px;
+      height: 110px;
       border-radius: 14px;
       background: linear-gradient(180deg, #f7efe3, #fcfaf6);
       margin-bottom: 0;
@@ -415,7 +433,7 @@
     .photo-card .example-visual {
       height: auto;
       min-height: 0;
-      padding: 8px;
+      padding: 10px;
     }
 
     .machine-photo {
@@ -424,6 +442,18 @@
       display: block;
       border-radius: 14px;
       box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+    }
+
+    .photo-card.wide-photo .machine-photo {
+      width: 100%;
+      max-width: 100%;
+      max-height: 360px;
+      object-fit: contain;
+      border-radius: 18px;
+    }
+
+    .photo-card.machine-shot .machine-photo {
+      width: min(100%, 280px);
     }
 
     .answers {
@@ -513,6 +543,20 @@
       background: rgba(249, 239, 226, 0.95);
     }
 
+    .match-chip.color-a .match-token,
+    .match-item.color-a strong { background: rgba(209, 84, 84, 0.14); color: #bb4343; }
+    .match-chip.color-b .match-token,
+    .match-item.color-b strong { background: rgba(63, 136, 255, 0.14); color: #2f6ed6; }
+    .match-chip.color-c .match-token,
+    .match-item.color-c strong { background: rgba(46, 125, 90, 0.14); color: #2e7d5a; }
+    .match-chip.color-d .match-token,
+    .match-item.color-d strong { background: rgba(197, 133, 29, 0.16); color: #a86c12; }
+
+    .match-chip.color-a.connected { border-color: rgba(209, 84, 84, 0.25); background: rgba(209, 84, 84, 0.08); }
+    .match-chip.color-b.connected { border-color: rgba(63, 136, 255, 0.25); background: rgba(63, 136, 255, 0.08); }
+    .match-chip.color-c.connected { border-color: rgba(46, 125, 90, 0.25); background: rgba(46, 125, 90, 0.08); }
+    .match-chip.color-d.connected { border-color: rgba(197, 133, 29, 0.25); background: rgba(197, 133, 29, 0.08); }
+
     .match-token {
       width: 34px;
       height: 34px;
@@ -543,6 +587,14 @@
     .match-item {
       font-size: 0.95rem;
       color: var(--muted);
+    }
+
+    .match-item strong {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-right: 8px;
+      font-size: 0.85rem;
     }
 
     textarea, input[type="text"], input[type="password"], select {
@@ -690,6 +742,17 @@
       font-size: 0.96rem;
     }
 
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px;
+      position: sticky;
+      bottom: 10px;
+      z-index: 5;
+    }
+
     .finish-form {
       display: grid;
       gap: 18px;
@@ -741,7 +804,7 @@
       <div class="start-grid">
         <div class="start-copy">
           <div class="eyebrow">Laborstart</div>
-          <h1>Automatenlabor</h1>
+          <h1 class="hero-title"><span>Mission</span>Automatenlabor</h1>
           <p class="start-caption">
             Du startest gleich in eine kleine Labor-Mission. Dabei untersuchst du den Snackautomaten, erkennst Muster und findest heraus, wie Eingaben, Zustände und Ausgaben zusammenhängen.
           </p>
@@ -772,6 +835,10 @@
             <div class="field">
               <label for="startName">Vorname</label>
               <input id="startName" type="text" placeholder="Vorname" />
+            </div>
+            <div class="field">
+              <label for="startLastName">Nachname</label>
+              <input id="startLastName" type="text" placeholder="Nachname" />
             </div>
             <div class="field">
               <label for="startClass">Klasse</label>
@@ -814,10 +881,6 @@
             <span class="badge hidden" id="saveBadge">Speicherstand wird vorbereitet</span>
           </div>
         </div>
-        <div class="row">
-          <button class="secondary" id="backBtn">Zurück</button>
-          <button class="primary" id="nextBtn">Weiter</button>
-        </div>
       </div>
 
       <section class="progress-box">
@@ -841,6 +904,11 @@
         <div id="questionAnswer"></div>
       </section>
 
+      <section class="nav-bar" id="navBar">
+        <button class="secondary" id="backBtn">Zurück</button>
+        <button class="primary" id="nextBtn">Weiter</button>
+      </section>
+
       <section class="finish-card hidden" id="finishCard">
         <div class="finish-form" id="finishForm">
           <div class="eyebrow">Fertig</div>
@@ -857,6 +925,7 @@
           <div class="status-line" id="downloadMessage"></div>
           <div class="summary-list">
             <div class="summary-item" id="finishName"></div>
+            <div class="summary-item" id="finishLastName"></div>
             <div class="summary-item" id="finishClass"></div>
           </div>
         </div>
@@ -964,6 +1033,7 @@
         text: "Welche Aussage lässt sich sicher aus dem Bild ablesen?",
         help: "Wähle nur etwas aus, das wirklich im Bild steht oder zu sehen ist.",
         visual: "machine-photo",
+        needsReason: true,
         options: [
           "Der Automat gibt Wechselgeld aus.",
           "Der Automat akzeptiert 1 Euro, 2 Euro und 50 Cent.",
@@ -1037,6 +1107,7 @@
         help: "Achte auf feste Eingaben, sichtbare Zustände und mögliche Ausgaben.",
         visual: "ticket-photo",
         correctAnswer: "ja",
+        needsReason: true,
         explanation: "Der Fahrkartenautomat verarbeitet Eingaben am Bildschirm, führt feste Abläufe aus und gibt am Ende ein Ergebnis aus."
       },
       {
@@ -1090,6 +1161,7 @@
         help: "Überlege, ob es feste Eingaben, feste Abläufe und eine Ausgabe gibt.",
         visual: "wiper-photo",
         correctAnswer: "ja",
+        needsReason: true,
         explanation: "Auch hier gibt es eine feste Eingabe, einen geregelten Ablauf und am Ende eine klar erkennbare Ausgabe."
       },
       {
@@ -1125,6 +1197,7 @@
       startScreen: document.getElementById("startScreen"),
       appShell: document.getElementById("appShell"),
       startName: document.getElementById("startName"),
+      startLastName: document.getElementById("startLastName"),
       startClass: document.getElementById("startClass"),
       startBtn: document.getElementById("startBtn"),
       startMessage: document.getElementById("startMessage"),
@@ -1143,12 +1216,14 @@
       timerLabel: document.getElementById("timerLabel"),
       timerBar: document.getElementById("timerBar"),
       questionAnswer: document.getElementById("questionAnswer"),
+      navBar: document.getElementById("navBar"),
       finishCard: document.getElementById("finishCard"),
       finishForm: document.getElementById("finishForm"),
       finishTitle: document.getElementById("finishTitle"),
       finishIntro: document.getElementById("finishIntro"),
       finishFeedback: document.getElementById("finishFeedback"),
       finishName: document.getElementById("finishName"),
+      finishLastName: document.getElementById("finishLastName"),
       finishClass: document.getElementById("finishClass"),
       downloadBtn: document.getElementById("downloadBtn"),
       restartBtn: document.getElementById("restartBtn"),
@@ -1171,6 +1246,7 @@
         skipped: [],
         helperUnlocked: false,
         studentName: "",
+        studentLastName: "",
         className: "",
         started: false,
         submittedAt: null,
@@ -1225,6 +1301,7 @@
       state.reasons = data.reasons || {};
       state.skipped = data.skipped || [];
       state.studentName = data.student_name || "";
+      state.studentLastName = data.last_name || "";
       state.className = data.class_name || "";
       state.started = Boolean(data.started_at || state.started);
       state.submittedAt = data.submitted_at || null;
@@ -1362,6 +1439,10 @@
       `;
     }
 
+    function questionNeedsReason(question) {
+      return Boolean(question.needsReason);
+    }
+
     function isAnswerCorrect(question) {
       const answer = state.answers[question.id];
       if (question.type === "single") {
@@ -1476,7 +1557,7 @@
       const visuals = {
         "machine-photo": `
           <div class="example-grid">
-            <div class="example-card photo-card">
+            <div class="example-card photo-card machine-shot">
               <div class="example-visual">
                 <img class="machine-photo" src="assets/automat.png" alt="Snackautomat mit Produkten, Tasten, Münzeinwurf und Ausgabefach" />
               </div>
@@ -1485,7 +1566,7 @@
         `,
         "ticket-photo": `
           <div class="example-grid">
-            <div class="example-card photo-card">
+            <div class="example-card photo-card wide-photo">
               <div class="example-visual">
                 <img class="machine-photo" src="assets/example-ticket.jpeg" alt="Fahrkartenautomat mit Bildschirm und Eingabefeld" />
               </div>
@@ -1494,7 +1575,7 @@
         `,
         "poststation-photo": `
           <div class="example-grid">
-            <div class="example-card photo-card">
+            <div class="example-card photo-card wide-photo">
               <div class="example-visual">
                 <img class="machine-photo" src="assets/example-poststation.jpeg" alt="Poststation mit Fächern und Bedienterminal" />
               </div>
@@ -1503,7 +1584,7 @@
         `,
         "wiper-photo": `
           <div class="example-grid">
-            <div class="example-card photo-card">
+            <div class="example-card photo-card wide-photo">
               <div class="example-visual">
                 <img class="machine-photo" src="assets/example-wiper.jpeg" alt="Scheibenreiniger-Automat mit Münzeinwurf und Sprühpistole" />
               </div>
@@ -1796,6 +1877,7 @@
       const progress = ((state.currentIndex + 1) / questions.length) * 100;
 
       els.progressBar.style.width = `${progress}%`;
+      els.progressLabel.textContent = "Fortschritt";
 
       els.questionText.textContent = question.text;
       els.questionHelp.textContent = question.help;
@@ -1816,7 +1898,7 @@
               </label>
             `).join("")}
           </div>
-          ${typeof state.answers[question.id] === "number" ? buildReasonField(question) : ""}
+          ${(typeof state.answers[question.id] === "number" && questionNeedsReason(question)) ? buildReasonField(question) : ""}
         `;
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
           input.addEventListener("change", (event) => {
@@ -1845,7 +1927,7 @@
               <span>Nein, das ist kein Automat.</span>
             </label>
           </div>
-          ${(state.answers[question.id] === "ja" || state.answers[question.id] === "nein") ? buildReasonField(question) : ""}
+          ${((state.answers[question.id] === "ja" || state.answers[question.id] === "nein") && questionNeedsReason(question)) ? buildReasonField(question) : ""}
         `;
         document.querySelectorAll(`input[name="${question.id}"]`).forEach((input) => {
           input.addEventListener("change", (event) => {
@@ -1869,12 +1951,12 @@
         let activeLeftId = null;
 
         const renderMatchSummary = () => {
-          const summary = question.leftItems.map((item) => {
+          const summary = question.leftItems.map((item, index) => {
             const rightId = currentMatches[item.id];
             const rightItem = question.rightItems.find((entry) => entry.id === rightId);
             return `
-              <div class="match-item">
-                <strong>${escapeHtml(item.label)}</strong> -> ${escapeHtml(rightItem ? rightItem.label : "noch offen")}
+              <div class="match-item color-${String.fromCharCode(97 + index)}">
+                <strong>${String.fromCharCode(65 + index)}</strong>${escapeHtml(item.label)} -> ${escapeHtml(rightItem ? rightItem.label : "noch offen")}
               </div>
             `;
           }).join("");
@@ -1891,7 +1973,7 @@
             <div class="match-grid">
               <div class="match-column" id="matchLeftColumn">
                 ${question.leftItems.map((item, index) => `
-                  <button type="button" class="match-chip ${currentMatches[item.id] ? "connected" : ""}" data-side="left" data-id="${item.id}">
+                  <button type="button" class="match-chip color-${String.fromCharCode(97 + index)} ${currentMatches[item.id] ? "connected" : ""}" data-side="left" data-id="${item.id}">
                     <span class="match-token">${String.fromCharCode(65 + index)}</span>
                     <span class="match-chip-text">${escapeHtml(item.label)}</span>
                   </button>
@@ -1899,7 +1981,7 @@
               </div>
               <div class="match-column" id="matchRightColumn">
                 ${question.rightItems.map((item, index) => `
-                  <button type="button" class="match-chip" data-side="right" data-id="${item.id}">
+                  <button type="button" class="match-chip color-${String.fromCharCode(97 + index)}" data-side="right" data-id="${item.id}">
                     <span class="match-token">${index + 1}</span>
                     <span class="match-chip-text">${escapeHtml(item.label)}</span>
                   </button>
@@ -1986,15 +2068,15 @@
     function renderFinish() {
       stopTimer();
       els.questionCard.classList.add("hidden");
+      els.navBar.classList.add("hidden");
       els.finishCard.classList.remove("hidden");
-      els.backBtn.classList.add("hidden");
-      els.nextBtn.classList.add("hidden");
       els.finishTitle.textContent = state.submittedAt ? "Mission beendet" : "Mission beenden";
       els.finishIntro.textContent = state.submittedAt
         ? "Deine Mission ist abgeschlossen. Unten kannst du direkt wieder von vorne starten."
         : "Beende jetzt deine Mission. Deine Ergebnisse werden im Hintergrund gesichert.";
       els.finishFeedback.textContent = getFinishFeedback();
       els.finishName.textContent = `Vorname: ${state.studentName || "-"}`;
+      els.finishLastName.textContent = `Nachname: ${state.studentLastName || "-"}`;
       els.finishClass.textContent = `Klasse: ${state.className || "-"}`;
       els.downloadBtn.textContent = state.submittedAt ? "Mission abgeschlossen" : "Mission beenden";
       els.downloadBtn.disabled = Boolean(state.submittedAt);
@@ -2026,9 +2108,8 @@
       }
 
       els.questionCard.classList.remove("hidden");
+      els.navBar.classList.remove("hidden");
       els.finishCard.classList.add("hidden");
-      els.backBtn.classList.remove("hidden");
-      els.nextBtn.classList.remove("hidden");
       renderQuestion();
     }
 
@@ -2110,9 +2191,14 @@
 
     function startMission() {
       const firstName = els.startName.value.trim();
+      const lastName = els.startLastName.value.trim();
       const className = els.startClass.value.trim();
       if (!firstName) {
         els.startMessage.textContent = "Bitte gib zuerst deinen Vornamen ein.";
+        return;
+      }
+      if (!lastName) {
+        els.startMessage.textContent = "Bitte gib zuerst deinen Nachnamen ein.";
         return;
       }
       if (!className) {
@@ -2120,6 +2206,7 @@
         return;
       }
       state.studentName = firstName;
+      state.studentLastName = lastName;
       state.className = className;
       state.started = true;
       state.submittedAt = null;
@@ -2129,15 +2216,20 @@
       render();
     }
 
-    function buildReportText(name) {
+    function buildReportText(name, lastName, className) {
       const { points, maxPoints } = scoreResult();
+      const answeredCount = questions.filter((question) => currentAnswerExistsForQuestion(question)).length;
       const lines = [
         "Automatenlabor - Auswertung",
         "===========================",
         `Vorname: ${name}`,
+        `Nachname: ${lastName}`,
+        `Klasse: ${className}`,
         `Datum: ${new Date().toLocaleString("de-DE")}`,
         "",
         `Punkte aus Auswahlfragen: ${points} von ${maxPoints}`,
+        `Bearbeitet: ${answeredCount} von ${questions.length}`,
+        `Übersprungen: ${state.skipped.length}`,
         "",
         "Antworten:",
         "---------"
@@ -2178,7 +2270,7 @@
       return lines.join("\n");
     }
 
-    async function buildReportPdfBlob(name, className) {
+    async function buildReportPdfBlob(name, lastName, className) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({
         orientation: "portrait",
@@ -2194,6 +2286,7 @@
       const positiveColor = [23, 135, 84];
       const negativeColor = [191, 38, 0];
       const neutralColor = [41, 51, 65];
+      const answeredCount = questions.filter((question) => currentAnswerExistsForQuestion(question)).length;
 
       const ensureSpace = (spaceNeeded = 24) => {
         if (y + spaceNeeded > pageHeight - margin) {
@@ -2224,15 +2317,19 @@
       y += 56;
 
       addWrappedText(`Vorname: ${name}`);
+      addWrappedText(`Nachname: ${lastName}`);
       addWrappedText(`Klasse: ${className}`);
       addWrappedText(`Datum: ${new Date().toLocaleString("de-DE")}`);
       y += 10;
 
       const { points, maxPoints } = scoreResult();
       addWrappedText(`Punkte aus Auswahlfragen: ${points} von ${maxPoints}`);
+      addWrappedText(`Bearbeitete Aufgaben: ${answeredCount} von ${questions.length}`);
+      addWrappedText(`Übersprungene Aufgaben: ${state.skipped.length}`);
       y += 20;
 
       questions.forEach((question, index) => {
+        const code = getQuestionCode(index);
         const skipped = getSkippedEntry(question);
         const answer = state.answers[question.id];
         const reason = state.reasons[question.id];
@@ -2243,7 +2340,7 @@
         doc.setFont("helvetica", "bold");
         doc.setTextColor(...neutralColor);
         doc.setFontSize(13);
-        const questionLines = doc.splitTextToSize(`${index + 1}. ${question.text}`, maxWidth);
+        const questionLines = doc.splitTextToSize(`${code}  ${question.text}`, maxWidth);
         questionLines.forEach((line) => {
           ensureSpace(18);
           doc.text(line, margin, y);
@@ -2315,6 +2412,7 @@
       const machineLines = [
         "BEGIN-DATEN",
         `vorname=${name}`,
+        `nachname=${lastName}`,
         `klasse=${className}`,
         `zeit=${new Date().toISOString()}`
       ];
@@ -2337,9 +2435,14 @@
 
     async function submitMission() {
       const name = state.studentName.trim();
+      const lastName = state.studentLastName.trim();
       const className = state.className.trim();
       if (!name) {
         els.downloadMessage.textContent = "Vorname fehlt.";
+        return;
+      }
+      if (!lastName) {
+        els.downloadMessage.textContent = "Nachname fehlt.";
         return;
       }
       if (!className) {
@@ -2350,11 +2453,12 @@
       await ensureAuthSession();
       els.downloadBtn.disabled = true;
       els.downloadBtn.textContent = "Beendet ...";
-      const pdfBlob = await buildReportPdfBlob(name, className);
+      const pdfBlob = await buildReportPdfBlob(name, lastName, className);
       const safeName = slugify(name) || "schueler";
+      const safeLastName = slugify(lastName) || "nachname";
       const safeClass = slugify(className) || "klasse";
       const nowIso = new Date().toISOString();
-      const fileName = `${authUser.id}/automatenlabor-${safeClass}-${safeName}-${Date.now()}.pdf`;
+      const fileName = `${authUser.id}/automatenlabor-${safeClass}-${safeLastName}-${safeName}-${Date.now()}.pdf`;
 
       const { error: uploadError } = await client
         .storage
@@ -2380,6 +2484,7 @@
           user_id: authUser.id,
           student_key: authUser.id,
           student_name: name,
+          last_name: lastName,
           class_name: className,
           current_index: questions.length,
           answers: state.answers,
@@ -2416,6 +2521,7 @@
       els.downloadMessage.textContent = "";
       els.startMessage.textContent = "";
       els.startName.value = "";
+      els.startLastName.value = "";
       els.startClass.value = "";
       els.downloadBtn.disabled = false;
       els.downloadBtn.textContent = "Mission beenden";
@@ -2448,6 +2554,7 @@
         user_id: authUser.id,
         student_key: authUser.id,
         student_name: state.studentName || "",
+        last_name: state.studentLastName || "",
         class_name: state.className || "",
         current_index: state.currentIndex,
         answers: state.answers,
@@ -2492,6 +2599,7 @@
       rebuildQuestions();
 
       if (state.studentName) els.startName.value = state.studentName;
+      if (state.studentLastName) els.startLastName.value = state.studentLastName;
       if (state.className) els.startClass.value = state.className;
       render();
     }
@@ -2515,6 +2623,12 @@
     els.restartBtn.addEventListener("click", () => restart().catch(console.error));
     els.startBtn.addEventListener("click", startMission);
     els.startName.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        startMission();
+      }
+    });
+    els.startLastName.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
         startMission();

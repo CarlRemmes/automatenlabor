@@ -5,6 +5,7 @@ create table if not exists public.worksheet_attempts (
   user_id uuid not null references auth.users(id) on delete cascade unique,
   student_key text not null unique,
   student_name text not null default '',
+  last_name text not null default '',
   class_name text not null default '',
   current_index integer not null default 0,
   answers jsonb not null default '{}'::jsonb,
@@ -24,6 +25,7 @@ create table if not exists public.worksheet_attempts (
 
 alter table public.worksheet_attempts
 add column if not exists class_name text not null default '',
+add column if not exists last_name text not null default '',
 add column if not exists reasons jsonb not null default '{}'::jsonb,
 add column if not exists question_order jsonb not null default '[]'::jsonb,
 add column if not exists timer_starts jsonb not null default '{}'::jsonb,

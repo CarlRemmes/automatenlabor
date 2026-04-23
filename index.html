@@ -859,7 +859,7 @@
         <div class="start-copy">
           <div class="brand-lockup">
             <div class="brand-meta">
-              <div class="brand-name">Automatenlabor</div>
+              <div class="brand-name" id="startHeroTitle">Automatenlabor</div>
             </div>
           </div>
           <h1 class="hero-title">Automaten sehen. Muster erkennen.</h1>
@@ -1272,6 +1272,7 @@
       startClass: document.getElementById("startClass"),
       startBtn: document.getElementById("startBtn"),
       startMessage: document.getElementById("startMessage"),
+      startHeroTitle: document.getElementById("startHeroTitle"),
       heroTitle: document.getElementById("heroTitle"),
       saveBadge: document.getElementById("saveBadge"),
       backBtn: document.getElementById("backBtn"),
@@ -2981,6 +2982,7 @@
         startMission();
       }
     });
+    els.startHeroTitle.addEventListener("click", handleTitleTap);
     els.heroTitle.addEventListener("click", handleTitleTap);
     els.unlockHelperBtn.addEventListener("click", () => unlockHelperMenu().catch(console.error));
     els.showSolutionsBtn.addEventListener("click", () => showSolutions().catch(console.error));

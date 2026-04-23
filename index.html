@@ -51,6 +51,79 @@
       backdrop-filter: blur(22px);
     }
 
+    .start-shell {
+      width: min(760px, calc(100% - 28px));
+      margin: 28px auto;
+      padding: 12px;
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px);
+    }
+
+    .start-card {
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(0, 122, 255, 0.18), transparent 30%),
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(245,249,255,0.92));
+    }
+
+    .start-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+      align-items: start;
+    }
+
+    .logo-panel {
+      display: grid;
+      gap: 14px;
+      justify-items: center;
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(248, 250, 252, 0.9);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .logo-frame {
+      width: 144px;
+      height: 144px;
+      padding: 14px;
+      border-radius: 32px;
+      background: linear-gradient(180deg, #ffffff, #edf4ff);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+      display: grid;
+      place-items: center;
+    }
+
+    .school-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 22px;
+      display: block;
+    }
+
+    .start-form {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      font-weight: 700;
+    }
+
     .glass {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -335,7 +408,7 @@
       border-color: rgba(0, 122, 255, 0.24);
     }
 
-    textarea, input[type="text"], input[type="password"] {
+    textarea, input[type="text"], input[type="password"], select {
       width: 100%;
       border: 1px solid rgba(16, 35, 61, 0.1);
       background: rgba(255, 255, 255, 0.88);
@@ -441,12 +514,30 @@
       line-height: 1.45;
     }
 
+    .summary-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .summary-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(16, 35, 61, 0.05);
+      border: 1px solid rgba(15, 23, 42, 0.05);
+      font-size: 0.96rem;
+    }
+
     .finish-form {
       display: grid;
       gap: 18px;
     }
 
     @media (max-width: 680px) {
+      .start-grid {
+        grid-template-columns: 1fr;
+      }
+
       .shell {
         width: min(100% - 10px, 920px);
         margin: 6px auto;
@@ -454,6 +545,14 @@
         border-radius: 26px;
       }
 
+      .start-shell {
+        width: min(100% - 12px, 760px);
+        margin: 10px auto;
+        padding: 8px;
+        border-radius: 26px;
+      }
+
+      .start-card,
       .hero-copy,
       .workspace {
         padding: 18px;
@@ -476,7 +575,63 @@
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
-  <div class="shell">
+  <div class="start-shell" id="startScreen">
+    <section class="start-card glass">
+      <div class="start-grid">
+        <div>
+          <div class="eyebrow">Start</div>
+          <h1>Automaten<br />labor</h1>
+          <p class="sub">
+            Gib zuerst deinen Vornamen und deine Klasse an. Danach startet dein Arbeitsauftrag mit dem Snackautomaten.
+          </p>
+          <div class="mission-strip">
+            <div class="mission-card">
+              <strong>Beobachten</strong>
+              <span>Den Automaten genau lesen.</span>
+            </div>
+            <div class="mission-card">
+              <strong>Erklären</strong>
+              <span>Mit Fachbegriffen antworten.</span>
+            </div>
+            <div class="mission-card">
+              <strong>Dokumentieren</strong>
+              <span>Am Ende das PDF speichern.</span>
+            </div>
+          </div>
+        </div>
+        <div class="logo-panel">
+          <div class="logo-frame">
+            <img class="school-logo" src="assets/school-logo.jpeg" alt="Schullogo" />
+          </div>
+          <div class="muted" style="text-align:center;">Maschinen lesen, Zustände verstehen, Antworten begründen.</div>
+        </div>
+      </div>
+      <div class="start-form">
+        <div class="field">
+          <label for="startName">Vorname</label>
+          <input id="startName" type="text" placeholder="Vorname" />
+        </div>
+        <div class="field">
+          <label for="startClass">Klasse</label>
+          <select id="startClass">
+            <option value="">Klasse auswählen</option>
+            <option value="6a">6a</option>
+            <option value="6b">6b</option>
+            <option value="6c">6c</option>
+            <option value="6d">6d</option>
+            <option value="6e">6e</option>
+            <option value="andere">andere</option>
+          </select>
+        </div>
+        <div class="row">
+          <button class="primary" id="startBtn">Starten</button>
+        </div>
+        <div class="status-line" id="startMessage"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="shell hidden" id="appShell">
     <section class="hero">
       <section class="hero-copy glass">
         <div class="eyebrow">Automatenlabor</div>
@@ -537,18 +692,18 @@
           <div class="eyebrow">Fertig</div>
           <h2>Speichern</h2>
           <p class="sub" style="max-width: none;">
-            Gib jetzt deinen Vornamen ein und speichere deine Ergebnisse auf diesem Gerät.
+            Prüfe noch einmal deine Angaben und speichere danach die Auswertung auf diesem Gerät.
           </p>
-          <div style="margin-top: 16px;">
-            <label for="studentName"><strong>Vorname</strong></label>
-            <input id="studentName" type="text" placeholder="Vorname" />
-          </div>
           <div class="skip-summary" id="skipSummary"></div>
           <div class="row" style="margin-top: 18px;">
             <button class="primary" id="downloadBtn">Speichern</button>
             <button class="secondary" id="restartBtn">Neu starten</button>
           </div>
           <div class="status-line" id="downloadMessage"></div>
+          <div class="summary-list">
+            <div class="summary-item" id="finishName"></div>
+            <div class="summary-item" id="finishClass"></div>
+          </div>
         </div>
       </section>
     </main>
@@ -612,7 +767,6 @@
         type: "single",
         text: "Welche Taste passt nicht direkt zu einem der drei Produktnamen?",
         help: "Vergleiche die Buchstaben mit Gummibärchen, Schokoriegel und Chips.",
-        visual: "machine-photo",
         options: ["G", "S", "C", "R"],
         correct: 3
       },
@@ -642,7 +796,6 @@
         type: "text",
         text: "Welche Informationen über den Kauf findest du direkt auf dem Automaten? Nenne mindestens zwei.",
         help: "Denk an Produkte, Preise, Tasten oder akzeptierte Münzen.",
-        visual: "machine-photo",
         sampleAnswer: "Zum Beispiel Produktnamen, Preis, Tasten und akzeptierte Münzen.",
         placeholder: "Auf dem Automaten steht ..."
       },
@@ -667,7 +820,6 @@
         type: "text",
         text: "Formuliere einen sinnvollen Startzustand für diesen Automaten, bevor jemand etwas tut.",
         help: "Denke an den Zustand ganz am Anfang eines Kaufs.",
-        visual: "machine-photo",
         sampleAnswer: "Zum Beispiel: Es wurde noch kein Geld eingeworfen und der Automat wartet auf eine Eingabe.",
         placeholder: "Ein möglicher Startzustand ist ..."
       },
@@ -687,7 +839,6 @@
         type: "text",
         text: "Erkläre an diesem Automaten den Unterschied zwischen Eingabe und Ausgabe.",
         help: "Nutze jeweils ein Beispiel aus dem Bild.",
-        visual: "machine-photo",
         sampleAnswer: "Eine Eingabe ist zum Beispiel das Einwerfen einer Münze oder das Drücken einer Taste. Eine Ausgabe ist zum Beispiel ein Produkt oder zurückgegebenes Geld.",
         placeholder: "Eine Eingabe ist ... Eine Ausgabe ist ..."
       },
@@ -707,7 +858,6 @@
         type: "text",
         text: "Beschreibe einen möglichen Ablauf vom Start bis zur Ausgabe eines Produkts in drei bis vier Schritten.",
         help: "Nutze Wörter wie Start, Eingabe, Zustand und Ausgabe.",
-        visual: "machine-photo",
         sampleAnswer: "Zum Beispiel: Startzustand ohne Geld, Münze einwerfen, passende Taste drücken, Produkt wird ausgegeben.",
         placeholder: "1. ... 2. ... 3. ..."
       },
@@ -726,6 +876,12 @@
     let questions = [];
 
     const els = {
+      startScreen: document.getElementById("startScreen"),
+      appShell: document.getElementById("appShell"),
+      startName: document.getElementById("startName"),
+      startClass: document.getElementById("startClass"),
+      startBtn: document.getElementById("startBtn"),
+      startMessage: document.getElementById("startMessage"),
       heroTitle: document.getElementById("heroTitle"),
       saveBadge: document.getElementById("saveBadge"),
       backBtn: document.getElementById("backBtn"),
@@ -740,7 +896,8 @@
       questionAnswer: document.getElementById("questionAnswer"),
       finishCard: document.getElementById("finishCard"),
       finishForm: document.getElementById("finishForm"),
-      studentName: document.getElementById("studentName"),
+      finishName: document.getElementById("finishName"),
+      finishClass: document.getElementById("finishClass"),
       downloadBtn: document.getElementById("downloadBtn"),
       restartBtn: document.getElementById("restartBtn"),
       downloadMessage: document.getElementById("downloadMessage"),
@@ -761,6 +918,8 @@
         skipped: [],
         helperUnlocked: false,
         studentName: "",
+        className: "",
+        started: false,
         savedLocally: false,
         questionOrder: []
       };
@@ -897,14 +1056,20 @@
 
     function buildSolutionsOverviewHtml() {
       return questions
-        .map((question) => `
+        .map((question, index) => `
           <div class="solution-item">
-            <strong>${escapeHtml(question.tag)}</strong><br />
+            <strong>${escapeHtml(getQuestionCode(index))}</strong><br />
             ${escapeHtml(question.text)}<br />
             <span class="muted">${question.type === "text" ? "Musterantwort" : "Richtige Antwort"}: ${escapeHtml(getCorrectAnswer(question))}</span>
           </div>
         `)
         .join("");
+    }
+
+    function getQuestionCode(index) {
+      const prefixes = ["AX", "BZ", "CQ", "DR", "EK", "FL", "GM", "HN", "JP", "KT", "LU", "MV", "NW", "PX", "QY", "RZ"];
+      const prefix = prefixes[index % prefixes.length];
+      return `${prefix}-${String(index + 1).padStart(2, "0")}`;
     }
 
     function exampleVisual(kind) {
@@ -1209,8 +1374,9 @@
 
       els.questionText.textContent = question.text;
       els.questionHelp.textContent = question.help;
-      els.questionTag.textContent = question.tag;
-      els.questionVisual.innerHTML = exampleVisual(question.visual);
+      els.questionTag.textContent = getQuestionCode(state.currentIndex);
+      els.questionVisual.classList.toggle("hidden", !question.visual);
+      els.questionVisual.innerHTML = question.visual ? exampleVisual(question.visual) : "";
       els.backBtn.disabled = state.currentIndex === 0;
       els.nextBtn.textContent = state.currentIndex === questions.length - 1 ? "Zum Abschluss" : "Weiter";
 
@@ -1274,10 +1440,10 @@
       els.finishCard.classList.remove("hidden");
       els.backBtn.classList.add("hidden");
       els.nextBtn.classList.add("hidden");
-      els.studentName.value = state.studentName || "";
       els.downloadBtn.textContent = state.savedLocally ? "Gespeichert" : "Speichern";
       els.downloadBtn.disabled = state.savedLocally;
-      els.studentName.disabled = state.savedLocally;
+      els.finishName.textContent = `Vorname: ${state.studentName || "-"}`;
+      els.finishClass.textContent = `Klasse: ${state.className || "-"}`;
       if (state.savedLocally) {
         els.downloadMessage.textContent = "Gespeichert.";
       }
@@ -1292,6 +1458,14 @@
     }
 
     function render() {
+      if (!state.started) {
+        els.startScreen.classList.remove("hidden");
+        els.appShell.classList.add("hidden");
+        return;
+      }
+
+      els.startScreen.classList.add("hidden");
+      els.appShell.classList.remove("hidden");
       updateBadges();
       if (state.currentIndex >= questions.length) {
         renderFinish();
@@ -1344,12 +1518,12 @@
       if (!getSkippedEntry(question)) {
         state.skipped.push({
           id: question.id,
-          tag: question.tag,
+          tag: getQuestionCode(state.currentIndex),
           text: question.text,
           timestamp: new Date().toISOString()
         });
       }
-      els.helperMessage.textContent = `${question.tag} wurde als übersprungen markiert.`;
+      els.helperMessage.textContent = `${getQuestionCode(state.currentIndex)} wurde als übersprungen markiert.`;
       state.helperUnlocked = false;
       updateBadges();
       queueSave();
@@ -1373,6 +1547,25 @@
       }
 
       return true;
+    }
+
+    function startMission() {
+      const firstName = els.startName.value.trim();
+      const className = els.startClass.value.trim();
+      if (!firstName) {
+        els.startMessage.textContent = "Bitte gib zuerst deinen Vornamen ein.";
+        return;
+      }
+      if (!className) {
+        els.startMessage.textContent = "Bitte wähle zuerst deine Klasse aus.";
+        return;
+      }
+      state.studentName = firstName;
+      state.className = className;
+      state.started = true;
+      els.startMessage.textContent = "";
+      saveLocalState();
+      render();
     }
 
     function buildReportText(name) {
@@ -1420,7 +1613,7 @@
       return lines.join("\n");
     }
 
-    async function buildReportPdfBlob(name) {
+    async function buildReportPdfBlob(name, className) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({
         orientation: "portrait",
@@ -1458,7 +1651,9 @@
 
       try {
         const logoData = await loadImageDataUrl("assets/school-logo.jpeg");
-        doc.addImage(logoData, "JPEG", margin, y, 54, 54);
+        doc.setFillColor(244, 248, 255);
+        doc.roundedRect(margin - 4, y - 6, 74, 74, 18, 18, "F");
+        doc.addImage(logoData, "JPEG", margin + 6, y + 4, 54, 54);
       } catch (error) {
         console.error("Logo konnte nicht geladen werden.", error);
       }
@@ -1473,6 +1668,7 @@
       y += 78;
 
       addWrappedText(`Vorname: ${name}`);
+      addWrappedText(`Klasse: ${className}`);
       addWrappedText(`Datum: ${new Date().toLocaleString("de-DE")}`);
       y += 10;
 
@@ -1540,22 +1736,55 @@
         y += 14;
       });
 
+      doc.addPage();
+      y = margin;
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(...neutralColor);
+      doc.setFontSize(18);
+      doc.text("Datenteil", margin, y);
+      y += 26;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      const machineLines = [
+        "BEGIN-DATEN",
+        `vorname=${name}`,
+        `klasse=${className}`,
+        `zeit=${new Date().toISOString()}`
+      ];
+      questions.forEach((question, index) => {
+        machineLines.push(`code_${index + 1}=${getQuestionCode(index)}`);
+        machineLines.push(`id_${index + 1}=${question.id}`);
+        machineLines.push(`antwort_${index + 1}=${getAnswerLabel(question, state.answers[question.id]).replaceAll("\n", " ")}`);
+        machineLines.push(`loesung_${index + 1}=${getCorrectAnswer(question).replaceAll("\n", " ")}`);
+      });
+      machineLines.push("END-DATEN");
+      machineLines.forEach((line) => {
+        ensureSpace(14);
+        doc.text(line, margin, y);
+        y += 14;
+      });
+
       return doc.output("blob");
     }
 
     async function saveWorksheet() {
-      const name = els.studentName.value.trim();
+      const name = state.studentName.trim();
+      const className = state.className.trim();
       if (!name) {
-        els.downloadMessage.textContent = "Bitte gib zuerst deinen Vornamen ein.";
+        els.downloadMessage.textContent = "Vorname fehlt.";
+        return;
+      }
+      if (!className) {
+        els.downloadMessage.textContent = "Klasse fehlt.";
         return;
       }
 
       els.downloadBtn.disabled = true;
       els.downloadBtn.textContent = "Speichert ...";
-      state.studentName = name;
-      const pdfBlob = await buildReportPdfBlob(name);
+      const pdfBlob = await buildReportPdfBlob(name, className);
       const safeName = slugify(name) || "schueler";
-      const fileName = `automatenlabor-auswertung-${safeName}.pdf`;
+      const safeClass = slugify(className) || "klasse";
+      const fileName = `automatenlabor-auswertung-${safeClass}-${safeName}.pdf`;
 
       try {
         if ("showSaveFilePicker" in window) {
@@ -1589,7 +1818,6 @@
       }
 
       state.savedLocally = true;
-      els.studentName.disabled = true;
       saveLocalState();
       render();
     }
@@ -1599,7 +1827,9 @@
       Object.assign(state, createDefaultState());
       rebuildQuestions();
       els.downloadMessage.textContent = "";
-      els.studentName.disabled = false;
+      els.startMessage.textContent = "";
+      els.startName.value = "";
+      els.startClass.value = "";
       els.downloadBtn.disabled = false;
       els.downloadBtn.textContent = "Speichern";
       render();
@@ -1646,6 +1876,19 @@
     els.backBtn.addEventListener("click", goBack);
     els.downloadBtn.addEventListener("click", () => saveWorksheet().catch(console.error));
     els.restartBtn.addEventListener("click", restart);
+    els.startBtn.addEventListener("click", startMission);
+    els.startName.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        startMission();
+      }
+    });
+    els.startClass.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        startMission();
+      }
+    });
     els.heroTitle.addEventListener("click", handleTitleTap);
     els.unlockHelperBtn.addEventListener("click", () => unlockHelperMenu().catch(console.error));
     els.showSolutionsBtn.addEventListener("click", showSolutions);
@@ -1661,16 +1904,6 @@
       els.helperOverlay.classList.add("hidden");
       els.helperMessage.textContent = "";
       els.solutionOverview.classList.add("hidden");
-    });
-    els.studentName.addEventListener("input", () => {
-      state.studentName = els.studentName.value;
-      queueSave();
-    });
-    els.studentName.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        saveWorksheet().catch(console.error);
-      }
     });
     rebuildQuestions();
     render();

@@ -2253,7 +2253,7 @@ Telefon: +49 5971 9453 5200</div>
               <div class="match-grid">
                 <div class="match-column" id="matchLeftColumn">
                 ${question.leftItems.map((item, index) => `
-                  <button type="button" class="match-chip color-${String.fromCharCode(97 + index)} ${currentMatches[item.id] ? "connected" : ""}" data-side="left" data-id="${item.id}" data-color="${String.fromCharCode(97 + index)}">
+                  <button type="button" class="match-chip ${currentMatches[item.id] ? "connected" : ""}" data-side="left" data-id="${item.id}" data-color="${String.fromCharCode(97 + index)}">
                     <span class="match-token handle">${String.fromCharCode(65 + index)}</span>
                     <span class="match-chip-text">${escapeHtml(item.label)}</span>
                   </button>
@@ -2261,7 +2261,7 @@ Telefon: +49 5971 9453 5200</div>
                 </div>
                 <div class="match-column" id="matchRightColumn">
                 ${question.rightItems.map((item, index) => `
-                  <button type="button" class="match-chip color-${String.fromCharCode(97 + index)}" data-side="right" data-id="${item.id}" data-color="${String.fromCharCode(97 + index)}">
+                  <button type="button" class="match-chip" data-side="right" data-id="${item.id}" data-color="${String.fromCharCode(97 + index)}">
                     <span class="match-token">${index + 1}</span>
                     <span class="match-chip-text">${escapeHtml(item.label)}</span>
                   </button>
@@ -2278,17 +2278,37 @@ Telefon: +49 5971 9453 5200</div>
         let dragState = null;
 
         const refreshMatchButtons = () => {
+          const colorClasses = ["color-a", "color-b", "color-c", "color-d"];
+
           document.querySelectorAll('.match-chip[data-side="left"]').forEach((button) => {
             const id = button.dataset.id;
+            colorClasses.forEach((className) => button.classList.remove(className));
             button.classList.toggle("active", activeLeftId === id);
             button.classList.toggle("connected", Boolean(currentMatches[id]));
+
+            const leftIndex = question.leftItems.findIndex((item) => item.id === id);
+            const rightId = currentMatches[id];
+            if (leftIndex >= 0 && rightId) {
+              const className = colorClasses[leftIndex % colorClasses.length];
+              button.classList.add(className);
+            }
           });
 
           document.querySelectorAll('.match-chip[data-side="right"]').forEach((button) => {
             const rightId = button.dataset.id;
-            const connected = Object.values(currentMatches).includes(rightId);
+            colorClasses.forEach((className) => button.classList.remove(className));
+            const leftId = Object.keys(currentMatches).find((currentLeftId) => currentMatches[currentLeftId] === rightId);
+            const connected = Boolean(leftId);
             button.classList.toggle("connected", connected);
             button.classList.toggle("active", false);
+
+            if (leftId) {
+              const leftIndex = question.leftItems.findIndex((item) => item.id === leftId);
+              if (leftIndex >= 0) {
+                const className = colorClasses[leftIndex % colorClasses.length];
+                button.classList.add(className);
+              }
+            }
           });
 
           updateMatchLines();

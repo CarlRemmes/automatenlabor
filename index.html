@@ -2847,8 +2847,7 @@ Telefon: +49 5971 9453 5200</div>
       const safeClass = slugify(className) || "klasse";
       const nowIso = new Date().toISOString();
       const fileName = `automatenlabor-${safeClass}-${safeLastName}-${safeName}-${Date.now()}.pdf`;
-      const rootReportPath = fileName;
-      const fallbackReportPath = authUser ? `${authUser.id}/${fileName}` : fileName;
+      const uploadPath = authUser ? `${authUser.id}/${fileName}` : fileName;
 
       state.submittedAt = null;
       state.reportUploadedAt = null;
@@ -2889,26 +2888,13 @@ Telefon: +49 5971 9453 5200</div>
         return;
       }
 
-      let uploadPath = rootReportPath;
-      let { error: uploadError } = await client
+      const { error: uploadError } = await client
         .storage
         .from(REPORTS_BUCKET)
         .upload(uploadPath, pdfBlob, {
           contentType: "application/pdf",
           upsert: true
         });
-
-      if (uploadError && /row-level security policy/i.test(uploadError.message || "")) {
-        uploadPath = fallbackReportPath;
-        const retryResult = await client
-          .storage
-          .from(REPORTS_BUCKET)
-          .upload(uploadPath, pdfBlob, {
-            contentType: "application/pdf",
-            upsert: true
-          });
-        uploadError = retryResult.error || null;
-      }
 
       if (uploadError) {
         console.error(uploadError);

@@ -2722,7 +2722,7 @@
       const safeLastName = slugify(lastName) || "nachname";
       const safeClass = slugify(className) || "klasse";
       const nowIso = new Date().toISOString();
-      const fileName = `${authUser.id}/automatenlabor-${safeClass}-${safeLastName}-${safeName}-${Date.now()}.pdf`;
+      const fileName = `automatenlabor-${safeClass}-${safeLastName}-${safeName}-${Date.now()}.pdf`;
 
       state.submittedAt = nowIso;
       state.reportPath = "";

@@ -82,7 +82,7 @@ on storage.objects
 for insert
 with check (
   bucket_id = 'automatenlabor-reports'
-  and auth.uid()::text = (storage.foldername(name))[1]
+  and auth.uid() is not null
 );
 
 drop policy if exists "worksheet reports self update" on storage.objects;
@@ -91,11 +91,11 @@ on storage.objects
 for update
 using (
   bucket_id = 'automatenlabor-reports'
-  and auth.uid()::text = (storage.foldername(name))[1]
+  and auth.uid() is not null
 )
 with check (
   bucket_id = 'automatenlabor-reports'
-  and auth.uid()::text = (storage.foldername(name))[1]
+  and auth.uid() is not null
 );
 
 drop policy if exists "worksheet reports self read" on storage.objects;
@@ -104,5 +104,5 @@ on storage.objects
 for select
 using (
   bucket_id = 'automatenlabor-reports'
-  and auth.uid()::text = (storage.foldername(name))[1]
+  and auth.uid() is not null
 );

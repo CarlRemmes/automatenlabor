@@ -70,6 +70,13 @@ Er legt an:
 - Policies fuer anonyme Schueler-Sessions
 - die serverseitige PIN-Pruefung
 
+Wenn beim Klick auf `Mission beenden` die Meldung
+
+- `new row violates row-level security policy`
+
+erscheint, dann ist in der Regel die Storage-Policy fuer den Bucket noch nicht aktuell.  
+Fuehre in diesem Fall [supabase_central_results.sql](/Users/carlremmes/Documents/Codex/2026-04-21-github-plugin-github-openai-curated-inspect/automatenlabor/supabase_central_results.sql) erneut komplett aus.
+
 ## Hinweise fuer den Unterricht
 
 - Die SuS sehen keine genaue Punktzahl.

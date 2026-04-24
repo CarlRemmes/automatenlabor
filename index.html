@@ -1321,6 +1321,7 @@
         className: "",
         started: false,
         submittedAt: null,
+        reportUploadedAt: null,
         reportPath: "",
         questionOrder: [],
         timerStarts: {}
@@ -1376,6 +1377,7 @@
       state.className = data.class_name || "";
       state.started = Boolean(data.started_at || state.started);
       state.submittedAt = data.submitted_at || null;
+      state.reportUploadedAt = data.report_uploaded_at || null;
       state.reportPath = data.report_path || "";
       state.questionOrder = Array.isArray(data.question_order) ? data.question_order : state.questionOrder;
       state.timerStarts = data.timer_starts || {};
@@ -1601,7 +1603,7 @@
     }
 
     function getFinishFeedback() {
-      if (state.submittedAt) {
+      if (state.submittedAt && state.reportPath && state.reportUploadedAt) {
         return getStudentFeedback();
       }
 
@@ -2337,20 +2339,21 @@
     }
 
     function renderFinish() {
+      const submissionComplete = Boolean(state.submittedAt && state.reportPath && state.reportUploadedAt);
       stopTimer();
       els.progressBox.classList.add("hidden");
       els.questionCard.classList.add("hidden");
       els.navBar.classList.add("hidden");
       els.finishCard.classList.remove("hidden");
-      els.finishTitle.textContent = state.submittedAt ? "Mission beendet" : "Mission beenden";
-      els.finishIntro.textContent = state.submittedAt
+      els.finishTitle.textContent = submissionComplete ? "Mission beendet" : "Mission beenden";
+      els.finishIntro.textContent = submissionComplete
         ? "Deine Mission ist abgeschlossen. Du kannst jetzt direkt neu starten."
         : "Beende jetzt deine Mission. Deine Ergebnisse werden im Hintergrund gesichert.";
       els.finishFeedback.textContent = getFinishFeedback();
-      els.downloadBtn.classList.toggle("hidden", Boolean(state.submittedAt));
-      els.downloadBtn.textContent = state.submittedAt ? "Mission abgeschlossen" : "Mission beenden";
-      els.downloadBtn.disabled = Boolean(state.submittedAt);
-      els.downloadMessage.textContent = state.submittedAt ? "Die Ergebnisse wurden gespeichert." : "";
+      els.downloadBtn.classList.toggle("hidden", submissionComplete);
+      els.downloadBtn.textContent = submissionComplete ? "Mission abgeschlossen" : "Mission beenden";
+      els.downloadBtn.disabled = submissionComplete;
+      els.downloadMessage.textContent = submissionComplete ? "Die Ergebnisse wurden gespeichert." : "";
     }
 
     function render() {
@@ -2474,6 +2477,7 @@
       state.className = className;
       state.started = true;
       state.submittedAt = null;
+      state.reportUploadedAt = null;
       state.reportPath = "";
       els.startMessage.textContent = "";
       queueSave();
@@ -2724,7 +2728,8 @@
       const nowIso = new Date().toISOString();
       const fileName = `automatenlabor-${safeClass}-${safeLastName}-${safeName}-${Date.now()}.pdf`;
 
-      state.submittedAt = nowIso;
+      state.submittedAt = null;
+      state.reportUploadedAt = null;
       state.reportPath = "";
 
       const { error: saveBeforeUploadError } = await client
@@ -2744,7 +2749,7 @@
           timer_starts: state.timerStarts,
           started_at: nowIso,
           finished_at: nowIso,
-          submitted_at: nowIso,
+          submitted_at: null,
           report_path: "",
           report_uploaded_at: null,
           updated_at: nowIso
@@ -2752,6 +2757,10 @@
 
       if (saveBeforeUploadError) {
         console.error(saveBeforeUploadError);
+        state.submittedAt = null;
+        state.reportUploadedAt = null;
+        state.reportPath = "";
+        saveLocalState();
         els.downloadBtn.disabled = false;
         els.downloadBtn.textContent = "Mission beenden";
         els.downloadMessage.textContent = `Die Tabellen-Speicherung ist fehlgeschlagen: ${saveBeforeUploadError.message}`;
@@ -2768,12 +2777,18 @@
 
       if (uploadError) {
         console.error(uploadError);
+        state.submittedAt = null;
+        state.reportUploadedAt = null;
+        state.reportPath = "";
+        saveLocalState();
         els.downloadBtn.disabled = false;
         els.downloadBtn.textContent = "Mission beenden";
         els.downloadMessage.textContent = `Der PDF-Upload ist fehlgeschlagen: ${uploadError.message}`;
         return;
       }
 
+      state.submittedAt = nowIso;
+      state.reportUploadedAt = nowIso;
       state.reportPath = fileName;
       const { error: saveError } = await client
         .from("worksheet_attempts")
@@ -2800,6 +2815,10 @@
 
       if (saveError) {
         console.error(saveError);
+        state.submittedAt = null;
+        state.reportUploadedAt = null;
+        state.reportPath = "";
+        saveLocalState();
         els.downloadBtn.disabled = false;
         els.downloadBtn.textContent = "Mission beenden";
         els.downloadMessage.textContent = `Die PDF wurde hochgeladen, aber der Datenbankeintrag konnte nicht aktualisiert werden: ${saveError.message}`;
@@ -2865,7 +2884,7 @@
         finished_at: state.currentIndex >= questions.length ? nowIso : null,
         submitted_at: state.submittedAt,
         report_path: state.reportPath || "",
-        report_uploaded_at: state.submittedAt,
+        report_uploaded_at: state.reportUploadedAt,
         updated_at: nowIso
       };
 

@@ -739,23 +739,23 @@
     .legal-bar {
       display: flex;
       justify-content: flex-end;
-      margin-top: 14px;
+      margin-top: 10px;
     }
 
     .legal-link {
       appearance: none;
       border: 0;
       background: transparent;
-      color: var(--muted);
-      font-size: 0.94rem;
-      padding: 4px 0;
+      color: rgba(103, 114, 129, 0.74);
+      font-size: 0.82rem;
+      padding: 2px 0;
       cursor: pointer;
-      text-decoration: underline;
-      text-underline-offset: 0.14em;
+      text-decoration: none;
+      letter-spacing: 0.01em;
     }
 
     .legal-link:hover {
-      color: var(--text);
+      color: var(--muted);
     }
 
     .impressum-card {
@@ -793,6 +793,18 @@
 
     .impressum-block {
       white-space: pre-line;
+    }
+
+    .impressum-link {
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(103, 114, 129, 0.22);
+      padding-bottom: 1px;
+    }
+
+    .impressum-link:hover {
+      color: var(--text);
+      border-bottom-color: rgba(31, 42, 55, 0.28);
     }
 
     .solution-item {
@@ -1053,6 +1065,8 @@ Bühnertstraße 120
 48431 Rheine</div>
         <div class="impressum-block">E-Mail: remmes@emsland-gymnasium-rheine.de
 Telefon: +49 5971 9453 5200</div>
+        <div class="impressum-block">Projekt-Repository:
+<a class="impressum-link" href="https://github.com/CarlRemmes/automatenlabor" target="_blank" rel="noopener noreferrer">github.com/CarlRemmes/automatenlabor</a></div>
       </div>
     </div>
   </div>

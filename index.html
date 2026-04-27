@@ -883,6 +883,38 @@
       line-height: 1.55;
     }
 
+    .finish-celebration {
+      display: grid;
+      gap: 14px;
+      padding: 14px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(246, 249, 253, 0.98));
+      border: 1px solid rgba(96, 122, 160, 0.14);
+    }
+
+    .finish-dog-image {
+      width: 100%;
+      max-height: 62vh;
+      object-fit: cover;
+      border-radius: 20px;
+      display: block;
+      background: rgba(99, 121, 159, 0.08);
+    }
+
+    .finish-dog-caption {
+      margin: 0;
+      color: var(--text);
+      font-size: 1.03rem;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .finish-dog-timer {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
     @media (max-width: 680px) {
       .start-grid {
         grid-template-columns: 1fr;
@@ -1029,6 +1061,11 @@
             <button class="secondary" id="restartBtn">Neu starten</button>
           </div>
           <div class="status-line" id="downloadMessage"></div>
+          <div class="finish-celebration hidden" id="finishCelebration">
+            <img class="finish-dog-image" id="finishDogImage" alt="Abschlussbild der Laborhündin" />
+            <p class="finish-dog-caption" id="finishDogCaption"></p>
+            <p class="finish-dog-timer" id="finishDogTimer"></p>
+          </div>
         </div>
       </section>
       <div class="legal-bar">
@@ -1076,6 +1113,11 @@ Telefon: +49 5971 9453 5200</div>
     const SUPABASE_ANON_KEY = "sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj";
     const REPORTS_BUCKET = "automatenlabor-reports";
     const ARCHIVE_LOCK = "informatikistcool";
+    const FINISH_DOGS = [
+      { src: "assets/dog-05.jpeg", caption: "Die Laborhündin sagt: Wuff. Sehr gut gearbeitet. Jetzt bitte einmal stolz gucken." },
+      { src: "assets/dog-06.jpeg", caption: "Die Laborhündin sprintet schon los: Mission geschafft und die PDF ist im sicheren Körbchen." },
+      { src: "assets/dog-04.jpeg", caption: "Die Laborhündin hat alles geprüft und sagt: Kein Leckerli verloren, alles sauber abgeschlossen." }
+    ];
     const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: { storageKey: "automatenlabor-student-auth-v1" }
     });
@@ -1086,6 +1128,8 @@ Telefon: +49 5971 9453 5200</div>
     let titleTapCount = 0;
     let titleTapTimer = null;
     let authUser = null;
+    let currentFinishDog = null;
+    let finishDogTimeout = null;
 
     const questionBank = [
       {
@@ -1392,6 +1436,10 @@ Telefon: +49 5971 9453 5200</div>
       finishTitle: document.getElementById("finishTitle"),
       finishIntro: document.getElementById("finishIntro"),
       finishFeedback: document.getElementById("finishFeedback"),
+      finishCelebration: document.getElementById("finishCelebration"),
+      finishDogImage: document.getElementById("finishDogImage"),
+      finishDogCaption: document.getElementById("finishDogCaption"),
+      finishDogTimer: document.getElementById("finishDogTimer"),
       downloadBtn: document.getElementById("downloadBtn"),
       restartBtn: document.getElementById("restartBtn"),
       downloadMessage: document.getElementById("downloadMessage"),
@@ -1709,6 +1757,32 @@ Telefon: +49 5971 9453 5200</div>
       }
 
       return "Speichere jetzt deine geschützte PDF-Datei. Danach siehst du nur noch eine kurze Rückmeldung und kannst wieder von vorne starten.";
+    }
+
+    function hideFinishCelebration() {
+      clearTimeout(finishDogTimeout);
+      finishDogTimeout = null;
+      currentFinishDog = null;
+      els.finishCelebration.classList.add("hidden");
+      els.finishDogImage.removeAttribute("src");
+      els.finishDogCaption.textContent = "";
+      els.finishDogTimer.textContent = "";
+    }
+
+    function showFinishCelebration() {
+      if (!currentFinishDog) {
+        currentFinishDog = FINISH_DOGS[Math.floor(Math.random() * FINISH_DOGS.length)];
+      }
+
+      els.finishDogImage.src = currentFinishDog.src;
+      els.finishDogCaption.textContent = currentFinishDog.caption;
+      els.finishDogTimer.textContent = "Das Abschlussbild bleibt jetzt noch drei Minuten sichtbar.";
+      els.finishCelebration.classList.remove("hidden");
+
+      clearTimeout(finishDogTimeout);
+      finishDogTimeout = window.setTimeout(() => {
+        els.finishDogTimer.textContent = "Zeit für den Neustart.";
+      }, 180000);
     }
 
     function currentAnswerExistsForQuestion(question) {
@@ -2475,6 +2549,11 @@ Telefon: +49 5971 9453 5200</div>
       els.downloadBtn.textContent = submissionComplete ? "Mission abgeschlossen" : "Mission beenden";
       els.downloadBtn.disabled = submissionComplete;
       els.downloadMessage.textContent = submissionComplete ? "Die Ergebnisse wurden gespeichert." : "";
+      if (submissionComplete) {
+        showFinishCelebration();
+      } else {
+        hideFinishCelebration();
+      }
     }
 
     function render() {
@@ -2952,6 +3031,7 @@ Telefon: +49 5971 9453 5200</div>
     async function restart() {
       localStorage.removeItem(STORAGE_KEY);
       Object.assign(state, createDefaultState());
+      hideFinishCelebration();
       questions = [];
       authUser = null;
       els.downloadMessage.textContent = "";

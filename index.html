@@ -1693,14 +1693,14 @@ Telefon: +49 5971 9453 5200</div>
       const ratio = maxPoints ? points / maxPoints : 0;
 
       if (ratio >= 0.8) {
-        return "Herr Remmes und Herr Bachen sind zufrieden. Du hast viele Muster sicher erkannt und deine Antworten gut begründet.";
+        return "Herr Remmes und Herr Bacher sind zufrieden. Du hast viele Muster sicher erkannt und deine Antworten gut begründet.";
       }
 
       if (ratio >= 0.5) {
-        return "Herr Remmes und Herr Bachen sind zufrieden. Du hast schon viele Zusammenhänge erkannt und an einigen Stellen lohnt sich ein zweiter Blick.";
+        return "Herr Remmes und Herr Bacher sind zufrieden. Du hast schon viele Zusammenhänge erkannt und an einigen Stellen lohnt sich ein zweiter Blick.";
       }
 
-      return "Herr Remmes und Herr Bachen sind zufrieden, dass du drangeblieben bist. Du hast erste wichtige Ideen gesammelt und kannst beim nächsten Mal noch sicherer werden.";
+      return "Herr Remmes und Herr Bacher sind zufrieden, dass du drangeblieben bist. Du hast erste wichtige Ideen gesammelt und kannst beim nächsten Mal noch sicherer werden.";
     }
 
     function getFinishFeedback() {
@@ -2828,6 +2828,15 @@ Telefon: +49 5971 9453 5200</div>
     }
 
     async function savePdfLocally(pdfBlob, fileName) {
+      if ("showDirectoryPicker" in window) {
+        const directoryHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+        const fileHandle = await directoryHandle.getFileHandle(fileName, { create: true });
+        const writable = await fileHandle.createWritable();
+        await writable.write(pdfBlob);
+        await writable.close();
+        return;
+      }
+
       if ("showSaveFilePicker" in window) {
         const fileHandle = await window.showSaveFilePicker({
           suggestedName: fileName,

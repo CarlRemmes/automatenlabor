@@ -29,8 +29,9 @@ Wichtig ist dabei:
 5. Einzelne Aufgaben können nur über das versteckte Lehrkraft-Menü übersprungen werden.
 6. Am Ende klicken die Schülerinnen und Schüler auf `Mission beenden`.
 7. Beim Abschluss wird lokal eine passwortgeschützte PDF-Datei erzeugt.
-8. Diese PDF kann im vorgesehenen Gruppenordner auf dem Rechner gespeichert werden.
-9. Nach erfolgreichem Abschluss erscheint eine kurze, allgemeine Rückmeldung.
+8. Wenn der Browser es unterstützt, können die Schülerinnen und Schüler direkt einen Ordner auswählen und die PDF dort speichern.
+9. Falls diese Funktion im Browser nicht verfügbar ist, wird die PDF regulär heruntergeladen und kann anschließend in den Gruppenordner verschoben werden.
+10. Nach erfolgreichem Abschluss erscheint eine kurze, allgemeine Rückmeldung.
 
 ## Aufgabentypen
 

@@ -1,7 +1,7 @@
 # Automatenlabor
 
 `Automatenlabor` ist eine browserbasierte Lernumgebung für den Informatikunterricht in Klasse 6.  
-Die Schülerinnen und Schüler bearbeiten eine kleine, spielerisch gestaltete Mission rund um Automaten, Zustände, Eingaben, Ausgaben und Zustandsübergänge. Die Anwendung ist so aufgebaut, dass sie sich für eine verdeckte Lernstandserhebung eignet: Für die Lernenden wirkt sie wie eine Labor-Mission, während im Hintergrund strukturierte Auswertungen für die Lehrkraft entstehen.
+Die Schülerinnen und Schüler bearbeiten eine kleine, spielerisch gestaltete Mission rund um Automaten, Zustände, Eingaben, Ausgaben und Zustandsübergänge. Die Anwendung ist so aufgebaut, dass sie sich für eine verdeckte Lernstandserhebung eignet: Für die Lernenden wirkt sie wie eine Labor-Mission, während am Ende lokal eine strukturierte PDF-Auswertung gespeichert wird.
 
 ## Ziel des Projekts
 
@@ -18,7 +18,7 @@ Wichtig ist dabei:
 - keine sichtbare Benotung für die Schülerinnen und Schüler,
 - ein motivierender, reduzierter Ablauf,
 - eine möglichst ruhige und ansprechende Oberfläche,
-- eine zentrale Sicherung der Ergebnisse für die Lehrkraft.
+- eine einfache, verlässliche Sicherung der Ergebnisse über eine lokale PDF-Datei.
 
 ## Aktueller Ablauf für Schülerinnen und Schüler
 
@@ -28,8 +28,9 @@ Wichtig ist dabei:
 4. Die Navigation erfolgt über `Zurück` und `Weiter`.
 5. Einzelne Aufgaben können nur über das versteckte Lehrkraft-Menü übersprungen werden.
 6. Am Ende klicken die Schülerinnen und Schüler auf `Mission beenden`.
-7. Die Ergebnisse werden im Hintergrund in Supabase gespeichert.
-8. Nach erfolgreichem Abschluss erscheint eine kurze, allgemeine Rückmeldung.
+7. Beim Abschluss wird lokal eine passwortgeschützte PDF-Datei erzeugt.
+8. Diese PDF kann im vorgesehenen Gruppenordner auf dem Rechner gespeichert werden.
+9. Nach erfolgreichem Abschluss erscheint eine kurze, allgemeine Rückmeldung.
 
 ## Aufgabentypen
 
@@ -57,12 +58,12 @@ Die Aufgaben orientieren sich an mehreren Bildquellen und Beispielen, unter ande
 
 Damit wird nicht nur ein einzelner Automat behandelt. Stattdessen lernen die Schülerinnen und Schüler, typische Merkmale von Automaten auf verschiedene Situationen zu übertragen.
 
-## Verdeckte Auswertung für Lehrkräfte
+## Auswertung
 
 Die Schülerinnen und Schüler sehen keine genaue Punktzahl und keine direkte Testauswertung.  
-Die eigentliche Auswertung ist für Lehrkräfte gedacht.
+Die eigentliche Auswertung steckt in der PDF-Datei.
 
-Im Hintergrund werden unter anderem gespeichert:
+In der PDF werden unter anderem festgehalten:
 
 - Vorname,
 - Nachname,
@@ -74,7 +75,7 @@ Im Hintergrund werden unter anderem gespeichert:
 - Bearbeitungszeitpunkte,
 - PDF-Auswertung.
 
-Die PDFs werden zentral in Supabase Storage abgelegt und können über die versteckte Lehrkraft-Ansicht abgerufen werden.
+Die PDF-Datei ist passwortgeschützt und für die Ablage im schulischen Gruppenordner gedacht.
 
 ## Verstecktes Lehrkraft-Menü
 
@@ -88,7 +89,7 @@ Derzeit sind dort unter anderem vorgesehen:
 
 - einzelne Aufgabe überspringen,
 - Lösungen anzeigen,
-- gespeicherte Abgaben abrufen.
+- optional gespeicherte Abgaben abrufen.
 
 ## Technik
 
@@ -96,9 +97,9 @@ Das Projekt ist bewusst schlank gehalten:
 
 - eine zentrale `index.html`,
 - Vanilla HTML, CSS und JavaScript,
-- Supabase für Authentifizierung, Tabellen und Storage,
+- Supabase für Arbeitsstände und optionale Zusatzspeicherung,
 - `jsPDF` für die PDF-Erstellung,
-- Edge Functions für Lehrkraft-Abrufe aus der Cloud.
+- Passwortschutz direkt in der erzeugten PDF-Datei.
 
 ## Wichtige Dateien
 
@@ -110,7 +111,7 @@ Das Projekt ist bewusst schlank gehalten:
 
 ## Supabase-Einrichtung
 
-Für die zentrale Speicherung muss mindestens der SQL-Block aus
+Für Arbeitsstände und optionale Zusatzfunktionen kann weiterhin Supabase genutzt werden. Dafür muss mindestens der SQL-Block aus
 
 - [supabase_central_results.sql](/Users/carlremmes/Documents/Codex/2026-04-21-github-plugin-github-openai-curated-inspect/automatenlabor/supabase_central_results.sql)
 
@@ -119,26 +120,15 @@ in Supabase ausgeführt werden.
 Dieser Block legt unter anderem an:
 
 - die Tabelle `worksheet_attempts`,
-- zusätzliche Spalten für Namen, Klasse, Begründungen, Reihenfolge und PDF-Pfade,
-- den Storage-Bucket `automatenlabor-reports`,
+- zusätzliche Spalten für Namen, Klasse, Begründungen und Reihenfolge,
 - die benötigten Policies,
 - die serverseitige PIN-Prüfung.
-
-## Typische Fehlerquelle
-
-Wenn beim Klick auf `Mission beenden` eine Meldung wie
-
-- `new row violates row-level security policy`
-
-erscheint, liegt das fast immer an veralteten Storage-Policies in Supabase.
-
-Dann sollte [supabase_central_results.sql](/Users/carlremmes/Documents/Codex/2026-04-21-github-plugin-github-openai-curated-inspect/automatenlabor/supabase_central_results.sql) erneut vollständig ausgeführt werden.
 
 ## Hinweise für den Unterricht
 
 - Die Anwendung ist bewusst nicht als offener Test bezeichnet.
 - Die Rückmeldungen am Ende bleiben allgemein und motivierend.
-- Die genaue Auswertung erfolgt über das PDF und die Lehrkraftansicht.
+- Die genaue Auswertung erfolgt über das PDF.
 - Übersprungene Aufgaben werden in der Auswertung markiert.
 - Die Oberfläche soll ruhig, klar und möglichst wenig überladen wirken.
 

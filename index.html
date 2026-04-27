@@ -1075,6 +1075,7 @@ Telefon: +49 5971 9453 5200</div>
     const SUPABASE_URL = "https://ksuqarrjolkhpwojrjav.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj";
     const REPORTS_BUCKET = "automatenlabor-reports";
+    const ARCHIVE_LOCK = "informatikistcool";
     const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: { storageKey: "automatenlabor-student-auth-v1" }
     });
@@ -1707,7 +1708,7 @@ Telefon: +49 5971 9453 5200</div>
         return getStudentFeedback();
       }
 
-      return "Deine Antworten werden jetzt im Hintergrund gesichert. Danach siehst du nur noch eine kurze Rückmeldung und kannst wieder von vorne starten.";
+      return "Speichere jetzt deine geschützte PDF-Datei. Danach siehst du nur noch eine kurze Rückmeldung und kannst wieder von vorne starten.";
     }
 
     function currentAnswerExistsForQuestion(question) {
@@ -2468,7 +2469,7 @@ Telefon: +49 5971 9453 5200</div>
       els.finishTitle.textContent = submissionComplete ? "Mission beendet" : "Mission beenden";
       els.finishIntro.textContent = submissionComplete
         ? "Deine Mission ist abgeschlossen. Du kannst jetzt direkt neu starten."
-        : "Beende jetzt deine Mission. Deine Ergebnisse werden im Hintergrund gesichert.";
+        : "Beende jetzt deine Mission und speichere die geschützte PDF-Datei.";
       els.finishFeedback.textContent = getFinishFeedback();
       els.downloadBtn.classList.toggle("hidden", submissionComplete);
       els.downloadBtn.textContent = submissionComplete ? "Mission abgeschlossen" : "Mission beenden";
@@ -2663,7 +2664,12 @@ Telefon: +49 5971 9453 5200</div>
       const doc = new jsPDF({
         orientation: "portrait",
         unit: "pt",
-        format: "a4"
+        format: "a4",
+        encryption: {
+          userPassword: ARCHIVE_LOCK,
+          ownerPassword: ARCHIVE_LOCK,
+          userPermissions: ["print"]
+        }
       });
 
       const margin = 48;
@@ -2821,6 +2827,33 @@ Telefon: +49 5971 9453 5200</div>
       return doc.output("blob");
     }
 
+    async function savePdfLocally(pdfBlob, fileName) {
+      if ("showSaveFilePicker" in window) {
+        const fileHandle = await window.showSaveFilePicker({
+          suggestedName: fileName,
+          types: [
+            {
+              description: "PDF-Datei",
+              accept: { "application/pdf": [".pdf"] }
+            }
+          ]
+        });
+        const writable = await fileHandle.createWritable();
+        await writable.write(pdfBlob);
+        await writable.close();
+        return;
+      }
+
+      const objectUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1500);
+    }
+
     async function submitMission() {
       const name = state.studentName.trim();
       const lastName = state.studentLastName.trim();
@@ -2840,77 +2873,37 @@ Telefon: +49 5971 9453 5200</div>
 
       await ensureAuthSession();
       els.downloadBtn.disabled = true;
-      els.downloadBtn.textContent = "Beendet ...";
+      els.downloadBtn.textContent = "Speichert ...";
       const pdfBlob = await buildReportPdfBlob(name, lastName, className);
       const safeName = slugify(name) || "schueler";
       const safeLastName = slugify(lastName) || "nachname";
       const safeClass = slugify(className) || "klasse";
       const nowIso = new Date().toISOString();
       const fileName = `automatenlabor-${safeClass}-${safeLastName}-${safeName}-${Date.now()}.pdf`;
-      const uploadPath = authUser ? `${authUser.id}/${fileName}` : fileName;
 
       state.submittedAt = null;
       state.reportUploadedAt = null;
       state.reportPath = "";
 
-      const { error: saveBeforeUploadError } = await client
-        .from("worksheet_attempts")
-        .upsert({
-          user_id: authUser.id,
-          student_key: authUser.id,
-          student_name: name,
-          last_name: lastName,
-          class_name: className,
-          current_index: questions.length,
-          answers: state.answers,
-          reasons: state.reasons,
-          skipped: state.skipped,
-          helper_enabled: false,
-          question_order: state.questionOrder,
-          timer_starts: state.timerStarts,
-          started_at: nowIso,
-          finished_at: nowIso,
-          submitted_at: null,
-          report_path: "",
-          report_uploaded_at: null,
-          updated_at: nowIso
-        }, { onConflict: "user_id" });
-
-      if (saveBeforeUploadError) {
-        console.error(saveBeforeUploadError);
+      try {
+        await savePdfLocally(pdfBlob, fileName);
+      } catch (error) {
+        console.error(error);
         state.submittedAt = null;
         state.reportUploadedAt = null;
         state.reportPath = "";
         saveLocalState();
         els.downloadBtn.disabled = false;
         els.downloadBtn.textContent = "Mission beenden";
-        els.downloadMessage.textContent = `Die Tabellen-Speicherung ist fehlgeschlagen: ${saveBeforeUploadError.message}`;
-        return;
-      }
-
-      const { error: uploadError } = await client
-        .storage
-        .from(REPORTS_BUCKET)
-        .upload(uploadPath, pdfBlob, {
-          contentType: "application/pdf",
-          upsert: true
-        });
-
-      if (uploadError) {
-        console.error(uploadError);
-        state.submittedAt = null;
-        state.reportUploadedAt = null;
-        state.reportPath = "";
-        saveLocalState();
-        els.downloadBtn.disabled = false;
-        els.downloadBtn.textContent = "Mission beenden";
-        els.downloadMessage.textContent = `Der PDF-Upload ist fehlgeschlagen: ${uploadError.message}`;
+        els.downloadMessage.textContent = error?.name === "AbortError"
+          ? "Das Speichern wurde abgebrochen."
+          : "Die PDF konnte lokal nicht gespeichert werden.";
         return;
       }
 
       state.submittedAt = nowIso;
       state.reportUploadedAt = nowIso;
-      state.reportPath = uploadPath;
+      state.reportPath = fileName;
       const { error: saveError } = await client
         .from("worksheet_attempts")
         .upsert({
@@ -2929,25 +2922,21 @@ Telefon: +49 5971 9453 5200</div>
           started_at: nowIso,
           finished_at: nowIso,
           submitted_at: nowIso,
-          report_path: uploadPath,
+          report_path: fileName,
           report_uploaded_at: nowIso,
           updated_at: nowIso
         }, { onConflict: "user_id" });
 
       if (saveError) {
         console.error(saveError);
-        state.submittedAt = null;
-        state.reportUploadedAt = null;
-        state.reportPath = "";
         saveLocalState();
-        els.downloadBtn.disabled = false;
-        els.downloadBtn.textContent = "Mission beenden";
-        els.downloadMessage.textContent = `Die PDF wurde hochgeladen, aber der Datenbankeintrag konnte nicht aktualisiert werden: ${saveError.message}`;
+        els.downloadMessage.textContent = "Die PDF wurde lokal gespeichert. Die zusätzliche Online-Speicherung hat gerade nicht geklappt.";
+        render();
         return;
       }
 
       saveLocalState();
-      els.downloadMessage.textContent = "Die Ergebnisse wurden gespeichert.";
+      els.downloadMessage.textContent = "Die PDF wurde lokal gespeichert.";
       render();
     }
 

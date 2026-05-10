@@ -18,7 +18,7 @@ Wichtig ist dabei:
 - keine sichtbare Benotung für die Schülerinnen und Schüler,
 - ein motivierender, reduzierter Ablauf,
 - eine möglichst ruhige und ansprechende Oberfläche,
-- eine einfache, verlässliche Sicherung der Ergebnisse über eine lokale PDF-Datei.
+- eine einfache, verlässliche Sicherung der Ergebnisse über eine lokale PDF-Datei mit anschließendem Upload in iServ.
 
 ## Aktueller Ablauf für Schülerinnen und Schüler
 
@@ -31,7 +31,8 @@ Wichtig ist dabei:
 7. Beim Abschluss wird lokal eine passwortgeschützte PDF-Datei erzeugt.
 8. Wenn der Browser es unterstützt, können die Schülerinnen und Schüler direkt einen Ordner auswählen und die PDF dort speichern.
 9. Falls diese Funktion im Browser nicht verfügbar ist, wird die PDF regulär heruntergeladen und kann anschließend in den Gruppenordner verschoben werden.
-10. Nach erfolgreichem Abschluss erscheint eine kurze, allgemeine Rückmeldung.
+10. Danach laden die Schülerinnen und Schüler die PDF in iServ bei der vorgesehenen Aufgabe hoch.
+11. Nach erfolgreichem Abschluss erscheint eine kurze, allgemeine Rückmeldung.
 
 ## Aufgabentypen
 

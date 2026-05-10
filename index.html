@@ -1756,7 +1756,7 @@ Telefon: +49 5971 9453 5200</div>
         return getStudentFeedback();
       }
 
-      return "Speichere jetzt deine geschützte PDF-Datei. Danach siehst du nur noch eine kurze Rückmeldung und kannst wieder von vorne starten.";
+      return "Speichere jetzt deine geschützte PDF-Datei. Lade sie danach in iServ hoch. Anschließend siehst du nur noch eine kurze Rückmeldung und kannst wieder von vorne starten.";
     }
 
     function hideFinishCelebration() {
@@ -2543,7 +2543,7 @@ Telefon: +49 5971 9453 5200</div>
       els.finishTitle.textContent = submissionComplete ? "Mission beendet" : "Mission beenden";
       els.finishIntro.textContent = submissionComplete
         ? "Deine Mission ist abgeschlossen. Du kannst jetzt direkt neu starten."
-        : "Beende jetzt deine Mission und speichere die geschützte PDF-Datei.";
+        : "Beende jetzt deine Mission, speichere die geschützte PDF-Datei und lade sie danach in iServ hoch.";
       els.finishFeedback.textContent = getFinishFeedback();
       els.downloadBtn.classList.toggle("hidden", submissionComplete);
       els.downloadBtn.textContent = submissionComplete ? "Mission abgeschlossen" : "Mission beenden";
@@ -2969,7 +2969,6 @@ Telefon: +49 5971 9453 5200</div>
         return;
       }
 
-      await ensureAuthSession();
       els.downloadBtn.disabled = true;
       els.downloadBtn.textContent = "Speichert ...";
       const pdfBlob = await buildReportPdfBlob(name, lastName, className);
@@ -3002,39 +3001,9 @@ Telefon: +49 5971 9453 5200</div>
       state.submittedAt = nowIso;
       state.reportUploadedAt = nowIso;
       state.reportPath = fileName;
-      const { error: saveError } = await client
-        .from("worksheet_attempts")
-        .upsert({
-          user_id: authUser.id,
-          student_key: authUser.id,
-          student_name: name,
-          last_name: lastName,
-          class_name: className,
-          current_index: questions.length,
-          answers: state.answers,
-          reasons: state.reasons,
-          skipped: state.skipped,
-          helper_enabled: false,
-          question_order: state.questionOrder,
-          timer_starts: state.timerStarts,
-          started_at: nowIso,
-          finished_at: nowIso,
-          submitted_at: nowIso,
-          report_path: fileName,
-          report_uploaded_at: nowIso,
-          updated_at: nowIso
-        }, { onConflict: "user_id" });
-
-      if (saveError) {
-        console.error(saveError);
-        saveLocalState();
-        els.downloadMessage.textContent = "Die PDF wurde lokal gespeichert. Die zusätzliche Online-Speicherung hat gerade nicht geklappt.";
-        render();
-        return;
-      }
 
       saveLocalState();
-      els.downloadMessage.textContent = "Die PDF wurde lokal gespeichert.";
+      els.downloadMessage.textContent = "Die PDF wurde lokal gespeichert. Bitte jetzt in iServ hochladen.";
       render();
     }
 

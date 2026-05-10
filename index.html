@@ -2672,6 +2672,11 @@ Telefon: +49 5971 9453 5200</div>
         els.startMessage.textContent = "Bitte wähle zuerst deine Klasse aus.";
         return;
       }
+      state.currentIndex = 0;
+      state.answers = {};
+      state.reasons = {};
+      state.skipped = [];
+      state.helperUnlocked = false;
       state.studentName = firstName;
       state.studentLastName = lastName;
       state.className = className;
@@ -2679,7 +2684,12 @@ Telefon: +49 5971 9453 5200</div>
       state.submittedAt = null;
       state.reportUploadedAt = null;
       state.reportPath = "";
+      state.questionOrder = [];
+      state.timerStarts = {};
+      hideFinishCelebration();
+      rebuildQuestions();
       els.startMessage.textContent = "";
+      els.downloadMessage.textContent = "";
       queueSave();
       render();
     }

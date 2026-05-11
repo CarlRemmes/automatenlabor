@@ -1529,6 +1529,15 @@ Telefon: +49 5971 9453 5200</div>
       if (error) throw error;
       if (!data) return;
 
+      // Do not let an older online attempt overwrite a freshly started local mission.
+      if (
+        state.started &&
+        (state.studentName || state.studentLastName || state.className) &&
+        (Object.keys(state.answers).length > 0 || state.currentIndex > 0 || !state.reportPath)
+      ) {
+        return;
+      }
+
       state.currentIndex = data.current_index || 0;
       state.answers = data.answers || {};
       state.reasons = data.reasons || {};

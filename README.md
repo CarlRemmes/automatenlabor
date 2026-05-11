@@ -22,7 +22,7 @@ Wichtig ist dabei:
 
 ## Aktueller Ablauf für Schülerinnen und Schüler
 
-1. Auf der Startseite werden Vorname, Nachname und Klasse eingetragen.
+1. Auf der Startseite werden Vorname, Nachname und eine Klasse von `05A` bis `10C` eingetragen.
 2. Danach startet die Labor-Mission.
 3. Während der Bearbeitung werden verschiedene Aufgabentypen gemischt angezeigt.
 4. Die Navigation erfolgt über `Zurück` und `Weiter`.
@@ -32,7 +32,7 @@ Wichtig ist dabei:
 8. Wenn der Browser es unterstützt, können die Schülerinnen und Schüler direkt einen Ordner auswählen und die PDF dort speichern.
 9. Falls diese Funktion im Browser nicht verfügbar ist, wird die PDF regulär heruntergeladen und kann anschließend in den Gruppenordner verschoben werden.
 10. Danach laden die Schülerinnen und Schüler die PDF in iServ bei der vorgesehenen Aufgabe hoch.
-11. Nach erfolgreichem Abschluss erscheint eine kurze, allgemeine Rückmeldung.
+11. Nach erfolgreichem Abschluss erscheint eine kurze, freundliche Rückmeldung mit einer kleinen Kurzauswertung der automatisch prüfbaren Aufgaben.
 
 ## Aufgabentypen
 

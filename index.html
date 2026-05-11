@@ -982,12 +982,24 @@
               <label for="startClass">Klasse</label>
               <select id="startClass">
                 <option value="">Klasse auswählen</option>
-                <option value="6a">6a</option>
-                <option value="6b">6b</option>
-                <option value="6c">6c</option>
-                <option value="6d">6d</option>
-                <option value="6e">6e</option>
-                <option value="andere">andere</option>
+                <option value="05A">05A</option>
+                <option value="05B">05B</option>
+                <option value="05C">05C</option>
+                <option value="06A">06A</option>
+                <option value="06B">06B</option>
+                <option value="06C">06C</option>
+                <option value="07A">07A</option>
+                <option value="07B">07B</option>
+                <option value="07C">07C</option>
+                <option value="08A">08A</option>
+                <option value="08B">08B</option>
+                <option value="08C">08C</option>
+                <option value="09A">09A</option>
+                <option value="09B">09B</option>
+                <option value="09C">09C</option>
+                <option value="10A">10A</option>
+                <option value="10B">10B</option>
+                <option value="10C">10C</option>
               </select>
             </div>
             <div class="row">
@@ -1751,9 +1763,17 @@ Telefon: +49 5971 9453 5200</div>
       return "Herr Remmes und Herr Bacher sind zufrieden, dass du drangeblieben bist. Du hast erste wichtige Ideen gesammelt und kannst beim nächsten Mal noch sicherer werden.";
     }
 
+    function getStudentSummary() {
+      const { points, maxPoints } = scoreResult();
+      if (!maxPoints) return "";
+
+      const percentage = Math.round((points / maxPoints) * 100);
+      return `Bei den automatisch auswertbaren Aufgaben hast du ${points} von ${maxPoints} richtig gelöst (${percentage} %). Deine freien Texte wurden dabei nicht mitgerechnet.`;
+    }
+
     function getFinishFeedback() {
       if (state.submittedAt && state.reportPath && state.reportUploadedAt) {
-        return getStudentFeedback();
+        return `${getStudentFeedback()} ${getStudentSummary()}`.trim();
       }
 
       return "Speichere jetzt deine geschützte PDF-Datei. Lade sie danach in iServ hoch. Anschließend siehst du nur noch eine kurze Rückmeldung und kannst wieder von vorne starten.";
@@ -2542,13 +2562,13 @@ Telefon: +49 5971 9453 5200</div>
       els.finishCard.classList.remove("hidden");
       els.finishTitle.textContent = submissionComplete ? "Mission beendet" : "Mission beenden";
       els.finishIntro.textContent = submissionComplete
-        ? "Deine Mission ist abgeschlossen. Du kannst jetzt direkt neu starten."
+        ? "Deine Mission ist abgeschlossen. Lade die PDF jetzt online in iServ bei der Aufgabe hoch. Danach kannst du direkt neu starten."
         : "Beende jetzt deine Mission, speichere die geschützte PDF-Datei und lade sie danach in iServ hoch.";
       els.finishFeedback.textContent = getFinishFeedback();
       els.downloadBtn.classList.toggle("hidden", submissionComplete);
       els.downloadBtn.textContent = submissionComplete ? "Mission abgeschlossen" : "Mission beenden";
       els.downloadBtn.disabled = submissionComplete;
-      els.downloadMessage.textContent = submissionComplete ? "Die Ergebnisse wurden gespeichert." : "";
+      els.downloadMessage.textContent = submissionComplete ? "Die PDF wurde gespeichert. Bitte jetzt in iServ hochladen." : "";
       if (submissionComplete) {
         showFinishCelebration();
       } else {

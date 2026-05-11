@@ -1126,8 +1126,8 @@ Telefon: +49 5971 9453 5200</div>
     const REPORTS_BUCKET = "automatenlabor-reports";
     const FINISH_DOGS = [
       { src: "assets/dog-05.jpeg", caption: "Die Laborhündin sagt: Wuff. Sehr gut gearbeitet. Jetzt bitte einmal stolz gucken." },
-      { src: "assets/dog-06.jpeg", caption: "Die Laborhündin sprintet schon los: Mission geschafft und die PDF ist im sicheren Körbchen." },
-      { src: "assets/dog-04.jpeg", caption: "Die Laborhündin hat alles geprüft und sagt: Kein Leckerli verloren, alles sauber abgeschlossen." }
+      { src: "assets/dog-06.jpeg", caption: "Die Laborhündin sprintet schon los: Mission geschafft. Jetzt noch kurz die PDF in iServ hochladen." },
+      { src: "assets/dog-04.jpeg", caption: "Die Laborhündin hat alles geprüft und sagt: Stark gemacht. Jetzt fehlt nur noch der Upload in iServ." }
     ];
     const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: { storageKey: "automatenlabor-student-auth-v1" }
@@ -1784,7 +1784,7 @@ Telefon: +49 5971 9453 5200</div>
         return `${getStudentFeedback()} ${getStudentSummary()}`.trim();
       }
 
-      return "Speichere jetzt deine geschützte PDF-Datei. Lade sie danach in iServ hoch. Anschließend siehst du nur noch eine kurze Rückmeldung und kannst wieder von vorne starten.";
+      return "Speichere jetzt deine PDF-Datei und lade sie danach in iServ bei der Aufgabe hoch. Anschließend kannst du wieder von vorne starten.";
     }
 
     function hideFinishCelebration() {
@@ -2570,8 +2570,8 @@ Telefon: +49 5971 9453 5200</div>
       els.finishCard.classList.remove("hidden");
       els.finishTitle.textContent = submissionComplete ? "Mission beendet" : "Mission beenden";
       els.finishIntro.textContent = submissionComplete
-        ? "Deine Mission ist abgeschlossen. Lade die PDF jetzt online in iServ bei der Aufgabe hoch. Danach kannst du direkt neu starten."
-        : "Beende jetzt deine Mission, speichere die geschützte PDF-Datei und lade sie danach in iServ hoch.";
+        ? "Deine Mission ist abgeschlossen. Bitte lade die PDF jetzt in iServ bei der Aufgabe hoch. Danach kannst du direkt neu starten."
+        : "Beende jetzt deine Mission, speichere die PDF-Datei und lade sie danach in iServ bei der Aufgabe hoch.";
       els.finishFeedback.textContent = getFinishFeedback();
       els.downloadBtn.classList.toggle("hidden", submissionComplete);
       els.downloadBtn.textContent = submissionComplete ? "Mission abgeschlossen" : "Mission beenden";
@@ -3026,7 +3026,7 @@ Telefon: +49 5971 9453 5200</div>
       state.reportPath = fileName;
 
       saveLocalState();
-      els.downloadMessage.textContent = "Die PDF wurde lokal gespeichert. Bitte jetzt in iServ hochladen.";
+      els.downloadMessage.textContent = "Die PDF wurde gespeichert. Bitte lade sie jetzt in iServ bei der Aufgabe hoch.";
       render();
     }
 

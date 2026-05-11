@@ -1124,7 +1124,6 @@ Telefon: +49 5971 9453 5200</div>
     const SUPABASE_URL = "https://ksuqarrjolkhpwojrjav.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_QlhlX9gY-KxT-bq5p8LYLg_R_uCcHJj";
     const REPORTS_BUCKET = "automatenlabor-reports";
-    const ARCHIVE_LOCK = "informatikistcool";
     const FINISH_DOGS = [
       { src: "assets/dog-05.jpeg", caption: "Die Laborhündin sagt: Wuff. Sehr gut gearbeitet. Jetzt bitte einmal stolz gucken." },
       { src: "assets/dog-06.jpeg", caption: "Die Laborhündin sprintet schon los: Mission geschafft und die PDF ist im sicheren Körbchen." },
@@ -2782,12 +2781,7 @@ Telefon: +49 5971 9453 5200</div>
       const doc = new jsPDF({
         orientation: "portrait",
         unit: "pt",
-        format: "a4",
-        encryption: {
-          userPassword: ARCHIVE_LOCK,
-          ownerPassword: ARCHIVE_LOCK,
-          userPermissions: ["print"]
-        }
+        format: "a4"
       });
 
       const margin = 48;

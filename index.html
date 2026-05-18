@@ -954,6 +954,7 @@
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
   <div class="start-shell" id="startScreen">
@@ -1004,8 +1005,10 @@
             </div>
             <div class="row">
               <button class="primary" id="startBtn">Mission starten</button>
+              <button class="secondary" id="importProgressBtn" type="button">Zwischenstand laden</button>
             </div>
             <div class="status-line" id="startMessage"></div>
+            <input id="importProgressInput" type="file" accept=".xlsx,.xls" class="hidden" />
           </div>
         </div>
         <div class="start-side">
@@ -1060,6 +1063,7 @@
 
       <section class="nav-bar" id="navBar">
         <button class="secondary" id="backBtn">Zurück</button>
+        <button class="secondary" id="exportProgressBtn" type="button">Zwischenstand speichern</button>
         <button class="primary" id="nextBtn">Weiter</button>
       </section>
 
@@ -1133,7 +1137,7 @@ Telefon: +49 5971 9453 5200</div>
       auth: { storageKey: "automatenlabor-student-auth-v1" }
     });
 
-    const STORAGE_KEY = "automatenlabor_worksheet_v9";
+    const STORAGE_KEY = "automatenlabor_worksheet_v10";
     const state = loadState();
     let saveTimer = null;
     let titleTapCount = 0;
@@ -1150,7 +1154,7 @@ Telefon: +49 5971 9453 5200</div>
         help: "Schreibe die Produktnamen aus dem Bild auf.",
         visual: "machine-photo",
         sampleAnswer: "Schokoriegel, Chips und Gummibärchen.",
-        placeholder: "Ich erkenne ..."
+        placeholder: "Kurz: Ich erkenne ..."
       },
       {
         id: "q2",
@@ -1159,7 +1163,7 @@ Telefon: +49 5971 9453 5200</div>
         help: "Sieh dir den Bereich mit der Aufschrift 'Akzeptiert' genau an.",
         visual: "machine-photo",
         sampleAnswer: "1 Euro, 2 Euro und 50 Cent.",
-        placeholder: "Der Automat akzeptiert ..."
+        placeholder: "Kurz: Der Automat akzeptiert ..."
       },
       {
         id: "q3",
@@ -1172,41 +1176,22 @@ Telefon: +49 5971 9453 5200</div>
         explanation: "Die Taste S passt zum Schokoriegel, weil der Anfangsbuchstabe mit dem Produktnamen auf dem Automaten zusammenpasst."
       },
       {
-        id: "q4",
-        type: "single",
-        text: "Welche Taste passt nicht direkt zu einem der drei Produktnamen?",
-        help: "Vergleiche die Buchstaben mit Gummibärchen, Schokoriegel und Chips.",
-        visual: "machine-photo",
-        options: ["G", "S", "C", "R"],
-        correct: 3,
-        explanation: "G, S und C lassen sich direkt den drei Produktnamen zuordnen. R bleibt als zusätzlicher Buchstabe übrig."
-      },
-      {
         id: "q5",
         type: "text",
         text: "Nenne zwei Stellen am Automaten, an denen der Mensch etwas eingeben oder auslösen kann.",
-        help: "Gesucht sind Bedienelemente oder Eingaben von außen.",
+        help: "Gesucht sind Bedienelemente oder Eingaben von außen. Antworte kurz.",
         visual: "machine-inputs-photo",
         sampleAnswer: "Zum Beispiel Münzen einwerfen und eine Taste drücken.",
-        placeholder: "Man kann ..."
+        placeholder: "Kurz: Man kann ..."
       },
       {
         id: "q6",
         type: "text",
         text: "Wo kommt das gekaufte Produkt wahrscheinlich heraus? Beschreibe die Stelle im Bild.",
-        help: "Suche nach einem Fach oder einer Öffnung für die Ausgabe.",
+        help: "Suche nach einem Fach oder einer Öffnung für die Ausgabe. Antworte kurz.",
         visual: "machine-output-photo",
         sampleAnswer: "Unten links im großen Ausgabefach.",
-        placeholder: "Das Produkt kommt wahrscheinlich ..."
-      },
-      {
-        id: "q7",
-        type: "text",
-        text: "Welche zwei Informationen brauchst du am Automaten, bevor du ein Produkt auswählen kannst?",
-        help: "Denke daran, was du vor dem Tastendruck wissen musst.",
-        visual: "machine-photo",
-        sampleAnswer: "Zum Beispiel den Produktnamen und den Preis oder welche Taste dazu gehört.",
-        placeholder: "Vor dem Auswählen muss ich wissen ..."
+        placeholder: "Kurz: Das Produkt kommt ..."
       },
       {
         id: "q8",
@@ -1231,46 +1216,16 @@ Telefon: +49 5971 9453 5200</div>
         help: "Denke an den Zustand ganz am Anfang eines Kaufs.",
         visual: "machine-photo",
         sampleAnswer: "Zum Beispiel: Es wurde noch kein Geld eingeworfen und der Automat wartet auf eine Eingabe.",
-        placeholder: "Ein möglicher Startzustand ist ..."
-      },
-      {
-        id: "q10",
-        type: "single",
-        text: "Welche Handlung verändert den Zustand des Snackautomaten am klarsten?",
-        help: "Wähle die Handlung aus, die direkt zu einem neuen Zustand führen kann.",
-        visual: "machine-photo",
-        options: [
-          "Nur vor dem Automaten stehen",
-          "Eine Münze einwerfen",
-          "Den Automaten anschauen",
-          "Am Regal vorbeigehen"
-        ],
-        correct: 1,
-        explanation: "Durch das Einwerfen einer Münze ändert sich der Geldzustand des Automaten unmittelbar."
+        placeholder: "Kurz: Ein Startzustand ist ..."
       },
       {
         id: "q11",
         type: "text",
         text: "Erkläre an diesem Automaten den Unterschied zwischen Eingabe und Ausgabe.",
-        help: "Nutze jeweils ein Beispiel aus dem Bild.",
+        help: "Nutze jeweils ein Beispiel aus dem Bild. Antworte kurz.",
         visual: "machine-photo",
         sampleAnswer: "Eine Eingabe ist zum Beispiel das Einwerfen einer Münze oder das Drücken einer Taste. Eine Ausgabe ist zum Beispiel ein Produkt oder zurückgegebenes Geld.",
-        placeholder: "Eine Eingabe ist ... Eine Ausgabe ist ..."
-      },
-      {
-        id: "q12",
-        type: "single",
-        text: "Welche Beobachtung zeigt am besten, dass der Snackautomat Eingaben begrenzt?",
-        help: "Achte darauf, welche Eingaben ausdrücklich genannt sind.",
-        visual: "machine-photo",
-        options: [
-          "Es gibt drei Produkte im Regal.",
-          "Es steht am Automaten, welche Münzen akzeptiert werden.",
-          "Der Automat ist grau und schwarz.",
-          "Die Produkte liegen auf drei Ebenen."
-        ],
-        correct: 1,
-        explanation: "Die Beschriftung der akzeptierten Münzen zeigt, dass nicht jede beliebige Eingabe erlaubt ist."
+        placeholder: "Kurz: Eingabe ... Ausgabe ..."
       },
       {
         id: "q13",
@@ -1298,7 +1253,7 @@ Telefon: +49 5971 9453 5200</div>
         help: "Suche im Bild nach Handlungen, die den Automaten beeinflussen.",
         visual: "ticket-photo",
         sampleAnswer: "Zum Beispiel ein Reiseziel eingeben, eine Schaltfläche antippen oder Geld bzw. Karte zum Bezahlen nutzen.",
-        placeholder: "Am Fahrkartenautomaten kann man ..."
+        placeholder: "Kurz: Man kann ..."
       },
       {
         id: "q16",
@@ -1333,7 +1288,7 @@ Telefon: +49 5971 9453 5200</div>
         help: "Erkläre, welche Rolle diese Angaben für die Nutzung spielen.",
         visual: "poststation-photo",
         sampleAnswer: "Sie zeigen verschiedene Fachgrößen oder Paketgrößen an. Dadurch wird geregelt, welche Sendung in welches Fach passt.",
-        placeholder: "Die Bezeichnungen zeigen, dass ..."
+        placeholder: "Kurz: Die Bezeichnungen zeigen ..."
       },
       {
         id: "q18",
@@ -1397,10 +1352,10 @@ Telefon: +49 5971 9453 5200</div>
         id: "q23",
         type: "text",
         text: "Erkläre am Zustandsgraphen kurz, was dort ein Zustand und was dort eine Eingabe ist.",
-        help: "Nenne die Kreise und die Pfeilbeschriftung in deiner Erklärung.",
+        help: "Nenne die Kreise und die Pfeilbeschriftung in deiner Erklärung. Antworte kurz.",
         visual: "stategraph-marked-photo",
         sampleAnswer: "Die Zustände sind 'Licht an' und 'Licht aus'. Die Eingabe ist 'Taster gedrückt', weil sie an den Pfeilen steht und den Wechsel auslöst.",
-        placeholder: "Im Zustandsgraphen sind die Zustände ..."
+        placeholder: "Kurz: Die Zustände sind ..."
       },
       {
         id: "q24",
@@ -1423,6 +1378,8 @@ Telefon: +49 5971 9453 5200</div>
       startLastName: document.getElementById("startLastName"),
       startClass: document.getElementById("startClass"),
       startBtn: document.getElementById("startBtn"),
+      importProgressBtn: document.getElementById("importProgressBtn"),
+      importProgressInput: document.getElementById("importProgressInput"),
       startMessage: document.getElementById("startMessage"),
       startHeroTitle: document.getElementById("startHeroTitle"),
       heroTitle: document.getElementById("heroTitle"),
@@ -1453,6 +1410,7 @@ Telefon: +49 5971 9453 5200</div>
       finishDogTimer: document.getElementById("finishDogTimer"),
       downloadBtn: document.getElementById("downloadBtn"),
       restartBtn: document.getElementById("restartBtn"),
+      exportProgressBtn: document.getElementById("exportProgressBtn"),
       downloadMessage: document.getElementById("downloadMessage"),
       openImpressumFromStart: document.getElementById("openImpressumFromStart"),
       openImpressumFromApp: document.getElementById("openImpressumFromApp"),
@@ -1480,6 +1438,7 @@ Telefon: +49 5971 9453 5200</div>
         studentLastName: "",
         className: "",
         started: false,
+        startedAt: null,
         submittedAt: null,
         reportUploadedAt: null,
         reportPath: "",
@@ -1545,6 +1504,7 @@ Telefon: +49 5971 9453 5200</div>
       state.studentLastName = data.last_name || "";
       state.className = data.class_name || "";
       state.started = Boolean(data.started_at || state.started);
+      state.startedAt = data.started_at || state.startedAt || null;
       state.submittedAt = data.submitted_at || null;
       state.reportUploadedAt = data.report_uploaded_at || null;
       state.reportPath = data.report_path || "";
@@ -1779,9 +1739,30 @@ Telefon: +49 5971 9453 5200</div>
       return `Bei den automatisch auswertbaren Aufgaben hast du ${points} von ${maxPoints} richtig gelöst (${percentage} %). Deine freien Texte wurden dabei nicht mitgerechnet.`;
     }
 
+    function formatDuration(ms) {
+      const totalSeconds = Math.max(0, Math.round(ms / 1000));
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      if (hours > 0) return `${hours} h ${String(minutes).padStart(2, "0")} min`;
+      if (minutes > 0) return `${minutes} min ${String(seconds).padStart(2, "0")} s`;
+      return `${seconds} s`;
+    }
+
+    function getElapsedDurationText() {
+      if (!state.startedAt) return "";
+      const startTime = new Date(state.startedAt).getTime();
+      const endTime = state.submittedAt ? new Date(state.submittedAt).getTime() : Date.now();
+      if (Number.isNaN(startTime) || Number.isNaN(endTime)) return "";
+      return formatDuration(endTime - startTime);
+    }
+
     function getFinishFeedback() {
       if (state.submittedAt && state.reportPath && state.reportUploadedAt) {
-        return `${getStudentFeedback()} ${getStudentSummary()}`.trim();
+        const durationText = getElapsedDurationText();
+        const durationPart = durationText ? ` Bearbeitungszeit: ${durationText}.` : "";
+        return `${getStudentFeedback()} ${getStudentSummary()}${durationPart}`.trim();
       }
 
       return "Speichere jetzt deine PDF-Datei und lade sie danach in iServ bei der Aufgabe hoch. Anschließend kannst du wieder von vorne starten.";
@@ -2709,6 +2690,7 @@ Telefon: +49 5971 9453 5200</div>
       state.studentLastName = lastName;
       state.className = className;
       state.started = true;
+      state.startedAt = new Date().toISOString();
       state.submittedAt = null;
       state.reportUploadedAt = null;
       state.reportPath = "";
@@ -2722,9 +2704,109 @@ Telefon: +49 5971 9453 5200</div>
       render();
     }
 
+    function buildProgressWorkbook() {
+      const exportedAt = new Date().toISOString();
+      const workbook = XLSX.utils.book_new();
+
+      const overviewRows = [
+        { Feld: "Version", Wert: "v1" },
+        { Feld: "Exportiert am", Wert: exportedAt },
+        { Feld: "Vorname", Wert: state.studentName || "" },
+        { Feld: "Nachname", Wert: state.studentLastName || "" },
+        { Feld: "Klasse", Wert: state.className || "" },
+        { Feld: "Aktuelle Aufgabe", Wert: String(state.currentIndex + 1) },
+        { Feld: "Bearbeitungszeit bisher", Wert: getElapsedDurationText() || "" }
+      ];
+
+      const answerRows = questions.map((question, index) => ({
+        Code: getQuestionCode(index),
+        Aufgabe: question.text,
+        Antwort: getAnswerLabel(question, state.answers[question.id]),
+        Begruendung: state.reasons[question.id] || "",
+        Uebersprungen: getSkippedEntry(question) ? "ja" : "nein"
+      }));
+
+      const rawState = {
+        version: "v1",
+        exportedAt,
+        state: {
+          currentIndex: state.currentIndex,
+          answers: state.answers,
+          reasons: state.reasons,
+          skipped: state.skipped,
+          studentName: state.studentName,
+          studentLastName: state.studentLastName,
+          className: state.className,
+          started: state.started,
+          startedAt: state.startedAt,
+          submittedAt: state.submittedAt,
+          reportUploadedAt: state.reportUploadedAt,
+          reportPath: state.reportPath,
+          questionOrder: state.questionOrder,
+          timerStarts: state.timerStarts
+        }
+      };
+
+      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(overviewRows), "Übersicht");
+      XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(answerRows), "Antworten");
+      XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet([["JSON"], [JSON.stringify(rawState)]]), "Daten");
+      return workbook;
+    }
+
+    function exportProgress() {
+      if (!state.started) {
+        els.startMessage.textContent = "Starte zuerst die Mission.";
+        return;
+      }
+
+      const safeName = slugify(state.studentName) || "schueler";
+      const safeLastName = slugify(state.studentLastName) || "nachname";
+      const safeClass = slugify(state.className) || "klasse";
+      const fileName = `automatenlabor-zwischenstand-${safeClass}-${safeLastName}-${safeName}.xlsx`;
+      XLSX.writeFile(buildProgressWorkbook(), fileName);
+      els.downloadMessage.textContent = "Der Zwischenstand wurde als Excel-Datei gespeichert.";
+    }
+
+    function applyImportedState(importedState) {
+      Object.assign(state, createDefaultState(), importedState, { helperUnlocked: false });
+      hideFinishCelebration();
+      rebuildQuestions();
+      els.startName.value = state.studentName || "";
+      els.startLastName.value = state.studentLastName || "";
+      els.startClass.value = state.className || "";
+      els.startMessage.textContent = "Zwischenstand geladen. Du kannst direkt weiterarbeiten.";
+      els.downloadMessage.textContent = "";
+      saveLocalState();
+      render();
+    }
+
+    async function importProgressFile(file) {
+      if (!file) return;
+      const buffer = await file.arrayBuffer();
+      const workbook = XLSX.read(buffer, { type: "array" });
+      const dataSheet = workbook.Sheets["Daten"];
+      if (!dataSheet) {
+        els.startMessage.textContent = "Die Excel-Datei enthält keinen gültigen Zwischenstand.";
+        return;
+      }
+      const rows = XLSX.utils.sheet_to_json(dataSheet, { header: 1 });
+      const jsonText = rows?.[1]?.[0];
+      if (!jsonText) {
+        els.startMessage.textContent = "Die Excel-Datei enthält keine lesbaren Missionsdaten.";
+        return;
+      }
+      const parsed = JSON.parse(jsonText);
+      if (!parsed?.state || !Array.isArray(parsed.state.questionOrder)) {
+        els.startMessage.textContent = "Die Excel-Datei passt nicht zu diesem Automatenlabor.";
+        return;
+      }
+      applyImportedState(parsed.state);
+    }
+
     function buildReportText(name, lastName, className) {
       const { points, maxPoints } = scoreResult();
       const answeredCount = questions.filter((question) => currentAnswerExistsForQuestion(question)).length;
+      const durationText = getElapsedDurationText();
       const lines = [
         "Automatenlabor - Auswertung",
         "===========================",
@@ -2732,6 +2814,7 @@ Telefon: +49 5971 9453 5200</div>
         `Nachname: ${lastName}`,
         `Klasse: ${className}`,
         `Datum: ${new Date().toLocaleString("de-DE")}`,
+        `Bearbeitungszeit: ${durationText || "-"}`,
         "",
         `Punkte aus Auswahlfragen: ${points} von ${maxPoints}`,
         `Bearbeitet: ${answeredCount} von ${questions.length}`,
@@ -2826,6 +2909,7 @@ Telefon: +49 5971 9453 5200</div>
       addWrappedText(`Nachname: ${lastName}`);
       addWrappedText(`Klasse: ${className}`);
       addWrappedText(`Datum: ${new Date().toLocaleString("de-DE")}`);
+      addWrappedText(`Bearbeitungszeit: ${getElapsedDurationText() || "-"}`);
       y += 10;
 
       const { points, maxPoints } = scoreResult();
@@ -2920,6 +3004,7 @@ Telefon: +49 5971 9453 5200</div>
         `vorname=${name}`,
         `nachname=${lastName}`,
         `klasse=${className}`,
+        `bearbeitungszeit=${getElapsedDurationText() || "-"}`,
         `zeit=${new Date().toISOString()}`
       ];
       questions.forEach((question, index) => {
@@ -3081,7 +3166,7 @@ Telefon: +49 5971 9453 5200</div>
         helper_enabled: false,
         question_order: state.questionOrder,
         timer_starts: state.timerStarts,
-        started_at: state.started ? nowIso : null,
+        started_at: state.startedAt || (state.started ? nowIso : null),
         finished_at: state.currentIndex >= questions.length ? nowIso : null,
         submitted_at: state.submittedAt,
         report_path: state.reportPath || "",
@@ -3189,9 +3274,21 @@ Telefon: +49 5971 9453 5200</div>
 
     els.nextBtn.addEventListener("click", goNext);
     els.backBtn.addEventListener("click", goBack);
+    els.exportProgressBtn.addEventListener("click", exportProgress);
     els.downloadBtn.addEventListener("click", () => submitMission().catch(console.error));
     els.restartBtn.addEventListener("click", () => restart().catch(console.error));
     els.startBtn.addEventListener("click", startMission);
+    els.importProgressBtn.addEventListener("click", () => {
+      els.importProgressInput.value = "";
+      els.importProgressInput.click();
+    });
+    els.importProgressInput.addEventListener("change", (event) => {
+      const file = event.target.files?.[0];
+      importProgressFile(file).catch((error) => {
+        console.error(error);
+        els.startMessage.textContent = "Der Zwischenstand konnte nicht geladen werden.";
+      });
+    });
     els.startName.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
